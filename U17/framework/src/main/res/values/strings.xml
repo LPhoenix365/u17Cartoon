@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Framework</string>
+    <string name="no_network_errortext">无网络</string>
+</resources>
