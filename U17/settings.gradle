@@ -1,1 +1,1 @@
-include ':app', ':framework', ':tablayoutdemo'
+include ':app', ':framework'
