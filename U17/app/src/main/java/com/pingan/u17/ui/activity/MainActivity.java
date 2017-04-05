@@ -63,6 +63,7 @@ public class MainActivity extends BaseActivity {
         mFragmentManager = getSupportFragmentManager();
 
         setSelectFragment(mCurrentPage);
+        mainRadiogroup.check(R.id.tab_home);
         //setSelectTab(mCurrentPage);
         //设置对应fragment
         setRadioGroupLisenter();

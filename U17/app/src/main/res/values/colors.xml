@@ -6,4 +6,7 @@
     <color name="tab_text_color_selected">#287c54</color>
     <color name="tab_text_color_normal">#606864</color>
 
+
+    <color name="colorTabSelectText">#FF80cc53</color>
+    <color name="colorTabText">#3a3d39</color>
 </resources>
