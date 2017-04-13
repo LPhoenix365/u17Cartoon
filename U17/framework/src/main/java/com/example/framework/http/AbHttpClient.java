@@ -18,6 +18,6 @@ public class AbHttpClient  {
     public AbHttpClient(Context context) {
         mContext = context;
         mExecutorService = AbThreadFactory.getExecutorService();
-        mHttpContext = new BasicHttpContext();
+
     }
 }
