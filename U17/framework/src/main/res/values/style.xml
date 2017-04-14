@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <style name="text_14_333333">
-        <item name="android:textSize">14dp</item>
-        <item name="android:textColor">#ff333333</item>
-    </style>
-</resources>
