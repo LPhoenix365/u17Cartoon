@@ -17,6 +17,8 @@ package com.example.framework.http;
 
 import android.os.Process;
 
+import com.example.framework.http.abutil.AbAppUtil;
+
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Executor;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -71,9 +73,8 @@ public class AbThreadFactory {
     public static Executor getExecutorService() { 
         if (mExecutorService == null) { 
         	int numCores = AbAppUtil.getNumCores();
-        	mExecutorService
-	         = new ThreadPoolExecutor(numCores * CORE_POOL_SIZE,numCores * MAXIMUM_POOL_SIZE,numCores * KEEP_ALIVE,
-                    TimeUnit.SECONDS, mPoolWorkQueue, mThreadFactory);
+        	mExecutorService = new ThreadPoolExecutor(numCores * CORE_POOL_SIZE,numCores * MAXIMUM_POOL_SIZE,
+                    numCores * KEEP_ALIVE, TimeUnit.SECONDS, mPoolWorkQueue, mThreadFactory);
         }
         Process.setThreadPriority(Process.THREAD_PRIORITY_BACKGROUND);
         return mExecutorService;
