@@ -1,6 +1,3 @@
 [submodule "U17/ModuleLibrary"]
 	path = U17/ModuleLibrary
 	url = https://github.com/BTHM/ModuleLibrary.git
-[submodule "workspace/ModuleLibrary"]
-	path = workspace/ModuleLibrary
-	url = https://github.com/BTHM/ModuleLibrary.git
