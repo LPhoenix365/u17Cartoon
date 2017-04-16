@@ -1,1 +1,1 @@
-include ':app', ':framework', ':library'
+include ':app', ':framework'
