@@ -11,10 +11,7 @@ import android.support.v4.app.FragmentActivity;
  * Address：liupeng264@pingan.com.cn
  */
 
-/**
- * Author：liupeng on 2017/2/24 09:40
- * Address：liupeng264@pingan.com.cn
- */
+
 public class BaseFragment extends Fragment {
 
     public FragmentActivity mActivity;
