@@ -5,7 +5,8 @@
     <color name="colorAccent">#FF4081</color>
     <color name="tab_text_color_selected">#287c54</color>
     <color name="tab_text_color_normal">#606864</color>
-
+    <color name="theme_body">#cc22292c</color>
+    <color name="black">#000000</color>
 
     <color name="colorTabSelectText">#FF80cc53</color>
     <color name="colorTabText">#3a3d39</color>

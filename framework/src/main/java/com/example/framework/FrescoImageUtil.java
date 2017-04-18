@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.backends.pipeline.PipelineDraweeController;
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.facebook.imagepipeline.common.ResizeOptions;
 import com.facebook.imagepipeline.request.ImageRequest;
 import com.facebook.imagepipeline.request.ImageRequestBuilder;
 
@@ -100,5 +101,30 @@ public class FrescoImageUtil  {
                     .build();
             simpleDraweeView.setController(controller);
         }
+    }
+
+
+    /**
+     * @param simpleDraweeView
+     * @param url
+     * @param weight
+     * @param height
+     */
+        public static void displayImgWithRetate(SimpleDraweeView simpleDraweeView, String url,int weight,int height) {
+            if (url.startsWith("http")) {
+                displayImgFromNetwork(simpleDraweeView, url);
+            } else {
+
+                ResizeOptions options=new ResizeOptions(weight,height);
+                ImageRequest request = ImageRequestBuilder.newBuilderWithSource(getUriFromFile(url))
+                        .setAutoRotateEnabled(true)
+                        .setResizeOptions(options)
+                        .build();
+                PipelineDraweeController controller = (PipelineDraweeController) Fresco.newDraweeControllerBuilder()
+                        .setImageRequest(request)
+                        .setOldController(simpleDraweeView.getController())
+                        .build();
+                simpleDraweeView.setController(controller);
+            }
     }
 }
