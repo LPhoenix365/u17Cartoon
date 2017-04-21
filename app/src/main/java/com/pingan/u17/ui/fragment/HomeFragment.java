@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 
 import com.pingan.u17.R;
 import com.pingan.u17.base.BaseFragment;
-import com.pingan.u17.ui.adapter.HomePagerAdapter;
+import com.pingan.u17.adapter.HomePagerAdapter;
 
 import java.util.ArrayList;
 import java.util.List;

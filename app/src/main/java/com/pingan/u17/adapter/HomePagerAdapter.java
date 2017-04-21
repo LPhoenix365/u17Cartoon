@@ -1,4 +1,4 @@
-package com.pingan.u17.ui.adapter;
+package com.pingan.u17.adapter;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
