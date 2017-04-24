@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.example.framework.http;
+package com.example.framework.http.abutil;
 
 import android.app.Activity;
 import android.app.ActivityManager;
@@ -370,7 +370,7 @@ public class AbAppUtil {
             memInfo = bufferedReader.readLine(); 
             strs = memInfo.split("\\s+");  
             for(String str:strs){  
-                AbLogUtil.d(AbAppUtil.class,str+"\t");  
+                AbLogUtil.d(AbAppUtil.class,str+"\t");
             }  
             //获得系统总内存，单位KB  
             memory = Integer.valueOf(strs[1]).intValue()*1024;

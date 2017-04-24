@@ -4,5 +4,9 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent"
             android:background="@color/cardview_shadow_end_color">
-
+        <Button
+            android:id="@+id/mine_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="进入选择"/>
 </LinearLayout>

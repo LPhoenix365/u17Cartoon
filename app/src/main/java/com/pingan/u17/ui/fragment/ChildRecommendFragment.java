@@ -7,14 +7,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.JsPromptResult;
-import android.webkit.JsResult;
-import android.webkit.WebChromeClient;
-import android.webkit.WebView;
 
 import com.pingan.u17.R;
 import com.pingan.u17.base.BaseFragment;
-import com.pingan.u17.ui.adapter.RecommendAdapter;
+import com.pingan.u17.adapter.RecommendAdapter;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -42,28 +38,7 @@ public class ChildRecommendFragment extends BaseFragment {
         rvRecommend.setAdapter(new RecommendAdapter());
 
 
-        test();
 
-    }
 
-    private void test() {
-        WebView webView = new WebView(mActivity);
-        webView.setWebChromeClient(new WebChromeClient(){
-            @Override
-            public boolean onJsPrompt(WebView view, String url, String message, String defaultValue, JsPromptResult result) {
-                return super.onJsPrompt(view, url, message, defaultValue, result);
-            }
-
-            @Override
-            public boolean onJsConfirm(WebView view, String url, String message, JsResult result) {
-                return super.onJsConfirm(view, url, message, result);
-            }
-
-            @Override
-            public boolean onJsAlert(WebView view, String url, String message, JsResult result) {
-                result.confirm();
-                return super.onJsAlert(view, url, message, result);
-            }
-        });
     }
 }
