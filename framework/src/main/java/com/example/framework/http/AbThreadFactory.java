@@ -66,7 +66,7 @@ public class AbThreadFactory {
             new LinkedBlockingQueue<Runnable>(10);
     
     /**
-     * 获取执行器.
+     * 获取线程执行器.
      *
      * @return the executor service
      */
