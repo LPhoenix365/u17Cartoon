@@ -19,9 +19,9 @@ android {
         }
     }
 
-    dataBinding{
-        enabled true
-    }
+   /* dataBinding{
+        enabled false
+    }*/
 }
 
 dependencies {

@@ -11,7 +11,7 @@ import java.util.ArrayList;
  * 修订历史：
  * ================================================
  */
-public class ImageFolder implements BaseBean {
+public class ImageFolder {
 
     public String name;  //当前文件夹的名字
     public String path;  //当前文件夹的路径
