@@ -1,8 +1,6 @@
 package com.example.framework.http.request;
 
 import android.content.Context;
-import android.os.Looper;
-import android.widget.TextView;
 
 import com.example.framework.http.AbHttpStatus;
 import com.example.framework.http.AbThreadFactory;
@@ -61,8 +59,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.concurrent.Executor;
-
-import static android.os.Build.VERSION_CODES.N;
 
 /**
  * Description
@@ -196,7 +192,7 @@ public class AbHttpClient {
 
 
     public void get(final String url, final AbRequestParams requestParams, final AbHttpResponseListener resultResponseListener) {
-       // resultResponseListener.setHandler(new ResponderHandler(mContext, resultResponseListener));
+        resultResponseListener.setHandler(new ResponderHandler(mContext, resultResponseListener));
         if (!AbAppUtil.isNetworkAvailable(mContext)) {
             resultResponseListener.dismissProgressDialog();//关闭Dialog
             resultResponseListener.onFailure(AbHttpStatus.NO_NETWORK, "网络链接不可用，请稍候再试", new Throwable());
@@ -215,7 +211,7 @@ public class AbHttpClient {
 
 
     private void doGet(String url, AbRequestParams params, AbHttpResponseListener responseListener) {
-        //responseListener.sendStartMessage();
+        responseListener.sendStartMessage();
         if (!AbAppUtil.isNetworkAvailable(mContext)) {
             responseListener.sendFailureMessage(AbHttpStatus.CONNECT_FAILURE_CODE, AbAppConfig.CONNECT_EXCEPTION,
                     new AbAppException(AbAppConfig.CONNECT_EXCEPTION));
@@ -252,7 +248,7 @@ public class AbHttpClient {
             AbLogUtil.e("AbHttpClient", "e" + e);
 
         }finally {
-           // responseListener.sendFinishMessage();
+           responseListener.sendFinishMessage();
 
         }
         AbLogUtil.i(mContext, "[HTTP Request]:" + url + ",result：" + response);

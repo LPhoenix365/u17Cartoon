@@ -13,10 +13,14 @@ import com.example.framework.http.abutil.AbLogUtil;
 import com.example.framework.http.request.AbHttpClient;
 import com.example.framework.http.request.AbRequestParams;
 import com.example.framework.http.response.AbStringHttpResponseListener;
+import com.google.gson.Gson;
 import com.pingan.u17.R;
 import com.pingan.u17.adapter.RecommendAdapter;
 import com.pingan.u17.base.BaseFragment;
+import com.pingan.u17.bean.HomePageBean;
 import com.pingan.u17.util.Constants;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -56,7 +60,30 @@ public class ChildRecommendFragment extends BaseFragment {
         final AbStringHttpResponseListener stringHttpResponseListener = new AbStringHttpResponseListener(mActivity) {
             @Override
             public void onSuccess(int statusCode, String content) {
-                AbLogUtil.d("ChildRecommendFragment","content="+content+"statusCode="+statusCode);
+                /*try {
+                    JSONObject jsonObject = new JSONObject(content);
+                    String code = jsonObject.optString("code");
+                    if (1 == Integer.parseInt(code)) {
+                        JSONObject data = new JSONObject(jsonObject.optString("data"));
+                        String stateCode = data.optString("stateCode");
+                        if (1 == Integer.parseInt(stateCode)) {
+                            Gson gson = new Gson();
+                            String string = data.toString();
+                            HomePageBean homePageBean = gson.fromJson(string, HomePageBean.class);
+                            List<HomePageBean.ComicListsBean> comicLists = homePageBean.getComicLists();
+                            List<HomePageBean.GalleryItemsBean> galleryItems = homePageBean.getGalleryItems();
+                            AbLogUtil.d("ChildRecommendFragment","homePageBean="+homePageBean+"comicLists="+comicLists+"galleryItems"+galleryItems);
+                        }
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }*/
+
+                Gson gson = new Gson();
+                HomePageBean bean = gson.fromJson(content, HomePageBean.class);
+                List<HomePageBean.DataBean.ReturnDataBean.ComicListsBean> comicLists = bean.getData().getReturnData().getComicLists();
+                List<HomePageBean.DataBean.ReturnDataBean.GalleryItemsBean> list = bean.getData().getReturnData().getGalleryItems();
+                AbLogUtil.d("ChildRecommendFragment","bean="+bean+"comicLists"+comicLists+comicLists+"list"+list);
             }
 
             @Override
