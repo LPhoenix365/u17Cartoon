@@ -1,16 +1,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="rst.framework">
+          package="com.example.framework">
 
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <application android:allowBackup="true"
+                 android:label="@string/app_name"
+                 android:supportsRtl="true"
+    >
 
-    <application>
-
-        <activity
-            android:name=".compoment.photoview.ImagePicsListActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppDialogTheme" />
     </application>
 
 </manifest>
