@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="transparent">#eae2e2</color>
-    <color name="translucent">#b7afaf</color>
+    <color name="progress_dialog_bg">#00000000</color>
+    <color name="excute_dialog_bg">#33000000</color>
+
+    <color name="bg_dark">#ffd7d7d7</color>
+
+    <color name="transparent">#00000000</color>
 </resources>
