@@ -1,6 +1,8 @@
 package com.pingan.u17.adapter;
 
 import android.app.Activity;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,6 +34,7 @@ public class PhotoSelectAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     private static final int ITEM_CARAME = 1;
     private static final int ITEM_ALBUM  = 2;
+    private Handler mHandler;
 
 
     private       LayoutInflater       mInflater;
@@ -42,8 +45,9 @@ public class PhotoSelectAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     /**
      * 构造方法
      */
-    public PhotoSelectAdapter(Activity activity, ArrayList<ImageItem> images) {
+    public PhotoSelectAdapter(Activity activity, ArrayList<ImageItem> images, Handler handler) {
         this.mActivity = activity;
+        mHandler = handler;
         if (images == null || images.size() == 0) this.images = new ArrayList<>();
         else this.images = images;
         mImageItemWidth = ToolUtils.getImageItemWidth(activity);
@@ -137,6 +141,8 @@ public class PhotoSelectAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         @BindView(R.id.cb_check)
         SuperCheckBox cbCheck;
 
+        private ImageItem mImageItem;
+
         public AlbumViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
@@ -144,8 +150,9 @@ public class PhotoSelectAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         }
 
         void bindAlbum(int position) {
-            ImageItem imageItem = getItem(position);
-             PicassoImageLoader.displayImage(mActivity,imageItem.path,ivThumb,mImageItemWidth,mImageItemWidth);
+
+            mImageItem = getItem(position);
+             PicassoImageLoader.displayImage(mActivity, mImageItem.path,ivThumb,mImageItemWidth,mImageItemWidth);
             // GlideImageLoader.displayImage(mActivity,imageItem.path,ivThumb,mImageItemWidth,mImageItemWidth);
 
         }
@@ -157,6 +164,10 @@ public class PhotoSelectAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                     //查看原图
                     break;
                 case R.id.cb_check:
+                    Message message = mHandler.obtainMessage();
+                    message.what=1;
+                    message.obj=mImageItem;
+                    mHandler.sendMessage(message);
                     break;
             }
         }

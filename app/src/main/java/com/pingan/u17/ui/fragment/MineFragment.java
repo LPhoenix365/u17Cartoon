@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.pingan.u17.R;
-import com.pingan.u17.abum.PhotoSelectActivity;
+import com.pingan.u17.abum.PhotoSelectFragment;
 import com.pingan.u17.base.BaseFragment;
 
 import butterknife.BindView;
@@ -49,7 +49,7 @@ public class MineFragment extends BaseFragment implements View.OnClickListener {
     public void onClick(View v) {
         switch(v.getId()){
             case R.id.mine_btn:
-                Intent intent = new Intent(mActivity, PhotoSelectActivity.class);
+                Intent intent = new Intent(mActivity, PhotoSelectFragment.class);
                 startActivity(intent);
                 break;
             default:
