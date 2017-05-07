@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+    >
+
+    <com.facebook.drawee.view.SimpleDraweeView
+        android:id="@+id/sv_cover_seven"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/default_image"/>
+
+    <TextView
+        android:id="@+id/tv_name_seven"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:layout_marginTop="6dp"
+        android:textSize="16sp"
+        android:text="非君不可"/>
+
+    <TextView
+        android:id="@+id/tv_corner_seven"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:textSize="12sp"
+        android:text="更新至78话"/>
+</LinearLayout>
