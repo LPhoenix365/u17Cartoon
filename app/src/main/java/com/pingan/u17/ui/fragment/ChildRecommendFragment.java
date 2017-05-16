@@ -1,5 +1,6 @@
 package com.pingan.u17.ui.fragment;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -18,6 +19,7 @@ import com.facebook.drawee.view.SimpleDraweeView;
 import com.google.gson.Gson;
 import com.pingan.u17.R;
 import com.pingan.u17.base.BaseFragment;
+import com.pingan.u17.base.U17Application;
 import com.pingan.u17.bean.HomePageBean;
 import com.pingan.u17.util.Constants;
 import com.pingan.u17.util.ToolUtils;
@@ -45,16 +47,18 @@ public class ChildRecommendFragment extends BaseFragment {
     private static final int SEVEN = 7;
     private static final int EIGHT = 8;
     private static final int NINE  = 9;
-    private List<HomePageBean.DataBean.ReturnDataBean.GalleryItemsBean> mGalleryItems;//banner 实体
-    private List<HomePageBean.DataBean.ReturnDataBean.ComicListsBean>   mComicLists;
-    private AbHttpClient                                                mHttpClient;
-    private LayoutInflater                                              mInflater;
+    private        List<HomePageBean.DataBean.ReturnDataBean.GalleryItemsBean> mGalleryItems;//banner 实体
+    private        List<HomePageBean.DataBean.ReturnDataBean.ComicListsBean>   mComicLists;
+    private        AbHttpClient                                                mHttpClient;
+    private        LayoutInflater                                              mInflater;
+    private  Context                                                     mContext;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.frag_recommend, container, false);
         ButterKnife.bind(this, view);
+        mContext = container.getContext();
         mInflater = LayoutInflater.from(mActivity);
         return view;
     }
@@ -143,11 +147,14 @@ public class ChildRecommendFragment extends BaseFragment {
      */
     private void addSixModel(List<HomePageBean.DataBean.ReturnDataBean.ComicListsBean.ComicsBean> comics) {
         if (comics != null && comics.size() > 0) {
-            LinearLayout modelLinearLayout = new LinearLayout(mActivity);
             LinearLayout.LayoutParams modelLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-            llContainer.addView(modelLinearLayout, modelLayoutParams);
+            LinearLayout modelLinearLayout = new LinearLayout(mActivity);
+
             LinearLayout linearLayout = null;
+            int COLUMN=3;
             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+
+            LinearLayout.LayoutParams boderParam = new LinearLayout.LayoutParams(ToolUtils.dip2px(mActivity, 6), LinearLayout.LayoutParams.MATCH_PARENT);
             for (int i = 0; i < comics.size(); i++) {
                 if (i % 3 == 0) {
                     linearLayout = new LinearLayout(mActivity);
@@ -156,14 +163,14 @@ public class ChildRecommendFragment extends BaseFragment {
                 View view = mInflater.inflate(R.layout.item_recomend_three, null, false);
                 SixViewHolder viewHolder = new SixViewHolder(view);
                 viewHolder.bindView(comics.get(i));
-                int screenDpi = ToolUtils.getScreenDpi(mActivity);
-                View boder = mInflater.inflate(R.layout.item_common_boder, null, false);
-                linearLayout.addView(boder);
-                int itemWidth = (screenDpi - boder.getWidth() * 4) / 3;
-                LinearLayout.LayoutParams layoutParam = new LinearLayout.LayoutParams(ToolUtils.dip2px(mActivity,itemWidth), ToolUtils.dip2px(mActivity,300));
+                int screenWidth = ToolUtils.getScreenWidth(mActivity);
+                View boder = new View(mActivity);
+               // linearLayout.addView(boder,boderParam);
+                int itemWidth = (screenWidth - ToolUtils.dip2px(mActivity, 6) * (COLUMN + 1)) / COLUMN;
+                LinearLayout.LayoutParams layoutParam = new LinearLayout.LayoutParams(itemWidth, ToolUtils.dip2px(mActivity,300));
                 linearLayout.addView(view, layoutParam);
             }
-
+            llContainer.addView(modelLinearLayout, modelLayoutParams);
         }
     }
 
@@ -190,7 +197,7 @@ public class ChildRecommendFragment extends BaseFragment {
         public void bindView(HomePageBean.DataBean.ReturnDataBean.ComicListsBean.ComicsBean comics) {
             FrescoImageUtil.displayImgFromNetwork(svCoverSeven, comics.getCover());
             tvNameSeven.setText(comics.getAuthor_name());
-            tvCornerSeven.setText(comics.getCornerInfo());
+            tvCornerSeven.setText(U17Application.getInstance().getResources().getString(R.string.text_update_setion,comics.getCornerInfo()));
         }
     }
 }

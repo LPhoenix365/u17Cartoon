@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">U17</string>
+    <string name="text_update_setion">更新至%s话</string>
 
 </resources>
