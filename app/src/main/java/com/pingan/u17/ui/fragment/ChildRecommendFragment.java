@@ -30,6 +30,8 @@ import butterknife.BindColor;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static android.R.attr.type;
+
 /**
  * Author：liupeng on 2017/2/24 09:56
  * Address：liupeng264@pingan.com.cn
@@ -138,8 +140,7 @@ public class ChildRecommendFragment extends BaseFragment implements View.OnClick
                         addTwoModel(comicBean, 100,2,false);
                         break;
                     case 6:
-
-
+                        addFourModel();
                         break;
                     case 8:
                         addTwoModel(comicBean, 100,1,false);
@@ -153,6 +154,57 @@ public class ChildRecommendFragment extends BaseFragment implements View.OnClick
                     default:
                 }
             }
+        }
+    }
+
+    private void addFourModel(HomePageBean.DataBean.ReturnDataBean.ComicListsBean comicsBean) {
+        List<HomePageBean.DataBean.ReturnDataBean.ComicListsBean.ComicsBean> comics = comicsBean.getComics();
+        if (comics != null && comics.size() > 0) {
+            LinearLayout.LayoutParams modelLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            modelLayoutParams.bottomMargin = ToolUtils.dip2px(mActivity, 10);
+            LinearLayout modelLinearLayout = new LinearLayout(mActivity);
+            modelLinearLayout.setBackgroundColor(model_border_bg);
+            modelLinearLayout.setOrientation(LinearLayout.VERTICAL);
+
+            LinearLayout.LayoutParams headerParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, ToolUtils.dip2px(mActivity, 40));
+            View headerView = mInflater.inflate(R.layout.item_recomend_header, null, false);
+            headerView.findViewById(R.id.item_header).setOnClickListener(this);
+            ((SimpleDraweeView) headerView.findViewById(R.id.item_header_icon)).setImageURI(comicsBean.getNewTitleIconUrl());
+            ((TextView) headerView.findViewById(R.id.item_header_title)).setText(comicsBean.getItemTitle());
+            modelLinearLayout.addView(headerView, headerParams);
+            LinearLayout.LayoutParams headerParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, ToolUtils.dip2px(mActivity, 40));
+            View headerView = mInflater.inflate(R.layout.item_recomend_header, null, false);
+            headerView.findViewById(R.id.item_header).setOnClickListener(this);
+            ((SimpleDraweeView) headerView.findViewById(R.id.item_header_icon)).setImageURI(comicsBean.getNewTitleIconUrl());
+            ((TextView) headerView.findViewById(R.id.item_header_title)).setText(comicsBean.getItemTitle());
+            modelLinearLayout.addView(headerView, headerParams);
+
+            LinearLayout linearLayout = null;
+            int COLUMN = 3;
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            int mItemWidth = (mScreenWidth - mBoderEdgeParam.width * (COLUMN + 1)) / COLUMN;
+            int size = comics.size();
+             if (size >= 3) {
+                size = 3;
+            }
+            for (int i = 0; i < size; i++) {
+                if (i % COLUMN == 0) {
+                    linearLayout = new LinearLayout(mActivity);
+                    modelLinearLayout.addView(linearLayout, layoutParams);
+                }
+                View view = mInflater.inflate(R.layout.item_view_three, null, false);
+                ThreeModelViewHolder viewHolder = new ThreeModelViewHolder(view);
+                viewHolder.bindView(comics.get(i));
+                View boderLine = new View(mActivity);
+                linearLayout.addView(boderLine, mBoderEdgeParam);
+                LinearLayout.LayoutParams layoutParam = new LinearLayout.LayoutParams(mItemWidth, LinearLayout.LayoutParams.WRAP_CONTENT);
+                linearLayout.addView(view, layoutParam);
+                if ((i + 1) % COLUMN == 0) {
+                    View boderLineRight = new View(mActivity);
+                    linearLayout.addView(boderLineRight, mBoderEdgeParam);
+                }
+            }
+            llContainer.addView(modelLinearLayout, modelLayoutParams);
         }
     }
 
