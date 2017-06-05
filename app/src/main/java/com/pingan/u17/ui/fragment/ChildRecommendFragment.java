@@ -26,6 +26,7 @@ import com.pingan.u17.util.ToolUtils;
 
 import java.util.List;
 
+import butterknife.BindColor;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -33,11 +34,13 @@ import butterknife.ButterKnife;
  * Author：liupeng on 2017/2/24 09:56
  * Address：liupeng264@pingan.com.cn
  */
-public class ChildRecommendFragment extends BaseFragment {
-    /*@BindView(R.id.rv_recommend)
-    RecyclerView rvRecommend;*/
+public class ChildRecommendFragment extends BaseFragment implements View.OnClickListener {
+
     @BindView(R.id.ll_container_recommend)
     LinearLayout llContainer;
+
+    @BindColor(R.color.model_border_bg)
+    int model_border_bg;
 
     private HomePageBean mHomePageBean;
     private static final int THREE = 3;
@@ -47,11 +50,14 @@ public class ChildRecommendFragment extends BaseFragment {
     private static final int SEVEN = 7;
     private static final int EIGHT = 8;
     private static final int NINE  = 9;
-    private        List<HomePageBean.DataBean.ReturnDataBean.GalleryItemsBean> mGalleryItems;//banner 实体
-    private        List<HomePageBean.DataBean.ReturnDataBean.ComicListsBean>   mComicLists;
-    private        AbHttpClient                                                mHttpClient;
-    private        LayoutInflater                                              mInflater;
-    private  Context                                                     mContext;
+    private List<HomePageBean.DataBean.ReturnDataBean.GalleryItemsBean> mGalleryItems;//banner 实体
+    private List<HomePageBean.DataBean.ReturnDataBean.ComicListsBean>   mComicLists;
+    private AbHttpClient                                                mHttpClient;
+    private LayoutInflater                                              mInflater;
+    private Context                                                     mContext;
+
+    private int                       mScreenWidth;
+    private LinearLayout.LayoutParams mBoderEdgeParam;
 
     @Nullable
     @Override
@@ -60,7 +66,15 @@ public class ChildRecommendFragment extends BaseFragment {
         ButterKnife.bind(this, view);
         mContext = container.getContext();
         mInflater = LayoutInflater.from(mActivity);
+        init();
         return view;
+    }
+
+    private void init() {
+        mScreenWidth = ToolUtils.getScreenWidth(mActivity);
+        mBoderEdgeParam = new LinearLayout.LayoutParams(ToolUtils.dip2px(mActivity, 8), LinearLayout.LayoutParams.MATCH_PARENT);
+
+
     }
 
     @Override
@@ -71,7 +85,7 @@ public class ChildRecommendFragment extends BaseFragment {
         AbHttpUtil abHttpUtil = AbHttpUtil.getInstance(mActivity);
         mHttpClient = new AbHttpClient(mActivity);
         final AbRequestParams requestParams = new AbRequestParams();
-        requestParams.put("v", "3220102");
+        requestParams.put("v", "3321");
         requestParams.put("t", "1493003790");
         requestParams.put("model", "Redmi+Pro");
         requestParams.put("come_from", "openqq");
@@ -103,29 +117,38 @@ public class ChildRecommendFragment extends BaseFragment {
     private void updateView() {
         if (mHomePageBean != null) {
             mGalleryItems = mHomePageBean.getData().getReturnData().getGalleryItems();
-            addAD();
+
             mComicLists = mHomePageBean.getData().getReturnData().getComicLists();
-            for (HomePageBean.DataBean.ReturnDataBean.ComicListsBean comicList : mComicLists) {
-                switch (comicList.getComicType()) {
-                    case THREE:
-                        List<HomePageBean.DataBean.ReturnDataBean.ComicListsBean.ComicsBean> comics = comicList.getComics();
-                        addSixModel(comics);
+            for (int i = 0; i < mComicLists.size(); i++) {
+                HomePageBean.DataBean.ReturnDataBean.ComicListsBean comicBean = mComicLists.get(i);
+                switch (i) {
+                    case 0:
+                        addThreeModel(comicBean, 2);
                         break;
-                    case FOUR:
+                    case 1:
+                    case 3:
+                    case 4:
+                    case 7:
+                        addThreeModel(comicBean, 1);
+                        break;
+                    case 2:
+                        addTwoModel(comicBean, 80,1,true);
+                        break;
+                    case 5:
+                        addTwoModel(comicBean, 100,2,false);
+                        break;
+                    case 6:
+
 
                         break;
-                    case FIVE:
+                    case 8:
+                        addTwoModel(comicBean, 100,1,false);
+                        break;
+                    case 9:
 
                         break;
-                    case SIX:
+                    case 10:
 
-                        break;
-                    case SEVEN:
-
-                        break;
-                    case EIGHT:
-                        break;
-                    case NINE:
                         break;
                     default:
                 }
@@ -134,45 +157,119 @@ public class ChildRecommendFragment extends BaseFragment {
     }
 
     /**
-     * 三模块
+     * 二模块
+     * @param comicBean
+     * @param height
+     * @param type
      */
-    private void addThreeModel(List<HomePageBean.DataBean.ReturnDataBean.ComicListsBean.ComicsBean> comics) {
-        if (comics != null) {
-
-        }
-    }
-
-    /**
-     * @param comics
-     */
-    private void addSixModel(List<HomePageBean.DataBean.ReturnDataBean.ComicListsBean.ComicsBean> comics) {
+    private void addTwoModel(HomePageBean.DataBean.ReturnDataBean.ComicListsBean comicBean, int height, int type,boolean onlyImg) {
+        List<HomePageBean.DataBean.ReturnDataBean.ComicListsBean.ComicsBean> comics = comicBean.getComics();
         if (comics != null && comics.size() > 0) {
             LinearLayout.LayoutParams modelLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            modelLayoutParams.bottomMargin = ToolUtils.dip2px(mActivity, 10);
             LinearLayout modelLinearLayout = new LinearLayout(mActivity);
+            modelLinearLayout.setBackgroundColor(model_border_bg);
+            modelLinearLayout.setOrientation(LinearLayout.VERTICAL);
+
+            LinearLayout.LayoutParams headerParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, ToolUtils.dip2px(mActivity, 40));
+            View headerView = mInflater.inflate(R.layout.item_recomend_header, null, false);
+            headerView.findViewById(R.id.item_header).setOnClickListener(this);
+            ((SimpleDraweeView) headerView.findViewById(R.id.item_header_icon)).setImageURI(comicBean.getNewTitleIconUrl());
+            ((TextView) headerView.findViewById(R.id.item_header_title)).setText(comicBean.getItemTitle());
+            modelLinearLayout.addView(headerView, headerParams);
 
             LinearLayout linearLayout = null;
-            int COLUMN=3;
+            int COLUMN = 2;
             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-
-            LinearLayout.LayoutParams boderParam = new LinearLayout.LayoutParams(ToolUtils.dip2px(mActivity, 6), LinearLayout.LayoutParams.MATCH_PARENT);
-            for (int i = 0; i < comics.size(); i++) {
-                if (i % 3 == 0) {
+            int mItemWidth = (mScreenWidth - mBoderEdgeParam.width * (COLUMN + 1)) / COLUMN;
+            int size = comics.size();
+            if (type == 1) {
+                size = 2;
+            } else if (size >= 4) {
+                size = 4;
+            }
+            for (int i = 0; i < size; i++) {
+                if (i % COLUMN == 0) {
                     linearLayout = new LinearLayout(mActivity);
-                    modelLinearLayout.addView(linearLayout,layoutParams);
+                    modelLinearLayout.addView(linearLayout, layoutParams);
                 }
-                View view = mInflater.inflate(R.layout.item_recomend_three, null, false);
-                SixViewHolder viewHolder = new SixViewHolder(view);
-                viewHolder.bindView(comics.get(i));
-                int screenWidth = ToolUtils.getScreenWidth(mActivity);
-                View boder = new View(mActivity);
-               // linearLayout.addView(boder,boderParam);
-                int itemWidth = (screenWidth - ToolUtils.dip2px(mActivity, 6) * (COLUMN + 1)) / COLUMN;
-                LinearLayout.LayoutParams layoutParam = new LinearLayout.LayoutParams(itemWidth, ToolUtils.dip2px(mActivity,300));
+                View view = mInflater.inflate(R.layout.item_view_three, linearLayout, false);
+                SimpleDraweeView icon = (SimpleDraweeView) view.findViewById(R.id.sv_cover_seven);
+                ViewGroup.LayoutParams iconLayoutParams = icon.getLayoutParams();
+                //设置icon的高度
+                iconLayoutParams.width = LinearLayout.LayoutParams.MATCH_PARENT;
+                iconLayoutParams.height = ToolUtils.dip2px(mActivity, height);
+
+                TwoModelViewHolder viewHolder = new TwoModelViewHolder(view);
+                viewHolder.bindView(comics.get(i),onlyImg);
+                View boderLine = new View(mActivity);
+                linearLayout.addView(boderLine, mBoderEdgeParam);
+                LinearLayout.LayoutParams layoutParam = new LinearLayout.LayoutParams(mItemWidth, LinearLayout.LayoutParams.WRAP_CONTENT);
+
                 linearLayout.addView(view, layoutParam);
+                if ((i + 1) % COLUMN == 0) {
+                    View boderLineRight = new View(mActivity);
+                    linearLayout.addView(boderLineRight, mBoderEdgeParam);
+                }
             }
             llContainer.addView(modelLinearLayout, modelLayoutParams);
         }
     }
+
+
+    /**
+     * 有一行的三模块 还有两行的三模块
+     *
+     * @param comicsBean
+     * @param type       = 1为 1行3列的，2为 2行3列的
+     */
+    private void addThreeModel(HomePageBean.DataBean.ReturnDataBean.ComicListsBean comicsBean, int type) {
+        List<HomePageBean.DataBean.ReturnDataBean.ComicListsBean.ComicsBean> comics = comicsBean.getComics();
+        if (comics != null && comics.size() > 0) {
+            LinearLayout.LayoutParams modelLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            modelLayoutParams.bottomMargin = ToolUtils.dip2px(mActivity, 10);
+            LinearLayout modelLinearLayout = new LinearLayout(mActivity);
+            modelLinearLayout.setBackgroundColor(model_border_bg);
+            modelLinearLayout.setOrientation(LinearLayout.VERTICAL);
+
+            LinearLayout.LayoutParams headerParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, ToolUtils.dip2px(mActivity, 40));
+            View headerView = mInflater.inflate(R.layout.item_recomend_header, null, false);
+            headerView.findViewById(R.id.item_header).setOnClickListener(this);
+            ((SimpleDraweeView) headerView.findViewById(R.id.item_header_icon)).setImageURI(comicsBean.getNewTitleIconUrl());
+            ((TextView) headerView.findViewById(R.id.item_header_title)).setText(comicsBean.getItemTitle());
+            modelLinearLayout.addView(headerView, headerParams);
+
+            LinearLayout linearLayout = null;
+            int COLUMN = 3;
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            int mItemWidth = (mScreenWidth - mBoderEdgeParam.width * (COLUMN + 1)) / COLUMN;
+            int size = comics.size();
+            if (type == 1) {
+                size = 3;
+            } else if (size >= 6) {
+                size = 6;
+            }
+            for (int i = 0; i < size; i++) {
+                if (i % COLUMN == 0) {
+                    linearLayout = new LinearLayout(mActivity);
+                    modelLinearLayout.addView(linearLayout, layoutParams);
+                }
+                View view = mInflater.inflate(R.layout.item_view_three, null, false);
+                ThreeModelViewHolder viewHolder = new ThreeModelViewHolder(view);
+                viewHolder.bindView(comics.get(i));
+                View boderLine = new View(mActivity);
+                linearLayout.addView(boderLine, mBoderEdgeParam);
+                LinearLayout.LayoutParams layoutParam = new LinearLayout.LayoutParams(mItemWidth, LinearLayout.LayoutParams.WRAP_CONTENT);
+                linearLayout.addView(view, layoutParam);
+                if ((i + 1) % COLUMN == 0) {
+                    View boderLineRight = new View(mActivity);
+                    linearLayout.addView(boderLineRight, mBoderEdgeParam);
+                }
+            }
+            llContainer.addView(modelLinearLayout, modelLayoutParams);
+        }
+    }
+
 
     /**
      * 设置banner
@@ -181,8 +278,19 @@ public class ChildRecommendFragment extends BaseFragment {
 
     }
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.item_header:
+                //强力推荐作品
+                break;
 
-    static class SixViewHolder {
+            default:
+        }
+    }
+
+
+    static class ThreeModelViewHolder {
         @BindView(R.id.sv_cover_seven)
         SimpleDraweeView svCoverSeven;
         @BindView(R.id.tv_name_seven)
@@ -190,14 +298,39 @@ public class ChildRecommendFragment extends BaseFragment {
         @BindView(R.id.tv_corner_seven)
         TextView         tvCornerSeven;
 
-        public SixViewHolder(View view) {
+        public ThreeModelViewHolder(View view) {
             ButterKnife.bind(this, view);
         }
 
         public void bindView(HomePageBean.DataBean.ReturnDataBean.ComicListsBean.ComicsBean comics) {
             FrescoImageUtil.displayImgFromNetwork(svCoverSeven, comics.getCover());
-            tvNameSeven.setText(comics.getAuthor_name());
-            tvCornerSeven.setText(U17Application.getInstance().getResources().getString(R.string.text_update_setion,comics.getCornerInfo()));
+            tvNameSeven.setText(comics.getName());
+            tvCornerSeven.setText(U17Application.getInstance().getResources().getString(R.string.text_update_setion, comics.getCornerInfo()));
+        }
+    }
+
+    static class TwoModelViewHolder {
+        @BindView(R.id.sv_cover_seven)
+        SimpleDraweeView svCoverSeven;
+        @BindView(R.id.tv_name_seven)
+        TextView         tvNameSeven;
+        @BindView(R.id.tv_corner_seven)
+        TextView         tvCornerSeven;
+
+        public TwoModelViewHolder(View view) {
+            ButterKnife.bind(this, view);
+        }
+
+        public void bindView(HomePageBean.DataBean.ReturnDataBean.ComicListsBean.ComicsBean comics,boolean onlyImg) {
+            FrescoImageUtil.displayImgFromNetwork(svCoverSeven, comics.getCover());
+            if (onlyImg) {
+                tvNameSeven.setVisibility(View.GONE);
+                tvCornerSeven.setVisibility(View.GONE);
+            }else{
+                tvNameSeven.setText(comics.getName());
+                tvCornerSeven.setText(U17Application.getInstance().getResources().getString(R.string.text_update_setion, comics.getCornerInfo()));
+            }
+
         }
     }
 }

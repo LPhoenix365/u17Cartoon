@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:id="@+id/item_header"
+              android:orientation="horizontal"
+    android:gravity="center_vertical">
+    <com.facebook.drawee.view.SimpleDraweeView
+        android:id="@+id/item_header_icon"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/bg_mine_head"
+        android:padding="2dp"
+        />
+        <TextView
+            android:id="@+id/item_header_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="强烈推荐"
+            />
+
+    <TextView
+        android:id="@+id/item_header_more"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="right"
+        android:text="更多"
+        android:drawableRight="@drawable/icon_more_boutique"
+        android:layout_marginRight="8dp"
+        android:drawablePadding="4dp"/>
+
+</LinearLayout>
