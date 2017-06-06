@@ -308,6 +308,16 @@ public class HomePageBean implements Serializable {
                     private String short_description;
                     private String author_name;
                     private int    is_vip;
+                    private String[] tags;
+                    public String[] getTags() {
+                        return tags;
+                    }
+
+                    public void setTags(String[] tags) {
+                        this.tags = tags;
+                    }
+
+
 
                     public int getComicId() {
                         return comicId;

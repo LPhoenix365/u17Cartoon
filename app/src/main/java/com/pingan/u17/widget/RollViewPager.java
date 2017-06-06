@@ -1,7 +1,6 @@
 package com.pingan.u17.widget;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.view.PagerAdapter;
@@ -11,46 +10,42 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.framework.FrescoImageUtil;
 import com.facebook.drawee.view.SimpleDraweeView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Author：liupeng on 2017/2/8 18:40
  * Address：liupeng264@pingan.com.cn
- *  存在一个bug  开始时不能向左滑动
+ * 存在一个bug  开始时不能向左滑动
  */
 public class RollViewPager extends ViewPager {
     private int mDownX;
     private int mDownY;
-    private ArrayList<String> mList = new ArrayList();
+    private List<String> mList = new ArrayList();
 
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            mCurrentItem = mTotal-- % mList.size();
-            if (mTotal == 1) {
-                //jian完后再回去
-                mTotal = mTotalSize;
+            mCurrentItem++;
+            if (mCurrentItem == mTotalSize) {
+                //完后再回去
+                mCurrentItem = mList.size() * 50+1;
             }
             RollViewPager.this.setCurrentItem(mCurrentItem);
             mHandler.sendEmptyMessageDelayed(0, 2000);
         }
     };
-    private int mTotal;//总个数
     private int mCurrentItem; //当前条目
     private int mTotalSize;
-    ;
-
-//http://img3.cdn.u17i.com/15/05/98063/wp/1220_1432724624_yU2Kzk1u11y8.01026_50.jpg
-// http://image.mylife.u17t.com/2017/02/08/1486518366_2sYyKJ8UJwEL.jpg
 
     public RollViewPager(Context context) {
         this(context, null);
 
     }
-
 
     public RollViewPager(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -62,22 +57,16 @@ public class RollViewPager extends ViewPager {
         this.addOnPageChangeListener(new OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
             }
 
             @Override
             public void onPageSelected(int position) {
-
             }
 
             @Override
             public void onPageScrollStateChanged(int state) {
-
             }
         });
-
-        //初始化后发消息
-        mHandler.sendEmptyMessageDelayed(0, 2000);
     }
 
 
@@ -99,11 +88,6 @@ public class RollViewPager extends ViewPager {
         // return true;//返回true会使viewpager滑动失效
         return super.onTouchEvent(ev);
     }
-
-    /*@Override
-    public boolean onTouchEvent(MotionEvent ev) {
-        return super.onTouchEvent(ev);
-    }*/
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
@@ -127,16 +111,16 @@ public class RollViewPager extends ViewPager {
     }
 
     //设置数据
-    public void setData(ArrayList<String> datas) {
+    public void setData(List<String> datas) {
         mList = datas;
         mTotalSize = mList.size() * 100;
-        mTotal = mTotalSize;
         //设置为
-        mCurrentItem = mList.size() * 50;
-
+        mCurrentItem=mList.size()*50;
+        RollAdapter rollAdapter = new RollAdapter();
+        this.setAdapter(rollAdapter);
         this.setCurrentItem(mCurrentItem);
-
-        this.setAdapter(new RollAdapter());
+        //初始化后发消息
+        mHandler.sendEmptyMessageDelayed(0, 2000);
     }
 
 
@@ -161,9 +145,10 @@ public class RollViewPager extends ViewPager {
         @Override
         public Object instantiateItem(ViewGroup container, int position) {
             SimpleDraweeView simpleDraweeView = new SimpleDraweeView(container.getContext());
-            simpleDraweeView.setImageURI(Uri.parse(mList.get(position % mList.size())));
+            FrescoImageUtil.displayImgFromNetwork(simpleDraweeView, mList.get(position % mList.size()));
             container.addView(simpleDraweeView);
             return simpleDraweeView;
         }
     }
+
 }

@@ -12,6 +12,8 @@
     <color name="colorTabText">#3a3d39</color>
     <color name="common_border_bg">#DDD</color>
     <color name="model_border_bg">#FEEE</color>
-
-
+    <color name="item_rank_bg1">#88d9a3</color>
+    <color name="item_rank_bg2">#eaaf98</color>
+    <color name="item_rank_bg3">#d2cd9b</color>
+    <color name="item_rank_bg4">#b49d9c</color>
 </resources>
