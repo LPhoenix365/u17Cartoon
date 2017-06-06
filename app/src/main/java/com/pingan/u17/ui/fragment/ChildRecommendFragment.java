@@ -12,7 +12,6 @@ import android.widget.TextView;
 import com.example.framework.FrescoImageUtil;
 import com.example.framework.http.abutil.AbHttpUtil;
 import com.example.framework.http.abutil.AbLogUtil;
-import com.example.framework.http.request.AbHttpClient;
 import com.example.framework.http.request.AbRequestParams;
 import com.example.framework.http.response.AbStringHttpResponseListener;
 import com.facebook.drawee.view.SimpleDraweeView;
@@ -32,7 +31,7 @@ import butterknife.BindColor;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-/**
+/** 首页 推荐
  * Author：liupeng on 2017/2/24 09:56
  * Address：liupeng264@pingan.com.cn
  */
@@ -57,7 +56,6 @@ public class ChildRecommendFragment extends BaseFragment implements View.OnClick
 
     private List<HomePageBean.DataBean.ReturnDataBean.GalleryItemsBean> mGalleryItems;//banner 实体
     private List<HomePageBean.DataBean.ReturnDataBean.ComicListsBean>   mComicLists;
-    private AbHttpClient                                                mHttpClient;
     private LayoutInflater                                              mInflater;
     private Context                                                     mContext;
 
@@ -90,8 +88,7 @@ public class ChildRecommendFragment extends BaseFragment implements View.OnClick
 
 
         AbHttpUtil abHttpUtil = AbHttpUtil.getInstance(mActivity);
-        mHttpClient = new AbHttpClient(mActivity);
-        final AbRequestParams requestParams = new AbRequestParams();
+        AbRequestParams requestParams = new AbRequestParams();
         requestParams.put("v", "3321");
         requestParams.put("t", "1493003790");
         requestParams.put("model", "Redmi+Pro");
