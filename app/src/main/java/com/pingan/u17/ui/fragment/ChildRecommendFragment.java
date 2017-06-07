@@ -22,7 +22,7 @@ import com.pingan.u17.base.U17Application;
 import com.pingan.u17.bean.HomePageBean;
 import com.pingan.u17.util.Constants;
 import com.pingan.u17.util.ToolUtils;
-import com.pingan.u17.widget.RollViewPager;
+import com.pingan.u17.widget.RollView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -395,7 +395,7 @@ public class ChildRecommendFragment extends BaseFragment implements View.OnClick
         LinearLayout modelLinearLayout = new LinearLayout(mActivity);
         modelLinearLayout.setBackgroundColor(model_border_bg);
         LinearLayout.LayoutParams adLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, ToolUtils.dip2px(mActivity, 140));
-        RollViewPager rollViewPager = new RollViewPager(mActivity);
+        RollView rollViewPager = new RollView(mActivity);
         List<String> arrayList = new ArrayList<>();
         for (HomePageBean.DataBean.ReturnDataBean.GalleryItemsBean galleryItem : mGalleryItems) {
             arrayList.add(galleryItem.getCover());
