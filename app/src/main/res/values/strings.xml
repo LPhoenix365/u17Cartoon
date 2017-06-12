@@ -8,5 +8,8 @@
 CollapsingToolbarLayout和ScrollView一起使用会有滑动bug，注意要使用NestedScrollView来替代ScrollView。
 
 AppBarLayout的子布局有5种滚动标识(就是上面代码CollapsingToolbarLayout中配置的app:layout_scrollFlags属性)：CollapsingToolbarLayout可以通过app:contentScrim设置折叠时工具栏布局的颜色，通过app:statusBarScrim设置折叠时状态栏的颜色。默认contentScrim是colorPrimary的色值，statusBarScrim是colorPrimaryDark的色值。这个后面会用到。  CollapsingToolbarLayout的子布局有3种折叠模式（Toolbar中设置的app:layout_collapseMode）  off：这个是默认属性，布局将正常显示，没有折叠的行为。 pin：CollapsingToolbarLayout折叠后，此布局将固定在顶部。 parallax：CollapsingToolbarLayout折叠时，此布局也会有视差折叠效果。 当CollapsingToolbarLayout的子布局设置了parallax模式时，我们还可以通过app:layout_collapseParallaxMultiplier设置视差滚动因子，值为：0~1。  FloatingActionButton这个控件通过app:layout_anchor这个设置锚定在了AppBarLayout下方。FloatingActionButton源码中有一个Behavior方法，当AppBarLayout收缩时，FloatingActionButton就会跟着做出相应变化。关于CoordinatorLayout和Behavior，我下一篇文章会和大家一起学习。  这一堆属性看着有点烦，大家可以新建一个ScrollingActivity模板去实验一下玩玩。</string>
+    <string name="title_activity_scrolling1">Scrolling1Activity</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_scrolling">ScrollingActivity</string>
 
 </resources>

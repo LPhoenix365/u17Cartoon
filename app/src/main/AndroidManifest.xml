@@ -44,6 +44,16 @@
         </activity>
         <activity android:name=".ui.activity.CartoonDetailActivity">
         </activity>
+        <activity
+            android:name=".ui.activity.Scrolling1Activity"
+            android:label="@string/title_activity_scrolling1"
+            android:theme="@style/AppTheme">
+        </activity>
+        <activity
+            android:name=".ui.activity.ScrollingActivity"
+            android:label="@string/title_activity_scrolling"
+            android:theme="@style/AppTheme">
+        </activity>
     </application>
 
 </manifest>

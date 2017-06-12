@@ -2,6 +2,7 @@ package com.pingan.u17.ui.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +20,7 @@ import com.pingan.u17.R;
 import com.pingan.u17.base.BaseFragment;
 import com.pingan.u17.base.U17Application;
 import com.pingan.u17.bean.HomePageBean;
-import com.pingan.u17.ui.activity.CartoonDetailActivity;
+import com.pingan.u17.ui.activity.ReadingActivity;
 import com.pingan.u17.util.ActivityIntentTools;
 import com.pingan.u17.util.Constants;
 import com.pingan.u17.util.ToolUtils;
@@ -31,6 +32,9 @@ import java.util.List;
 import butterknife.BindColor;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.reactivex.Observer;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.disposables.Disposable;
 
 /**
  * Description  首页 推荐
@@ -84,7 +88,37 @@ public class ChildRecommendFragment extends BaseFragment implements View.OnClick
         mRank_bgs = new int[]{item_rank_bg1, item_rank_bg2, item_rank_bg3, item_rank_bg4, item_rank_bg5};
         mScreenWidth = ToolUtils.getScreenWidth(mActivity);
         mBoderEdgeParam = new LinearLayout.LayoutParams(ToolUtils.dip2px(mActivity, 8), LinearLayout.LayoutParams.MATCH_PARENT);
+        String[] names = {"a","b","c"};
+        final String tag="tag";
+        Observer<String> observer = new Observer<String>() {
 
+            @Override
+            public void onSubscribe(@NonNull Disposable d) {
+            }
+            @Override
+            public void onNext(String s) {
+                Log.d(tag, "Item: " + s);
+            }
+
+
+            @Override
+            public void onError(Throwable e) {
+                Log.d(tag, "Error!");
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+
+        };
+        /*Observable.from(names)
+                .subscribe(new Action1<String>() {
+                    @Override
+                    public void call(String name) {
+                        Log.d(tag, name);
+                    }
+                });*/
 
     }
 
@@ -510,7 +544,7 @@ public class ChildRecommendFragment extends BaseFragment implements View.OnClick
     private void dispatchEventClick(String[] params) {
         String itemTitle = params[0];
         int position = Integer.parseInt(params[1]);
-        ActivityIntentTools.gotoActivityNotFinish(mActivity, CartoonDetailActivity.class);
+        ActivityIntentTools.gotoActivityNotFinish(mActivity, ReadingActivity.class);
     }
 
     static class ThreeModelViewHolder {
