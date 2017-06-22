@@ -17,5 +17,26 @@
     <color name="item_rank_bg2">#eaaf98</color>
     <color name="item_rank_bg3">#d2cd9b</color>
     <color name="item_rank_bg4">#b49d9c</color>
+    <color name="tran">#b49d9c</color>
+    <color name="item_c7bf68">#c7bf68</color>
+    <color name="toolbar_bg_color">#F2F2F2</color>
 
+
+    <color name="text_color_94">#949494</color>
+    <color name="text_color_934a4a">#934a4a</color>
+
+    <color name="border_bg">#e3ddcf</color>
+    <color name="border_color">#d5d5d5</color>
+    <color name="detail_text_color1">#C05930</color>
+    <color name="detail_text_color2">#ABA89F</color>
+    <color name="detail_text_C8ECA3">#C8ECA3</color>
+    <color name="detail_text_565A5D">#565A5D</color>
+    <color name="detail_text_F4FAE9">#F4FAE9</color>
+    <color name="full_transparent">#00000000</color>
+    <color name="half_transparent">#aa000000</color>
+    <color name="selectpicbule">#037BFF</color>
+    <color name="text_color_ffcccccc">#FFCCCCCC</color>
+    <color name="login_edittext_hint">#c9c9c9</color>
+    <color name="contentBgColor">#f8f8f8</color>
+    <color name="transparent">#1000</color>
 </resources>
