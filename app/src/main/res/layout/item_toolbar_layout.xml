@@ -3,7 +3,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:orientation="horizontal"
-                android:layout_marginTop="25dp"
                 >
 
     <ImageView

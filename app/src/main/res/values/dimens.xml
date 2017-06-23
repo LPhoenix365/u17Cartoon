@@ -5,4 +5,6 @@
     <dimen name="app_bar_height">300dp</dimen>
     <dimen name="text_margin">5dp</dimen>
     <dimen name="fab_margin">4dp</dimen>
+    <dimen name="status_bar_height">24dp</dimen>
+
 </resources>

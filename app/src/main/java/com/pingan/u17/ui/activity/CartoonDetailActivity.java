@@ -8,7 +8,6 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -64,11 +63,11 @@ public class CartoonDetailActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentLayout(R.layout.activity_cartoon_detail);
         ButterKnife.bind(this);
-        appBar.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+        /*appBar.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             @Override
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
                 Log.w("verticalOffset", "verticalOffset=" + verticalOffset);
-
+                toolbar.setAlpha(Math.abs(verticalOffset / (576.f*2)));
                 if (verticalOffset == 0) {
                     if (state != CollapsingToolbarLayoutState.EXPANDED) {
                         state = CollapsingToolbarLayoutState.EXPANDED;//修改状态标记为展开
@@ -82,14 +81,14 @@ public class CartoonDetailActivity extends BaseActivity {
                 } else {
                     if (state != CollapsingToolbarLayoutState.INTERNEDIATE) {
                         if (state == CollapsingToolbarLayoutState.COLLAPSED) {
-                            toolbar.setAlpha(Math.abs(verticalOffset / (576.f*2)));
+
                         }
                        // collapsingToolbarLayout.setTitle("INTERNEDIATE");//设置title为INTERNEDIATE
                         state = CollapsingToolbarLayoutState.INTERNEDIATE;//修改状态标记为中间
                     }
                 }
             }
-        });
+        });*/
 
     }
 
