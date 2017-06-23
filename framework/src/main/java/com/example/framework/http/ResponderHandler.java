@@ -46,8 +46,7 @@ public class ResponderHandler extends Handler {
                     {
                         if (mResultResponseListener instanceof AbStringHttpResponseListener) {
                             if (response.length >= 2) {
-                                ((AbStringHttpResponseListener) mResultResponseListener).onSuccess((Integer) response[0],
-                                        (String) response[1]);
+                                ((AbStringHttpResponseListener) mResultResponseListener).onSuccess((Integer) response[0], (String) response[1]);
                             } else {
                                 AbLogUtil.e(mContext, "SUCCESS_MESSAGE " + AbAppConfig.MISSING_PARAMETERS);
                             }

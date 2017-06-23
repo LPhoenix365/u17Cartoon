@@ -153,11 +153,11 @@ public class AbRequestParams {
      */
     public List<BasicNameValuePair> getParamsList() {
         List<BasicNameValuePair> paramsList = new LinkedList<BasicNameValuePair>();
-        for (ConcurrentHashMap.Entry<String, String> entry : urlParams
-                .entrySet()) {
+        for (ConcurrentHashMap.Entry<String, String> entry : urlParams.entrySet()) {
             paramsList.add(new BasicNameValuePair(entry.getKey(), entry
                     .getValue()));
         }
+        //
         return paramsList;
     }
 

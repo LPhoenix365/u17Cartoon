@@ -7,3 +7,8 @@
 /build
 /captures
 .externalNativeBuild
+framework/._.DS_Store
+/freeline/
+/freeline_core/
+/freeline.py
+/freeline_project_description.json

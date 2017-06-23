@@ -5,7 +5,8 @@
     android:id="@+id/activity_album_and"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.pingan.u17.abum.PhotoSelectActivity">
+    tools:context="com.pingan.u17.abum.PhotoSelectFragment">
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/photo_select_rv"
         android:layout_width="match_parent"

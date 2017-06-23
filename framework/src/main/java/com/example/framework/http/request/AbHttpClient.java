@@ -12,6 +12,7 @@ import com.example.framework.http.global.AbAppConfig;
 import com.example.framework.http.global.AbAppException;
 import com.example.framework.http.response.AbBinaryHttpResponseListener;
 import com.example.framework.http.response.AbFileHttpResponseListener;
+import com.example.framework.http.response.AbGzipDecompressingEntity;
 import com.example.framework.http.response.AbHttpResponseListener;
 import com.example.framework.http.response.AbStringHttpResponseListener;
 
@@ -58,6 +59,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.concurrent.Executor;
+
 /**
  * Description
  *
@@ -81,7 +83,7 @@ public class AbHttpClient {
     /**
      * 编码.
      */
-    private String encode = HTTP_GET;
+    private String encode = HTTP.UTF_8;
 
     /**
      * 用户代理.
@@ -220,21 +222,33 @@ public class AbHttpClient {
             url = url + "?";
         }
 
-        HttpGet httpGet = new HttpGet(url);
-        httpGet.addHeader(USER_AGENT, userAgent);
-        httpGet.addHeader("Content-Type", "text/html;charset=UTF-8");
+        if (params != null) {
+            String paramsContent = params.getParamString();
+            if (paramsContent != null) {
+                /*if (paramsContent.contains("xwalk")) {
+                    url = url.substring(0, url.length() - 1);
+                } else {
+                    url += paramsContent;
+                }*/
+                url+=paramsContent;
+            }
+        }
 
+        HttpGet httpGet = new HttpGet(url);
+       //httpGet.addHeader(USER_AGENT, userAgent);
+        //httpGet.addHeader("Content-Type", "text/html;charset=UTF-8");
         // 取得默认的HttpClient9
         HttpClient httpClient = getHttpClient();
         // 取得HttpResponse
         String response = null;
         try {
-            response = httpClient.execute(httpGet, new RedirectionResponseHandler(url, responseListener),
-                    mHttpContext);
+            response = httpClient.execute(httpGet, new RedirectionResponseHandler(url, responseListener), mHttpContext);
         } catch (IOException e) {
             e.printStackTrace();
+            AbLogUtil.e("AbHttpClient", "e" + e);
+
         }finally {
-            responseListener.sendFinishMessage();
+           responseListener.sendFinishMessage();
 
         }
         AbLogUtil.i(mContext, "[HTTP Request]:" + url + ",result：" + response);
@@ -292,7 +306,7 @@ public class AbHttpClient {
                             String contentEncoding = header.getValue();
                             if (contentEncoding != null) {
                                 if (contentEncoding.contains("gzip")) {
-                                    //  entity = new AbGzipDecompressingEntity(entity);
+                                      entity = new AbGzipDecompressingEntity(entity);
                                 }
                             }
                         }

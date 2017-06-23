@@ -9,7 +9,7 @@ package com.pingan.u17.bean;
  * 修订历史：
  * ================================================
  */
-public class ImageItem implements BaseBean {
+public class ImageItem{
 
     public String name;       //图片的名字
     public String path;       //图片的路径
