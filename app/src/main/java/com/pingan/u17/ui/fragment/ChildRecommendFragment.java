@@ -20,7 +20,7 @@ import com.pingan.u17.R;
 import com.pingan.u17.base.BaseFragment;
 import com.pingan.u17.base.U17Application;
 import com.pingan.u17.bean.HomePageBean;
-import com.pingan.u17.ui.activity.ReadingActivity;
+import com.pingan.u17.ui.activity.ScrollingActivity;
 import com.pingan.u17.util.ActivityIntentTools;
 import com.pingan.u17.util.Constants;
 import com.pingan.u17.util.ToolUtils;
@@ -544,7 +544,7 @@ public class ChildRecommendFragment extends BaseFragment implements View.OnClick
     private void dispatchEventClick(String[] params) {
         String itemTitle = params[0];
         int position = Integer.parseInt(params[1]);
-        ActivityIntentTools.gotoActivityNotFinish(mActivity, ReadingActivity.class);
+        ActivityIntentTools.gotoActivityNotFinish(mActivity, ScrollingActivity.class);
     }
 
     static class ThreeModelViewHolder {
