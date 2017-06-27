@@ -2,7 +2,6 @@ package com.pingan.u17.ui.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,9 +31,6 @@ import java.util.List;
 import butterknife.BindColor;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import io.reactivex.Observer;
-import io.reactivex.annotations.NonNull;
-import io.reactivex.disposables.Disposable;
 
 /**
  * Description  首页 推荐
@@ -90,28 +86,8 @@ public class ChildRecommendFragment extends BaseFragment implements View.OnClick
         mBoderEdgeParam = new LinearLayout.LayoutParams(ToolUtils.dip2px(mActivity, 8), LinearLayout.LayoutParams.MATCH_PARENT);
         String[] names = {"a","b","c"};
         final String tag="tag";
-        Observer<String> observer = new Observer<String>() {
-
-            @Override
-            public void onSubscribe(@NonNull Disposable d) {
-            }
-            @Override
-            public void onNext(String s) {
-                Log.d(tag, "Item: " + s);
-            }
 
 
-            @Override
-            public void onError(Throwable e) {
-                Log.d(tag, "Error!");
-            }
-
-            @Override
-            public void onComplete() {
-
-            }
-
-        };
         /*Observable.from(names)
                 .subscribe(new Action1<String>() {
                     @Override
