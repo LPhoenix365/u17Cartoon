@@ -19,6 +19,7 @@ import com.pingan.u17.R;
 import com.pingan.u17.base.BaseFragment;
 import com.pingan.u17.base.U17Application;
 import com.pingan.u17.bean.HomePageBean;
+import com.pingan.u17.bean.Update2Bean;
 import com.pingan.u17.ui.activity.ScrollingActivity;
 import com.pingan.u17.util.ActivityIntentTools;
 import com.pingan.u17.util.ToolUtils;
@@ -33,6 +34,7 @@ import butterknife.ButterKnife;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
 
 /**
  * Description  首页 推荐
@@ -58,6 +60,8 @@ public class ChildRecommendFragment extends BaseFragment implements View.OnClick
     @BindColor(R.color.item_rank_bg4)
     int item_rank_bg5;
     private HomePageBean mHomePageBean;
+
+    public static final String TAG=ChildRecommendFragment.class.getSimpleName();
 
     private List<HomePageBean.DataBean.ReturnDataBean.GalleryItemsBean> mGalleryItems;//banner 实体
     private List<HomePageBean.DataBean.ReturnDataBean.ComicListsBean>   mComicLists;
@@ -86,8 +90,8 @@ public class ChildRecommendFragment extends BaseFragment implements View.OnClick
         mRank_bgs = new int[]{item_rank_bg1, item_rank_bg2, item_rank_bg3, item_rank_bg4, item_rank_bg5};
         mScreenWidth = ToolUtils.getScreenWidth(mActivity);
         mBoderEdgeParam = new LinearLayout.LayoutParams(ToolUtils.dip2px(mActivity, 8), LinearLayout.LayoutParams.MATCH_PARENT);
-        String[] names = {"a","b","c"};
-        final String tag="tag";
+        String[] names = {"a", "b", "c"};
+        final String tag = "tag";
 
 
         /*Observable.from(names)
@@ -104,7 +108,7 @@ public class ChildRecommendFragment extends BaseFragment implements View.OnClick
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        AbHttpUtil abHttpUtil = AbHttpUtil.getInstance(mActivity);
+        final AbHttpUtil abHttpUtil = AbHttpUtil.getInstance(mActivity);
         AbRequestParams requestParams = new AbRequestParams();
         requestParams.put("v", "3321");
         requestParams.put("t", "1493003790");
@@ -131,35 +135,42 @@ public class ChildRecommendFragment extends BaseFragment implements View.OnClick
         };
         //abHttpUtil.get(Constants.BASE_URL + Constants.HOME_PAGE, requestParams, stringHttpResponseListener);
 
-        String t="1493003790";
-        String model="Redmi+Pro";
-        String android_id="602b734eecb46c60";
-        /*api.hasNewversion(t,model,android_id).enqueue(new Callback<UpdateBean>() {
+
+        String t = "1493003790";
+        String model = "Redmi+Pro";
+        String android_id = "602b734eecb46c60";
+        api.hasNewversion2(t, model, android_id).enqueue(new Callback<Update2Bean>() {
             @Override
-            public void onResponse(Call<UpdateBean> call, Response<UpdateBean> response) {
-                UpdateBean updateInfo = response.body();
-                UpdateBean.ReturnDataBean info = updateInfo.getReturnData();
-                UpdateBean.ReturnDataBean.UpdateInfoBean info1 = info.getUpdateInfo();
-                AbLogUtil.d("ChildRecommendFragment", "call=" + call + "response=" + info1.getUpdate_content());
+            public void onResponse(Call<Update2Bean> call, Response<Update2Bean> response) {
+                Update2Bean updateInfo = response.body();
+               /* UpdateBean.ReturnDataBean info = updateInfo.getReturnData();
+                UpdateBean.ReturnDataBean.UpdateInfoBean info1 = info.getUpdateInfo();*/
+                AbLogUtil.d("ChildRecommendFragment", "call=" + call + "response=" + updateInfo);
+
             }
 
             @Override
-            public void onFailure(Call<UpdateBean> call, Throwable t) {
+            public void onFailure(Call<Update2Bean> call, Throwable t) {
+                AbLogUtil.d("ChildRecommendFragment", "call=" + call + "Throwable=" + t);
+            }
+        });
+
+        api.hasNewversion(t, model, android_id);
+
+
+
+        /*api.getHomePageData(model,android_id).enqueue(new Callback<HomePage>() {
+            @Override
+            public void onResponse(Call<HomePage> call, Response<HomePage> response) {
+                AbLogUtil.d("ChildRecommendFragment", "call=" + call + "response=" + response);
+
+            }
+
+            @Override
+            public void onFailure(Call<HomePage> call, Throwable t) {
                 AbLogUtil.d("ChildRecommendFragment", "call=" + call + "Throwable=" + t);
             }
         });*/
-
-        api.hasNewversion2(t,model,android_id).enqueue(new Callback<Object>() {
-            @Override
-            public void onResponse(Call<Object> call, Response<Object> response) {
-
-            }
-
-            @Override
-            public void onFailure(Call<Object> call, Throwable t) {
-
-            }
-        });
     }
 
     /**

@@ -7,11 +7,11 @@ package com.pingan.u17.bean;
  * @data 2017/6/28
  */
 
-public class DataBean<T> extends BaseBean {
+public class DataBean<T> extends Base2Bean {
 
     private int    stateCode;
     private String message;
-    private T      returnData;
+    private T returnData;
 
     public int getStateCode() {
         return stateCode;

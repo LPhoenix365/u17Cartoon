@@ -15,7 +15,7 @@ import com.pingan.u17.base.BaseActivity;
 import com.pingan.u17.ui.fragment.BookRackFragment;
 import com.pingan.u17.ui.fragment.HomeFragment;
 import com.pingan.u17.ui.fragment.MineFragment;
-import com.pingan.u17.ui.fragment.SearchFragment;
+import com.pingan.u17.ui.fragment.SortFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -41,12 +41,12 @@ public class MainActivity extends BaseActivity {
     RadioButton  tabMine;
     @BindView(R.id.main_radiogroup)
     RadioGroup   mainRadiogroup;
-    private Unbinder            mUnbinder;
-    private HomeFragment        mHomeFragment;
-    private FragmentManager     mFragmentManager;
-    private SearchFragment      mSearchFragment;
-    private BookRackFragment    mBookRackFragment;
-    private MineFragment        mMineFragment;
+    private Unbinder         mUnbinder;
+    private HomeFragment     mHomeFragment;
+    private FragmentManager  mFragmentManager;
+    private SortFragment     mSearchFragment;
+    private BookRackFragment mBookRackFragment;
+    private MineFragment     mMineFragment;
     private int mCurrentPage = 0;
     private double exitTime;
 
@@ -115,7 +115,7 @@ public class MainActivity extends BaseActivity {
                 break;
             case 1:
                 if (mSearchFragment == null) {
-                    mSearchFragment = new SearchFragment();
+                    mSearchFragment = new SortFragment();
                     transaction.add(R.id.main_framelayout, mSearchFragment, "SearchFragment");
                 } else {
                     transaction.show(mSearchFragment);

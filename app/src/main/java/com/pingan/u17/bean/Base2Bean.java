@@ -1,7 +1,5 @@
 package com.pingan.u17.bean;
 
-import com.pingan.u17.net.IResponse;
-
 import java.io.Serializable;
 
 /**
@@ -11,12 +9,12 @@ import java.io.Serializable;
  * @data 2017/4/18
  */
 
-public class BaseBean<T> implements Serializable,IResponse {
+public class Base2Bean implements Serializable {
 
 
-    private int    code;
-    private String msg;
-    private T   data;
+    private int      code;
+    private String   msg;
+    private DataBean data;
 
     public int getCode() {
         return code;
@@ -34,11 +32,11 @@ public class BaseBean<T> implements Serializable,IResponse {
         this.msg = msg;
     }
 
-    public T getData() {
+    public DataBean getData() {
         return data;
     }
 
-    public void setData(T data) {
+    public void setData(DataBean data) {
         this.data = data;
     }
 

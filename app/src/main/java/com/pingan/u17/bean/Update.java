@@ -4,11 +4,44 @@ package com.pingan.u17.bean;
  * Description
  *
  * @author liupeng502
- * @data 2017/4/24
+ * @data 2017/6/29
  */
 
-public class UpdateBean extends BaseBean<UpdateBean.DataBean>{
+public class Update  {
 
+    /**
+     * code : 1
+     * msg : 成功
+     * data : {"stateCode":1,"message":"版本更新","returnData":{"updateInfo":{"code":3320100,"name":"3.3.2.1","update_time":1495468800,"update_content":"升级来啦~ \r\n【新增】\u201c换一换\u201d，强力漫画看个够 \r\n【新增】\u201c书单\u201d，自由创建个性合集\r\n【优化】\u201c漫画详情页\u201d，操作便捷人性化\r\n【优化】\u201c历史记录列表\u201d，继续阅读更方便\r\n 快来体验吧！","apk_url":"http://download.u17i.com/app/android/phone/u17_phone_3_3_2_1_arm_release.apk","apk_name":"u17_phone_3_3_2_1_arm_release.apk","force_update":false,"size":"12088","cpu":"arm","game_channel_visbal":1}}}
+     */
+
+    private int code;
+    private String   msg;
+    private DataBean data;
+
+    public int getCode() {
+        return code;
+    }
+
+    public void setCode(int code) {
+        this.code = code;
+    }
+
+    public String getMsg() {
+        return msg;
+    }
+
+    public void setMsg(String msg) {
+        this.msg = msg;
+    }
+
+    public DataBean getData() {
+        return data;
+    }
+
+    public void setData(DataBean data) {
+        this.data = data;
+    }
 
     public static class DataBean {
         /**

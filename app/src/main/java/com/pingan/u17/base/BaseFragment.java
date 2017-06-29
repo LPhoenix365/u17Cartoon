@@ -20,6 +20,7 @@ public class BaseFragment extends Fragment {
     protected RestApi         api;
 
 
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
