@@ -6,6 +6,8 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 
+import com.pingan.u17.net.RestApi;
+
 /**
  * Author：liupeng on 2017/2/24 09:40
  * Address：liupeng264@pingan.com.cn
@@ -15,6 +17,7 @@ import android.support.v4.app.FragmentActivity;
 public class BaseFragment extends Fragment {
 
     public FragmentActivity mActivity;
+    protected RestApi         api;
 
 
     @Override
@@ -22,6 +25,8 @@ public class BaseFragment extends Fragment {
         super.onAttach(context);
         //防止后面获取activity失败 报空
         mActivity = getActivity();
+        api = U17Application.getInstance().getHttpClient().getApiService();
+
     }
 
     @Override
@@ -29,9 +34,6 @@ public class BaseFragment extends Fragment {
         super.onCreate(savedInstanceState);
         //是否有保存的实例
     }
-
-
-
 
     @Override
     public void onDestroy() {

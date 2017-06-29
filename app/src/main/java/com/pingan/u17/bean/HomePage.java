@@ -9,7 +9,7 @@ import java.util.List;
  * @data 2017/4/26
  */
 
-public class HomePage {
+public class HomePage extends BaseBean{
 
         private ReturnDataBean returnData;
 

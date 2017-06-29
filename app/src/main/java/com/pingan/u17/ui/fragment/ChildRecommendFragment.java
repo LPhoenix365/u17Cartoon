@@ -21,7 +21,6 @@ import com.pingan.u17.base.U17Application;
 import com.pingan.u17.bean.HomePageBean;
 import com.pingan.u17.ui.activity.ScrollingActivity;
 import com.pingan.u17.util.ActivityIntentTools;
-import com.pingan.u17.util.Constants;
 import com.pingan.u17.util.ToolUtils;
 import com.pingan.u17.widget.RollView;
 
@@ -31,6 +30,9 @@ import java.util.List;
 import butterknife.BindColor;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Description  首页 推荐
@@ -127,7 +129,37 @@ public class ChildRecommendFragment extends BaseFragment implements View.OnClick
                 AbLogUtil.d("ChildRecommendFragment", "content=" + content + "statusCode=" + statusCode + "error=" + error);
             }
         };
-        abHttpUtil.get(Constants.BASE_URL + Constants.HOME_PAGE, requestParams, stringHttpResponseListener);
+        //abHttpUtil.get(Constants.BASE_URL + Constants.HOME_PAGE, requestParams, stringHttpResponseListener);
+
+        String t="1493003790";
+        String model="Redmi+Pro";
+        String android_id="602b734eecb46c60";
+        /*api.hasNewversion(t,model,android_id).enqueue(new Callback<UpdateBean>() {
+            @Override
+            public void onResponse(Call<UpdateBean> call, Response<UpdateBean> response) {
+                UpdateBean updateInfo = response.body();
+                UpdateBean.ReturnDataBean info = updateInfo.getReturnData();
+                UpdateBean.ReturnDataBean.UpdateInfoBean info1 = info.getUpdateInfo();
+                AbLogUtil.d("ChildRecommendFragment", "call=" + call + "response=" + info1.getUpdate_content());
+            }
+
+            @Override
+            public void onFailure(Call<UpdateBean> call, Throwable t) {
+                AbLogUtil.d("ChildRecommendFragment", "call=" + call + "Throwable=" + t);
+            }
+        });*/
+
+        api.hasNewversion2(t,model,android_id).enqueue(new Callback<Object>() {
+            @Override
+            public void onResponse(Call<Object> call, Response<Object> response) {
+
+            }
+
+            @Override
+            public void onFailure(Call<Object> call, Throwable t) {
+
+            }
+        });
     }
 
     /**

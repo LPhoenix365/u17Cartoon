@@ -14,10 +14,16 @@ import android.widget.TextView;
 
 import com.pingan.u17.R;
 import com.pingan.u17.base.BaseActivity;
+import com.pingan.u17.net.LoggingInterceptor;
+
+import java.io.IOException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 import static com.pingan.u17.R.id.app_bar;
 
@@ -90,6 +96,25 @@ public class CartoonDetailActivity extends BaseActivity {
             }
         });*/
 
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                         OkHttpClient client = new OkHttpClient.Builder()
+                                .addNetworkInterceptor(new LoggingInterceptor())
+                                .build();
+
+                         Request request = new Request.Builder()
+                                .url("http://www.publicobject.com/helloworld.txt")
+                                .header("User-Agent", "OkHttp Example")
+                                .build();
+                        Response response = client.newCall(request).execute();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }).start();
+
     }
 
 
@@ -111,4 +136,6 @@ public class CartoonDetailActivity extends BaseActivity {
         COLLAPSED,
         INTERNEDIATE
     }
+
+
 }
