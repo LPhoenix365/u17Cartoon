@@ -7,10 +7,7 @@ package com.pingan.u17.bean;
  * @data 2017/4/24
  */
 
-public class UpdateBean extends BaseBean<UpdateBean.DataBean>{
-
-
-    public static class DataBean {
+public class UpdateBean extends BaseBean<UpdateBean>{
         /**
          * stateCode : 1
          * message : 版本更新
@@ -171,5 +168,5 @@ public class UpdateBean extends BaseBean<UpdateBean.DataBean>{
                 }
             }
         }
-    }
+
 }

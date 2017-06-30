@@ -11,12 +11,12 @@ import java.io.Serializable;
  * @data 2017/4/18
  */
 
-public class BaseBean<T> implements Serializable,IResponse {
+public class BaseBean<T> implements Serializable, IResponse {
 
 
     private int    code;
     private String msg;
-    private T   data;
+    private T      data;
 
     public int getCode() {
         return code;
@@ -42,6 +42,8 @@ public class BaseBean<T> implements Serializable,IResponse {
         this.data = data;
     }
 
-
+    public boolean isSucess() {
+        return code == 1;
+    }
 
 }
