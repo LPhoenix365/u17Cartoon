@@ -31,14 +31,13 @@ public interface RestApi {
 
     @GET("version/newVersion?")
     Call<UpdateBean> hasNewversion2(@Query("t") String t,
-                                     @Query("model") String model,
-                                     @Query("android_id") String android_id);
+                                    @Query("model") String model,
+                                    @Query("android_id") String android_id);
     @GET("comic/boutiqueListNew?")
-    Observable<HomePageBean> getHomePageData(@Query("model") String model,
-                                       @Query("android_id") String android_id);
+    Observable<HomePageBean> getHomePageData(@QueryMap Map<String,String> map);
 
     @GET("sort/mobileCateList?")
-    Call<SortPageBean> getSortPageData(@QueryMap Map<String,String> map);
+    Observable<SortPageBean> getSortPageData(@QueryMap Map<String,String> map);
 
     @FormUrlEncoded
     @POST("/x3/weather")

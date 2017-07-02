@@ -2,23 +2,17 @@ package com.pingan.u17.ui.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.framework.FrescoImageUtil;
-import com.example.framework.http.abutil.AbHttpUtil;
 import com.example.framework.http.abutil.AbLogUtil;
-import com.example.framework.http.request.AbRequestParams;
-import com.example.framework.http.response.AbStringHttpResponseListener;
 import com.facebook.drawee.view.SimpleDraweeView;
-import com.google.gson.Gson;
 import com.pingan.u17.R;
 import com.pingan.u17.base.BaseFragment;
 import com.pingan.u17.base.U17Application;
-import com.pingan.u17.bean.HomePage2Bean;
 import com.pingan.u17.bean.HomePageBean;
 import com.pingan.u17.bean.UpdateBean;
 import com.pingan.u17.presenter.ChildRecommendPresenter;
@@ -29,7 +23,9 @@ import com.pingan.u17.view.ChildRecommendView;
 import com.pingan.u17.widget.RollView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindColor;
 import butterknife.BindView;
@@ -68,7 +64,6 @@ public class ChildRecommendFragment extends BaseFragment<ChildRecommendView,Chil
 
     private List<HomePageBean.ReturnDataBean.GalleryItemsBean>         mGalleryItems;//banner 实体
     private List<HomePageBean.ReturnDataBean.ComicListsBean> mComicLists;
-    private LayoutInflater                                             mInflater;
 
     private int                       mScreenWidth;
     private LinearLayout.LayoutParams mBoderEdgeParam;
@@ -76,14 +71,9 @@ public class ChildRecommendFragment extends BaseFragment<ChildRecommendView,Chil
     List<HomePageBean.ReturnDataBean.ComicListsBean.ComicsBean> twoModelEntities;
 
 
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.frag_recommend, container, false);
-        ButterKnife.bind(this, view);
-        mInflater = LayoutInflater.from(mActivity);
-        init();
-        return view;
+    protected int createViewLayoutId() {
+        return R.layout.frag_recommend;
     }
 
     private void init() {
@@ -95,8 +85,8 @@ public class ChildRecommendFragment extends BaseFragment<ChildRecommendView,Chil
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
-        final AbHttpUtil abHttpUtil = AbHttpUtil.getInstance(mActivity);
+        init();
+        /* AbHttpUtil abHttpUtil = AbHttpUtil.getInstance(mActivity);
         AbRequestParams requestParams = new AbRequestParams();
         requestParams.put("v", "3321");
         requestParams.put("t", "1493003790");
@@ -104,7 +94,7 @@ public class ChildRecommendFragment extends BaseFragment<ChildRecommendView,Chil
         requestParams.put("come_from", "openqq");
         requestParams.put("android_id", "602b734eecb46c60");
 
-        /*final AbStringHttpResponseListener stringHttpResponseListener = new AbStringHttpResponseListener(mActivity) {
+        final AbStringHttpResponseListener stringHttpResponseListener = new AbStringHttpResponseListener(mActivity) {
             @Override
             public void onSuccess(int statusCode, String content) {
                 Gson gson = new Gson();
@@ -128,9 +118,17 @@ public class ChildRecommendFragment extends BaseFragment<ChildRecommendView,Chil
         String model = "Redmi+Pro";
         String android_id = "602b734eecb46c60";
 
-        mPresenter.getHomePageData(model,android_id);
 
-        mPresenter.hasNewversion(t,model,android_id);
+        Map<String,String> map = new HashMap<>();
+        map.put("v", "3321");
+        map.put("t", "1493003790");
+        map.put("model", "Redmi+Pro");
+        map.put("come_from", "openqq");
+        map.put("android_id", "602b734eecb46c60");
+
+        mPresenter.getHomePageData(map);
+
+        //mPresenter.hasNewversion(t,model,android_id);
 
 
 
@@ -169,36 +167,37 @@ public class ChildRecommendFragment extends BaseFragment<ChildRecommendView,Chil
         if (mHomePageBean != null) {
             mGalleryItems = mHomePageBean.getReturnData().getGalleryItems();
             addAD();
-            mComicLists = mHomePageBean.getData().getReturnData().getComicLists();
+            mComicLists = mHomePageBean.getReturnData().getComicLists();
+            int size = mComicLists.size();
+
             for (int i = 0; i < mComicLists.size(); i++) {
                 HomePageBean.ReturnDataBean.ComicListsBean comicBean = mComicLists.get(i);
-                switch (i) {
-                    case 0:
+                int comicType = comicBean.getComicType();
+                switch (comicType) {
+                    case 6:  //强力推荐
                         addThreeModel(comicBean, 2);
                         break;
-                    case 1:
-                    case 3:
-                    case 4:
+                    //今日推荐 今日更新 订阅漫画  vip会员漫画
                     case 7:
                         addThreeModel(comicBean, 1);
                         break;
-                    case 2:
+                    case 5:  // 不知道什么鬼
                         addTwoModel(comicBean, 80, 1, true);
                         break;
-                    case 5:
+                    case 3: //条慢每日更新
                         addTwoModel(comicBean, 100, 2, false);
-                        break;
-                    case 6:
-                        //暂时无数据
-                        addFourModel(comicBean);
                         break;
                     case 8:
+                        //暂时无数据 热门新品
+                        addFourModel(comicBean);
+                        break;
+                    case 9: //最新动画
                         addTwoModel(comicBean, 100, 1, false);
                         break;
-                    case 9:
+                    /*case 9: //暂时没有吧
                         addTwoModel(comicBean, 100, 2, false);
-                        break;
-                    case 10:
+                        break;*/
+                    case 4: //排行
                         addRankModel(comicBean);
                         break;
                     default:

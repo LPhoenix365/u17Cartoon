@@ -8,9 +8,8 @@ import java.util.List;
  * @author liupeng502
  * @data 2017/6/29
  */
-public class SortPageBean extends BaseBean<DataBean>{
+public class SortPageBean extends BaseBean<SortPageBean>{
 
-    public static class DataBean {
         /**
          * stateCode : 1
          * message : 成功
@@ -294,5 +293,4 @@ public class SortPageBean extends BaseBean<DataBean>{
                 }
             }
         }
-    }
 }

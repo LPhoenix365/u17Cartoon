@@ -6,6 +6,8 @@ import com.pingan.u17.model.ChildRecommendModel;
 import com.pingan.u17.net.rxImp.Action1Imp;
 import com.pingan.u17.view.ChildRecommendView;
 
+import java.util.Map;
+
 import rx.functions.Action1;
 
 /**
@@ -39,9 +41,9 @@ public class ChildRecommendPresenter extends BasePresenter<ChildRecommendView> {
                 }, new Action1Imp());
     }
 
-    public void getHomePageData(String model, String android_id) {
+    public void getHomePageData(Map<String,String> map) {
         childRecommendModel
-                .getHomePageData(model, android_id)
+                .getHomePageData(map)
                 .subscribe(new Action1<HomePageBean>() {
                     @Override
                     public void call(HomePageBean homePageBean) {

@@ -19,12 +19,13 @@ import butterknife.ButterKnife;
  */
 
 
-public  class BaseFragment<V, T extends BasePresenter<V>> extends Fragment {
+public  class BaseFragment<V, P extends BasePresenter<V>> extends Fragment {
 
-    public FragmentActivity mActivity;
-    protected RestApi         api;
-    protected T mPresenter;
-
+    public    FragmentActivity mActivity;
+    protected RestApi          api;
+    protected P                mPresenter;
+    protected LayoutInflater   mInflater;
+    protected boolean          hasLoadOnce;
 
     @Override
     public void onAttach(Context context) {
@@ -37,7 +38,7 @@ public  class BaseFragment<V, T extends BasePresenter<V>> extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(createViewLayoutId(),container,false);
         ButterKnife.bind(this,rootView);
-
+        mInflater = LayoutInflater.from(mActivity);
         //允许为空不是每个都要实现MVP
         if (createPresenter() != null) {
             mPresenter = createPresenter();
@@ -45,6 +46,28 @@ public  class BaseFragment<V, T extends BasePresenter<V>> extends Fragment {
         }
         return rootView;
     }
+
+    //fragment 懒加载 适合tablayout与fragment使用
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        if(getUserVisibleHint()) {//
+            hasLoadOnce = true;
+            doLazyRequest();//ViewPager的第1个Fragment会走这里
+        }
+        super.onActivityCreated(savedInstanceState);
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        if(!hasLoadOnce && isVisible() && isVisibleToUser) {
+            hasLoadOnce = true;
+            doLazyRequest();//ViewPager的第2,3..个Fragment会走这里
+        }
+        super.setUserVisibleHint(isVisibleToUser);
+    }
+
+
+
 
 
 
@@ -55,11 +78,15 @@ public  class BaseFragment<V, T extends BasePresenter<V>> extends Fragment {
 
     }
 
-    protected  T createPresenter(){
+    protected P createPresenter(){
         return null;
     }
     protected  int createViewLayoutId(){
         return 0;
+    }
+
+    protected void doLazyRequest() {
+
     }
 
 }

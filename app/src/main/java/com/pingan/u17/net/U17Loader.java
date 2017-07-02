@@ -11,6 +11,8 @@ import rx.functions.Func1;
  *
  * @author liupeng502
  * @data 2017/6/30
+ *
+ * 此处loader已经不需要 功能由mvp中的P和M代替
  */
 
 public class U17Loader extends ObjectLoader {

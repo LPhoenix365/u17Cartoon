@@ -4,6 +4,8 @@ import com.pingan.u17.bean.HomePageBean;
 import com.pingan.u17.bean.UpdateBean;
 import com.pingan.u17.net.rxImp.Fun1Imp;
 
+import java.util.Map;
+
 import rx.Observable;
 
 /**
@@ -23,8 +25,8 @@ public class ChildRecommendModel extends BaseModel {
                 .map(new Fun1Imp<UpdateBean>()));
     }
 
-    public Observable<HomePageBean> getHomePageData(String model, String android_id) {
-        return observe(api.getHomePageData(model, android_id)
+    public Observable<HomePageBean> getHomePageData(Map<String,String> map) {
+        return observe(api.getHomePageData(map)
                 .map(new Fun1Imp<HomePageBean>()));
     }
 
