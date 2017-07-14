@@ -13,10 +13,12 @@ import android.view.WindowManager;
 import android.widget.FrameLayout;
 
 import com.pingan.u17.R;
+import com.pingan.u17.presenter.BasePresenter;
 
-public class BaseActivity extends AppCompatActivity {
+public class BaseActivity<V, T extends BasePresenter<V>> extends AppCompatActivity {
 
 
+    protected  T mPresenter;
     FrameLayout baseFramelayout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +50,19 @@ public class BaseActivity extends AppCompatActivity {
         if (null != baseFramelayout) {
             baseFramelayout.addView(contentView);
         }
+        //允许为空，不是所有都要实现MVP模式
+        if(createPresenter()!=null) {
+            mPresenter = createPresenter();
+            mPresenter.attachView((V) this);
+        }
+
     }
+
+
+    private T createPresenter() {
+        return null;
+    }
+
     /***
      * 设置内容区域
      */
@@ -65,5 +79,8 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        if (mPresenter != null) {
+            mPresenter.detachView();
+        }
     }
 }

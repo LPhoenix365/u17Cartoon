@@ -235,6 +235,7 @@ public class AbHttpClient {
         }
 
         HttpGet httpGet = new HttpGet(url);
+        AbLogUtil.d("http","request:"+url);
        //httpGet.addHeader(USER_AGENT, userAgent);
         //httpGet.addHeader("Content-Type", "text/html;charset=UTF-8");
         // 取得默认的HttpClient9
@@ -243,6 +244,7 @@ public class AbHttpClient {
         String response = null;
         try {
             response = httpClient.execute(httpGet, new RedirectionResponseHandler(url, responseListener), mHttpContext);
+            AbLogUtil.d("http","response:"+response);
         } catch (IOException e) {
             e.printStackTrace();
             AbLogUtil.e("AbHttpClient", "e" + e);

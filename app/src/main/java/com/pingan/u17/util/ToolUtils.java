@@ -90,6 +90,17 @@ public class ToolUtils {
 		return false;
 	}
 
+	public static boolean hasNet(Context mContext) {
+		ConnectivityManager connectivityManager = (ConnectivityManager) mContext
+				.getSystemService(Context.CONNECTIVITY_SERVICE);
+		NetworkInfo activeNetInfo = connectivityManager.getActiveNetworkInfo();
+		if (activeNetInfo != null
+				&& activeNetInfo.getType() == ConnectivityManager.TYPE_WIFI) {
+			return true;
+		}
+		return false;
+	}
+
 	/**
 	 * 关闭键盘
 	 *
@@ -763,6 +774,7 @@ public class ToolUtils {
 		buf.append("x");
 		return buf.toString();
 	}
+
 
 
 
