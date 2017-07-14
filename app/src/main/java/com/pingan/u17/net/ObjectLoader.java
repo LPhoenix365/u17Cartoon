@@ -1,8 +1,9 @@
 package com.pingan.u17.net;
 
-import rx.Observable;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
+
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Description
@@ -18,7 +19,7 @@ public class ObjectLoader {
      * @param
      * @return
      */
-    protected  Observable observe(Observable observable){
+    protected Observable observe(Observable observable){
         return observable
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
