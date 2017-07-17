@@ -1,13 +1,7 @@
 package com.pingan.u17.presenter;
 
-import com.pingan.u17.bean.SortPageBean;
 import com.pingan.u17.model.SortModel;
-import com.pingan.u17.net.rxImp.Action1Imp;
 import com.pingan.u17.view.SortView;
-
-import java.util.Map;
-
-import rx.functions.Action1;
 
 /**
  * @author sanshu
@@ -24,7 +18,7 @@ public class SortPresenter extends BasePresenter<SortView> {
         this.sortView = sortView;
     }
 
-    public void getSortPageData(Map<String,String> map){
+   /* public void getSortPageData(Map<String,String> map){
         sortModel
                 .getSortPageData(map)
                 .subscribe(new Action1<SortPageBean>() {
@@ -33,5 +27,5 @@ public class SortPresenter extends BasePresenter<SortView> {
                         sortView.getSortPageData(sortPageBean);
                     }
                 },new Action1Imp());
-    }
+    }*/
 }

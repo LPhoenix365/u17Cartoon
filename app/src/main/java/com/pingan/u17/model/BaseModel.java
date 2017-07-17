@@ -3,9 +3,10 @@ package com.pingan.u17.model;
 import com.pingan.u17.base.U17Application;
 import com.pingan.u17.net.RestApi;
 
-import rx.Observable;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
+
 
 /**
  * Description
@@ -28,7 +29,7 @@ public class BaseModel {
      * @param
      * @return
      */
-    protected   Observable observe(Observable observable){
+    protected Observable observe(Observable observable){
         return observable
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())

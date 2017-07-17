@@ -42,7 +42,7 @@ public class SortFragment extends BaseFragment<SortView,SortPresenter> implement
         map.put("model", "Lenovo+K920");
         map.put("android_id", "4314d9d0e238ef04");
         map.put("version", "2");
-        mPresenter.getSortPageData(map);
+        //mPresenter.getSortPageData(map);
     }
 
     @Override

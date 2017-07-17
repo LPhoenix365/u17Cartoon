@@ -128,6 +128,42 @@ public class ChildRecommendFragment extends BaseFragment<ChildRecommendView,Chil
 
         mPresenter.getHomePageData(map);
 
+                /*.subscribe(new Consumer<HomePageBean.ReturnDataBean.ComicListsBean>() {
+                    @Override
+                    public void accept(HomePageBean.ReturnDataBean.ComicListsBean comicListsBean) throws Exception {
+                        int comicType = comicListsBean.getComicType();
+                        switch (comicType) {
+                            case 6:  //强力推荐
+                                addThreeModel(comicListsBean, 2);
+                                break;
+                            //今日推荐 今日更新 订阅漫画  vip会员漫画
+                            case 7:
+                                addThreeModel(comicListsBean, 1);
+                                break;
+                            case 5:  // 不知道什么鬼
+                                addTwoModel(comicListsBean, 80, 1, true);
+                                break;
+                            case 3: //条慢每日更新
+                                addTwoModel(comicListsBean, 100, 2, false);
+                                break;
+                            case 8:
+                                //暂时无数据 热门新品
+                                //addFourModel(comicListsBean);
+                                break;
+                            case 9: //最新动画
+                                addTwoModel(comicListsBean, 100, 1, false);
+                                break;
+                    *//*case 9: //暂时没有吧
+                        addTwoModel(comicBean, 100, 2, false);
+                        break;*//*
+                            case 4: //排行
+                                addRankModel(comicListsBean);
+                                break;
+                            default:
+                        }
+                    }
+                });*/
+
         //mPresenter.hasNewversion(t,model,android_id);
 
 

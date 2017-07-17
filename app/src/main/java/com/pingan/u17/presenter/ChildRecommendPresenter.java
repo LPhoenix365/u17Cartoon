@@ -1,14 +1,15 @@
 package com.pingan.u17.presenter;
 
 import com.pingan.u17.bean.HomePageBean;
-import com.pingan.u17.bean.UpdateBean;
 import com.pingan.u17.model.ChildRecommendModel;
-import com.pingan.u17.net.rxImp.Action1Imp;
 import com.pingan.u17.view.ChildRecommendView;
 
+import java.util.List;
 import java.util.Map;
 
-import rx.functions.Action1;
+import io.reactivex.Observable;
+import io.reactivex.ObservableSource;
+import io.reactivex.functions.Function;
 
 /**
  * Description
@@ -29,7 +30,7 @@ public class ChildRecommendPresenter extends BasePresenter<ChildRecommendView> {
 
 
 
-
+/*
     public void hasNewversion(String t, String model, String android_id) {
         childRecommendModel
                 .hasNewversion(t, model, android_id)
@@ -39,16 +40,31 @@ public class ChildRecommendPresenter extends BasePresenter<ChildRecommendView> {
                         childRecommendView.hasNewVersion(updateBean);
                     }
                 }, new Action1Imp());
-    }
+    }*/
 
     public void getHomePageData(Map<String,String> map) {
-        childRecommendModel
+          childRecommendModel
                 .getHomePageData(map)
-                .subscribe(new Action1<HomePageBean>() {
+                .flatMap(new Function<HomePageBean, Observable<HomePageBean.ReturnDataBean>>() {
                     @Override
-                    public void call(HomePageBean homePageBean) {
-                        childRecommendView.getHomePageData(homePageBean);
+                    public Observable<HomePageBean.ReturnDataBean> apply(HomePageBean homePageBean) throws Exception {
+                        HomePageBean data = homePageBean.getData();
+                        HomePageBean.ReturnDataBean dataBean = data.getReturnData();
+                       /* HomePageBean.ReturnDataBean returnData = null;
+                        returnData = homePageBean.getReturnData();*/
+                        return Observable.just(dataBean);
                     }
-                }, new Action1Imp());
+                })
+                .flatMap(new Function<HomePageBean.ReturnDataBean, ObservableSource<HomePageBean.ReturnDataBean.ComicListsBean>>() {
+                    @Override
+                    public ObservableSource<HomePageBean.ReturnDataBean.ComicListsBean> apply(HomePageBean.ReturnDataBean returnDataBean) throws Exception {
+                        List<HomePageBean.ReturnDataBean.ComicListsBean> comicLists = returnDataBean.getComicLists();
+                        List<HomePageBean.ReturnDataBean.GalleryItemsBean> galleryItems = returnDataBean.getGalleryItems();
+                        //List<HomePageBean.ReturnDataBean.GalleryItemsBean> galleryItems = returnDataBean.getGalleryItems();
+                        return Observable.fromIterable(comicLists);
+                    }
+                })
+                .take(10);
+
     }
 }
