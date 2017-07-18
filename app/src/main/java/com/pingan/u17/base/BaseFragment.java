@@ -2,7 +2,6 @@ package com.pingan.u17.base;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +9,7 @@ import android.view.ViewGroup;
 
 import com.pingan.u17.net.RestApi;
 import com.pingan.u17.presenter.BasePresenter;
+import com.trello.rxlifecycle2.components.support.RxFragment;
 
 import butterknife.ButterKnife;
 
@@ -19,7 +19,7 @@ import butterknife.ButterKnife;
  */
 
 
-public  class BaseFragment<V, P extends BasePresenter<V>> extends Fragment {
+public  class BaseFragment<V, P extends BasePresenter<V>> extends RxFragment {
 
     public    FragmentActivity mActivity;
     protected RestApi          api;

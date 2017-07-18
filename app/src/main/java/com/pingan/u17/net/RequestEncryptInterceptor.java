@@ -1,5 +1,7 @@
 package com.pingan.u17.net;
 
+import com.example.framework.http.abutil.AbLogUtil;
+
 import java.io.IOException;
 
 import okhttp3.FormBody;
@@ -39,6 +41,7 @@ public class RequestEncryptInterceptor implements Interceptor {
                     .method(request.method(), request.body())
                     .url(newBuilder.build())
                     .build();
+            AbLogUtil.d("request","url:"+newRequest.url().toString());
             return chain.proceed(newRequest);
         } else {
             if (body instanceof FormBody) {
@@ -70,6 +73,7 @@ public class RequestEncryptInterceptor implements Interceptor {
                             .build();
                 }
             }
+            AbLogUtil.d("request","url:"+request.url().toString());
             return chain.proceed(request);
         }
     }

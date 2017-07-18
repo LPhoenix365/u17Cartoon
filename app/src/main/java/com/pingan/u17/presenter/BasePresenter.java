@@ -24,7 +24,7 @@ public class BasePresenter<V> {
     }
 
     public boolean isViewAttached(){
-        return mViewRef != null&&mViewRef.get()!=null;
+        return mViewRef != null&& mViewRef.get()!=null;
     }
 
     public void detachView(){

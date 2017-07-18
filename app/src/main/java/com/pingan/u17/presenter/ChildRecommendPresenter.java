@@ -1,15 +1,18 @@
 package com.pingan.u17.presenter;
 
+import com.example.framework.http.abutil.AbLogUtil;
 import com.pingan.u17.bean.HomePageBean;
+import com.pingan.u17.bean.UpdateBean;
 import com.pingan.u17.model.ChildRecommendModel;
 import com.pingan.u17.view.ChildRecommendView;
 
-import java.util.List;
+import java.lang.ref.WeakReference;
 import java.util.Map;
 
 import io.reactivex.Observable;
-import io.reactivex.ObservableSource;
-import io.reactivex.functions.Function;
+import io.reactivex.Single;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.functions.Consumer;
 
 /**
  * Description
@@ -20,12 +23,13 @@ import io.reactivex.functions.Function;
 
 public class ChildRecommendPresenter extends BasePresenter<ChildRecommendView> {
     private ChildRecommendView childRecommendView;
+    public static final String TAG = ChildRecommendPresenter.class.getSimpleName();
 
     private ChildRecommendModel childRecommendModel;
 
-    public ChildRecommendPresenter(ChildRecommendView childRecommendView) {
+    public ChildRecommendPresenter(WeakReference<ChildRecommendView> childRecommendView) {
         childRecommendModel = new ChildRecommendModel();
-        this.childRecommendView = childRecommendView;
+        this.childRecommendView = childRecommendView.get();
     }
 
 
@@ -42,29 +46,47 @@ public class ChildRecommendPresenter extends BasePresenter<ChildRecommendView> {
                 }, new Action1Imp());
     }*/
 
-    public void getHomePageData(Map<String,String> map) {
-          childRecommendModel
+    public void getHomePageData(Map<String, String> map) {
+        childRecommendModel
                 .getHomePageData(map)
-                .flatMap(new Function<HomePageBean, Observable<HomePageBean.ReturnDataBean>>() {
+                .subscribe(new Consumer<HomePageBean>() {
                     @Override
-                    public Observable<HomePageBean.ReturnDataBean> apply(HomePageBean homePageBean) throws Exception {
-                        HomePageBean data = homePageBean.getData();
-                        HomePageBean.ReturnDataBean dataBean = data.getReturnData();
-                       /* HomePageBean.ReturnDataBean returnData = null;
-                        returnData = homePageBean.getReturnData();*/
-                        return Observable.just(dataBean);
+                    public void accept(HomePageBean homePageBean) throws Exception {
+                        if (homePageBean != null && homePageBean.getCode() == 1) {
+                            HomePageBean data = homePageBean.getData();
+                            HomePageBean.ReturnDataBean dataBean = data.getReturnData();
+
+                            childRecommendView.getHomePageData2(Observable.just(dataBean));
+                            childRecommendView.showErrorMsg("");
+                        }
                     }
-                })
-                .flatMap(new Function<HomePageBean.ReturnDataBean, ObservableSource<HomePageBean.ReturnDataBean.ComicListsBean>>() {
+                }, new Consumer<Throwable>() {
                     @Override
-                    public ObservableSource<HomePageBean.ReturnDataBean.ComicListsBean> apply(HomePageBean.ReturnDataBean returnDataBean) throws Exception {
-                        List<HomePageBean.ReturnDataBean.ComicListsBean> comicLists = returnDataBean.getComicLists();
-                        List<HomePageBean.ReturnDataBean.GalleryItemsBean> galleryItems = returnDataBean.getGalleryItems();
-                        //List<HomePageBean.ReturnDataBean.GalleryItemsBean> galleryItems = returnDataBean.getGalleryItems();
-                        return Observable.fromIterable(comicLists);
+                    public void accept(Throwable throwable) throws Exception {
+                        childRecommendView.showErrorMsg("");
                     }
-                })
-                .take(10);
+                });
+    }
+
+    public void hasNewversion(Map<String,String> map){
+        childRecommendModel
+                .hasNewversion(map)
+                .subscribe(new Consumer<UpdateBean>() {
+                               @Override
+                               public void accept(@NonNull UpdateBean updateBean) throws Exception {
+                                   UpdateBean data = updateBean.getData();
+                                   UpdateBean.ReturnDataBean.UpdateInfoBean updateInfo = data.getReturnData().getUpdateInfo();
+                                   AbLogUtil.d(TAG,"updateInfo="+updateInfo);
+                                   childRecommendView.hasNewVersion(Single.just(updateInfo));
+                               }
+                           }, new Consumer<Throwable>() {
+                               @Override
+                               public void accept(@NonNull Throwable throwable) throws Exception {
+                                   childRecommendView.showErrorMsg("");
+                               }
+                           }
+                );
+
 
     }
 }

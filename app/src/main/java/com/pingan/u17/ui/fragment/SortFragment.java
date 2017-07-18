@@ -59,4 +59,10 @@ public class SortFragment extends BaseFragment<SortView,SortPresenter> implement
     public void getSortPageData(SortPageBean sortPageBean) {
 
     }
+
+
+    @Override
+    public void showErrorMsg(String errormsg) {
+
+    }
 }

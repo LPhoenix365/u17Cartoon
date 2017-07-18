@@ -7,6 +7,7 @@ import com.pingan.u17.bean.UpdateBean;
 import java.util.Map;
 
 import io.reactivex.Observable;
+import io.reactivex.Single;
 import retrofit2.Call;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
@@ -25,9 +26,7 @@ import retrofit2.http.QueryMap;
 
 public interface RestApi {
     @GET("version/newVersion?")
-    Observable<UpdateBean> hasNewversion(@Query("t") String t,
-                                         @Query("model") String model,
-                                         @Query("android_id") String android_id);
+    Single<UpdateBean> hasNewversion(@QueryMap Map<String,String> map);
 
     @GET("version/newVersion?")
     Call<UpdateBean> hasNewversion2(@Query("t") String t,
@@ -35,6 +34,7 @@ public interface RestApi {
                                     @Query("android_id") String android_id);
     @GET("comic/boutiqueListNew?")
     Observable<HomePageBean> getHomePageData(@QueryMap Map<String,String> map);
+
 
     @GET("sort/mobileCateList?")
     Observable<SortPageBean> getSortPageData(@QueryMap Map<String,String> map);

@@ -12,5 +12,6 @@ AppBarLayout的子布局有5种滚动标识(就是上面代码CollapsingToolbarL
     <string name="action_settings">Settings</string>
     <string name="title_activity_scrolling">ScrollingActivity</string>
     <string name="title_activity_scrolling2">ScrollingActivity2</string>
+    <string name="error_msg">网络不好，稍后再试</string>
 
 </resources>

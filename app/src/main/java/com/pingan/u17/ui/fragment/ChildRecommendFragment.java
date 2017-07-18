@@ -6,9 +6,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.framework.FrescoImageUtil;
 import com.example.framework.http.abutil.AbLogUtil;
+import com.example.framework.http.abutil.ToastUtil;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.pingan.u17.R;
 import com.pingan.u17.base.BaseFragment;
@@ -18,10 +20,12 @@ import com.pingan.u17.bean.UpdateBean;
 import com.pingan.u17.presenter.ChildRecommendPresenter;
 import com.pingan.u17.ui.activity.ScrollingActivity;
 import com.pingan.u17.util.ActivityIntentTools;
+import com.pingan.u17.util.RxBus;
 import com.pingan.u17.util.ToolUtils;
 import com.pingan.u17.view.ChildRecommendView;
 import com.pingan.u17.widget.RollView;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -30,9 +34,12 @@ import java.util.Map;
 import butterknife.BindColor;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import io.reactivex.Observable;
+import io.reactivex.ObservableSource;
+import io.reactivex.Single;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Function;
 
 
 /**
@@ -41,7 +48,7 @@ import retrofit2.Response;
  * @author liupeng502
  * @data 2017/6/9
  */
-public class ChildRecommendFragment extends BaseFragment<ChildRecommendView,ChildRecommendPresenter> implements View.OnClickListener,ChildRecommendView {
+public class ChildRecommendFragment extends BaseFragment<ChildRecommendView, ChildRecommendPresenter> implements View.OnClickListener, ChildRecommendView {
 
     @BindView(R.id.ll_container_recommend)
     LinearLayout llContainer;
@@ -62,8 +69,8 @@ public class ChildRecommendFragment extends BaseFragment<ChildRecommendView,Chil
 
     public static final String TAG = ChildRecommendFragment.class.getSimpleName();
 
-    private List<HomePageBean.ReturnDataBean.GalleryItemsBean>         mGalleryItems;//banner 实体
-    private List<HomePageBean.ReturnDataBean.ComicListsBean> mComicLists;
+    private List<HomePageBean.ReturnDataBean.GalleryItemsBean> mGalleryItems;//banner 实体
+    private List<HomePageBean.ReturnDataBean.ComicListsBean>   mComicLists;
 
     private int                       mScreenWidth;
     private LinearLayout.LayoutParams mBoderEdgeParam;
@@ -77,6 +84,16 @@ public class ChildRecommendFragment extends BaseFragment<ChildRecommendView,Chil
     }
 
     private void init() {
+        RxBus.getInstance()
+                .toObservable(UpdateBean.class)
+                .compose(this.<UpdateBean>bindToLifecycle())
+                .subscribe(new Consumer<UpdateBean>() {
+                    @Override
+                    public void accept(@NonNull UpdateBean loginEvent) throws Exception {
+                        //处理RxBus发送来的逻辑
+                    }
+                });
+
         mRank_bgs = new int[]{item_rank_bg1, item_rank_bg2, item_rank_bg3, item_rank_bg4, item_rank_bg5};
         mScreenWidth = ToolUtils.getScreenWidth(mActivity);
         mBoderEdgeParam = new LinearLayout.LayoutParams(ToolUtils.dip2px(mActivity, 8), LinearLayout.LayoutParams.MATCH_PARENT);
@@ -86,49 +103,48 @@ public class ChildRecommendFragment extends BaseFragment<ChildRecommendView,Chil
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         init();
-        /* AbHttpUtil abHttpUtil = AbHttpUtil.getInstance(mActivity);
-        AbRequestParams requestParams = new AbRequestParams();
-        requestParams.put("v", "3321");
-        requestParams.put("t", "1493003790");
-        requestParams.put("model", "Redmi+Pro");
-        requestParams.put("come_from", "openqq");
-        requestParams.put("android_id", "602b734eecb46c60");
 
-        final AbStringHttpResponseListener stringHttpResponseListener = new AbStringHttpResponseListener(mActivity) {
-            @Override
-            public void onSuccess(int statusCode, String content) {
-                Gson gson = new Gson();
-                mHomePageBean = gson.fromJson(content, HomePage2Bean.class);
-                updateView();
-                List<HomePageBean.ReturnDataBean.ComicListsBean> comicLists = mHomePageBean.getData().getReturnData().getComicLists();
-                List<HomePageBean.ReturnDataBean.GalleryItemsBean> list = mHomePageBean.getData().getReturnData().getGalleryItems();
-                AbLogUtil.d(TAG, "bean=" + mHomePageBean + "comicLists" + comicLists + comicLists + "list" + list);
-            }
-
-            @Override
-            public void onFailure(int statusCode, String content, Throwable error) {
-                super.onFailure(statusCode, content, error);
-                AbLogUtil.d(TAG, "content=" + content + "statusCode=" + statusCode + "error=" + error);
-            }
-        };
-        //abHttpUtil.get(Constants.BASE_URL + Constants.HOME_PAGE, requestParams, stringHttpResponseListener);*/
-
-
-        String t = "1493003790";
-        String model = "Redmi+Pro";
-        String android_id = "602b734eecb46c60";
-
-
-        Map<String,String> map = new HashMap<>();
+        Map<String, String> map = new HashMap<>();
         map.put("v", "3321");
         map.put("t", "1493003790");
         map.put("model", "Redmi+Pro");
         map.put("come_from", "openqq");
         map.put("android_id", "602b734eecb46c60");
 
-        mPresenter.getHomePageData(map);
 
-                /*.subscribe(new Consumer<HomePageBean.ReturnDataBean.ComicListsBean>() {
+        mPresenter.getHomePageData(map);
+        mPresenter.hasNewversion(map);
+    }
+
+
+    @Override
+    public void getHomePageData2(Observable<HomePageBean.ReturnDataBean> homePageBean) {
+        homePageBean
+                .map(new Function<HomePageBean.ReturnDataBean, List<HomePageBean.ReturnDataBean.GalleryItemsBean>>() {
+                    @Override
+                    public List<HomePageBean.ReturnDataBean.GalleryItemsBean> apply(HomePageBean.ReturnDataBean returnDataBean) throws Exception {
+                        return returnDataBean.getGalleryItems();
+                    }
+                })
+                .take(1)
+                .subscribe(new Consumer<List<HomePageBean.ReturnDataBean.GalleryItemsBean>>() {
+                    @Override
+                    public void accept(List<HomePageBean.ReturnDataBean.GalleryItemsBean> galleryItemsBeen) throws Exception {
+                        mGalleryItems = galleryItemsBeen;
+                        addAD();
+                    }
+                });
+
+        homePageBean
+                .flatMap(new Function<HomePageBean.ReturnDataBean, ObservableSource<HomePageBean.ReturnDataBean.ComicListsBean>>() {
+                    @Override
+                    public ObservableSource<HomePageBean.ReturnDataBean.ComicListsBean> apply(HomePageBean.ReturnDataBean returnDataBean) throws Exception {
+                        List<HomePageBean.ReturnDataBean.ComicListsBean> comicLists = returnDataBean.getComicLists();
+                        return Observable.fromIterable(comicLists);
+                    }
+                })
+                .take(10)
+                .subscribe(new Consumer<HomePageBean.ReturnDataBean.ComicListsBean>() {
                     @Override
                     public void accept(HomePageBean.ReturnDataBean.ComicListsBean comicListsBean) throws Exception {
                         int comicType = comicListsBean.getComicType();
@@ -153,48 +169,36 @@ public class ChildRecommendFragment extends BaseFragment<ChildRecommendView,Chil
                             case 9: //最新动画
                                 addTwoModel(comicListsBean, 100, 1, false);
                                 break;
-                    *//*case 9: //暂时没有吧
-                        addTwoModel(comicBean, 100, 2, false);
-                        break;*//*
+                    /*case 9: //暂时没有吧
+                            addTwoModel(comicBean, 100, 2, false);
+                            break;*/
                             case 4: //排行
                                 addRankModel(comicListsBean);
                                 break;
                             default:
                         }
                     }
-                });*/
-
-        //mPresenter.hasNewversion(t,model,android_id);
-
-
-
-        api.hasNewversion2(t, model, android_id).enqueue(new Callback<UpdateBean>() {
-            @Override
-            public void onResponse(Call<UpdateBean> call, Response<UpdateBean> response) {
-                UpdateBean updateInfo = response.body();
-                AbLogUtil.d("ChildRecommendFragment", "call=" + call + "response=" + updateInfo);
-
-            }
-
-            @Override
-            public void onFailure(Call<UpdateBean> call, Throwable t) {
-                AbLogUtil.d("ChildRecommendFragment", "call=" + call + "Throwable=" + t);
-            }
-        });
+                });
     }
 
     @Override
-    public void getHomePageData(HomePageBean homePageBean) {
-        mHomePageBean=homePageBean;
-        updateView();
-    }
+    public void hasNewVersion(Single<UpdateBean.ReturnDataBean.UpdateInfoBean> updateBean) {
+        updateBean
+                .map(new Function<UpdateBean.ReturnDataBean.UpdateInfoBean, String>() {
+                    @Override
+                    public String apply(@NonNull UpdateBean.ReturnDataBean.UpdateInfoBean updateInfoBean) throws Exception {
+                        return updateInfoBean.getUpdate_content();
+                    }
+                })
+                .subscribe(new Consumer<String>() {
+                    @Override
+                    public void accept(@NonNull String s) throws Exception {
+                        Toast.makeText(mActivity, "有更新" + s, Toast.LENGTH_LONG);
+                        AbLogUtil.d(TAG, "content=" + s);
+                    }
+                });
 
-    @Override
-    public void hasNewVersion(UpdateBean updateBean) {
-        String content = updateBean.getReturnData().getUpdateInfo().getUpdate_content();
-        AbLogUtil.d(TAG,"content="+content);
     }
-
 
     /**
      * 根据返回值刷新view界面
@@ -244,7 +248,7 @@ public class ChildRecommendFragment extends BaseFragment<ChildRecommendView,Chil
 
     @Override
     protected ChildRecommendPresenter createPresenter() {
-        return new ChildRecommendPresenter(this);
+        return new ChildRecommendPresenter(new WeakReference<ChildRecommendView>(this));
     }
 
     /**
@@ -594,6 +598,11 @@ public class ChildRecommendFragment extends BaseFragment<ChildRecommendView,Chil
         ActivityIntentTools.gotoActivityNotFinish(mActivity, ScrollingActivity.class);
     }
 
+
+    @Override
+    public void showErrorMsg(String errormsg) {
+        ToastUtil.showToast(mActivity, getString(R.string.error_msg));
+    }
 
 
     static class ThreeModelViewHolder {

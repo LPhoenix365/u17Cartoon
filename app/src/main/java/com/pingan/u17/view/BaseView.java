@@ -9,4 +9,5 @@ package com.pingan.u17.view;
 
 public interface BaseView {
 
+    void showErrorMsg(String errormsg);
 }
