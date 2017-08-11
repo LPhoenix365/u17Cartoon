@@ -16,6 +16,8 @@
 
     <style name="AppFullScreenTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:windowFullscreen">true</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
     </style>
 
     <!--SuperCheckbox的样式-->

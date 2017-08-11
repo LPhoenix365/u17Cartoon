@@ -17,14 +17,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Author：liupeng on 2017/2/8 18:40
- * Address：liupeng264@pingan.com.cn
- * 存在一个bug  开始时不能向左滑动
+ * Description
+ * @author  liupeng502
+ * @data    2017/8/4
  */
 public class RollView extends ViewPager {
     private int mDownX;
     private int mDownY;
     private List<String> mList = new ArrayList();
+    private int sectionTime = 2000;
 
     private Handler mHandler = new Handler() {
         @Override
@@ -36,7 +37,7 @@ public class RollView extends ViewPager {
                 mCurrentItem = mList.size() * 50+1;
             }
             RollView.this.setCurrentItem(mCurrentItem);
-            mHandler.sendEmptyMessageDelayed(0, 2000);
+            mHandler.sendEmptyMessageDelayed(0, sectionTime);
         }
     };
     private int mCurrentItem; //当前条目
@@ -61,6 +62,11 @@ public class RollView extends ViewPager {
 
             @Override
             public void onPageSelected(int position) {
+                int imgPosition = position % mList.size();
+                if (mUpdatePositionListener != null) {
+                    mUpdatePositionListener.setupdatePositon(imgPosition);
+                }
+
             }
 
             @Override
@@ -81,7 +87,7 @@ public class RollView extends ViewPager {
 
                 break;
             case MotionEvent.ACTION_UP:
-                mHandler.sendEmptyMessageDelayed(0, 2000);
+                mHandler.sendEmptyMessageDelayed(0, sectionTime);
                 break;
             default:
         }
@@ -120,7 +126,7 @@ public class RollView extends ViewPager {
         this.setAdapter(rollAdapter);
         this.setCurrentItem(mCurrentItem);
         //初始化后发消息
-        mHandler.sendEmptyMessageDelayed(0, 2000);
+        mHandler.sendEmptyMessageDelayed(0, sectionTime);
     }
 
 
@@ -145,10 +151,21 @@ public class RollView extends ViewPager {
         @Override
         public Object instantiateItem(ViewGroup container, int position) {
             SimpleDraweeView simpleDraweeView = new SimpleDraweeView(container.getContext());
-            FrescoImageUtil.displayImgFromNetwork(simpleDraweeView, mList.get(position % mList.size()));
+            int imgPosition = position % mList.size();
+            FrescoImageUtil.displayImgFromNetwork(simpleDraweeView, mList.get(imgPosition));
             container.addView(simpleDraweeView);
             return simpleDraweeView;
         }
+    }
+
+    public interface updatePositionListener{
+        void setupdatePositon(int position);
+    }
+
+    private updatePositionListener mUpdatePositionListener;
+
+    public void setUpdatePositionListener(updatePositionListener updatePositionListener){
+        mUpdatePositionListener=updatePositionListener;
     }
 
 }

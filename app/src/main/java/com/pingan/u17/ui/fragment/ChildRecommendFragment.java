@@ -2,9 +2,12 @@ package com.pingan.u17.ui.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,11 +28,11 @@ import com.pingan.u17.util.ToolUtils;
 import com.pingan.u17.view.ChildRecommendView;
 import com.pingan.u17.widget.RollView;
 
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.BindColor;
 import butterknife.BindView;
@@ -114,11 +117,39 @@ public class ChildRecommendFragment extends BaseFragment<ChildRecommendView, Chi
 
         mPresenter.getHomePageData(map);
         mPresenter.hasNewversion(map);
+        Observable.range(20, 30).subscribe(new Consumer<Integer>() {
+            @Override
+            public void accept(@NonNull Integer integer) throws Exception {
+                Log.d(TAG, "integer=" + integer);
+            }
+        });
+
+        Observable<Long> observable3 = Observable.timer(2, TimeUnit.SECONDS);
+
+
+        Observable.just(1, 2, 3, 4, 5)
+                .filter(integer -> integer > 4)
+                .subscribe(integer -> System.out.println(integer));
+
+
+       /* Observable.zip(observable3, observable3, new BiFunction<String, Integer, String>() {
+            @Override
+            public String apply(@NonNull String s, @NonNull Integer integer) throws Exception {
+                return s + integer;
+            }
+        }).subscribe(new Consumer<String>() {
+            @Override
+            public void accept(@NonNull String s) throws Exception {
+                mRxOperatorsText.append("zip : accept : " + s + "\n");
+                Log.e(TAG, "zip : accept : " + s + "\n");
+            }
+        });*/
+
     }
 
 
     @Override
-    public void getHomePageData2(Observable<HomePageBean.ReturnDataBean> homePageBean) {
+    public void getHomePageData(Observable<HomePageBean.ReturnDataBean> homePageBean) {
         homePageBean
                 .map(new Function<HomePageBean.ReturnDataBean, List<HomePageBean.ReturnDataBean.GalleryItemsBean>>() {
                     @Override
@@ -248,7 +279,7 @@ public class ChildRecommendFragment extends BaseFragment<ChildRecommendView, Chi
 
     @Override
     protected ChildRecommendPresenter createPresenter() {
-        return new ChildRecommendPresenter(new WeakReference<ChildRecommendView>(this));
+        return new ChildRecommendPresenter(mActivity);
     }
 
     /**
@@ -510,16 +541,42 @@ public class ChildRecommendFragment extends BaseFragment<ChildRecommendView, Chi
      */
     private void addAD() {
         LinearLayout.LayoutParams modelLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        LinearLayout modelLinearLayout = new LinearLayout(mActivity);
+        RelativeLayout modelLinearLayout = new RelativeLayout(mActivity);
         modelLinearLayout.setBackgroundColor(model_border_bg);
-        LinearLayout.LayoutParams adLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, ToolUtils.dip2px(mActivity, 140));
+        RelativeLayout.LayoutParams adLayoutParams = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, ToolUtils.dip2px(mActivity, 140));
         RollView rollViewPager = new RollView(mActivity);
         List<String> arrayList = new ArrayList<>();
+        LinearLayout guideLayout = new LinearLayout(mActivity);
+        RelativeLayout.LayoutParams guideLayoutParams = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+
+        RelativeLayout.LayoutParams imglayoutParams = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        int paddingLength = ToolUtils.dip2px(mActivity, 8);
+        int paddingWidth = ToolUtils.dip2px(mActivity, 6);
+        imglayoutParams.rightMargin=paddingWidth;
+
         for (HomePageBean.ReturnDataBean.GalleryItemsBean galleryItem : mGalleryItems) {
             arrayList.add(galleryItem.getCover());
+            ImageView imageView = new ImageView(mActivity);
+            imageView.setPadding(paddingLength,paddingWidth,paddingLength,paddingWidth);
+            imageView.setImageResource(R.drawable.icon_check_normal);
+            guideLayout.addView(imageView);
         }
         rollViewPager.setData(arrayList);
+
+        rollViewPager.setUpdatePositionListener(new RollView.updatePositionListener() {
+            public int lastPosition;
+
+            @Override
+            public void setupdatePositon(int position) {
+                if (lastPosition != position) {
+                    ((ImageView)guideLayout.getChildAt(lastPosition)).setImageResource(R.drawable.icon_check_normal);
+                }
+                lastPosition=position;
+                ((ImageView)guideLayout.getChildAt(position)).setImageResource(R.drawable.icon_boutique_gallery_indicator_selected);
+            }
+        });
         modelLinearLayout.addView(rollViewPager, adLayoutParams);
+        modelLinearLayout.addView(guideLayout,guideLayoutParams);
         llContainer.addView(modelLinearLayout, modelLayoutParams);
     }
 

@@ -1,5 +1,6 @@
 package com.pingan.u17.net;
 
+import com.example.framework.http.abutil.AbLogUtil;
 import com.pingan.u17.base.U17Application;
 import com.pingan.u17.util.AppEnvConstants;
 
@@ -37,7 +38,9 @@ public class HttpClient {
 
     private Cache initCache() {
         Cache cache = null;
-        File cacheFile = new File(U17Application.getInstance().getCacheDir(), U17Application.getInstance().getPackageName() + "cacheFile");
+        File cacheFile = new File(U17Application.getInstance().getCacheDir(), "/cacheFile");
+        AbLogUtil.d("tag","path="+cacheFile.getAbsolutePath());
+        ///data/data/com.pingan.u17Cartoon/cache/com.pingan.u17CartooncacheFile
         if (cache == null)
             cache = new Cache(cacheFile, 20 * 1024 * 1024);  //20M
         return cache;

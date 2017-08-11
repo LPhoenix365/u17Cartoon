@@ -14,6 +14,6 @@ import io.reactivex.Single;
  */
 
 public interface ChildRecommendView extends BaseView {
-    void  getHomePageData2(Observable<HomePageBean.ReturnDataBean> homePageBean);
+    void  getHomePageData(Observable<HomePageBean.ReturnDataBean> homePageBean);
     void  hasNewVersion(Single<UpdateBean.ReturnDataBean.UpdateInfoBean> updateBean);
 }

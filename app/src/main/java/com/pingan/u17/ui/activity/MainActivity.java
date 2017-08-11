@@ -10,12 +10,14 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import com.example.framework.http.abutil.AbLogUtil;
 import com.pingan.u17.R;
 import com.pingan.u17.base.BaseActivity;
 import com.pingan.u17.ui.fragment.BookRackFragment;
 import com.pingan.u17.ui.fragment.HomeFragment;
 import com.pingan.u17.ui.fragment.MineFragment;
 import com.pingan.u17.ui.fragment.SortFragment;
+import com.pingan.u17.util.CipherUtil;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -67,6 +69,11 @@ public class MainActivity extends BaseActivity {
         //setSelectTab(mCurrentPage);
         //设置对应fragment
         setRadioGroupLisenter();
+        StringBuilder sb=new StringBuilder();
+        sb.append("148").append("1501665311916").append("CE0F891A70DA79EFF47E40382B0EFC32BEE6EE17");
+        String sha1 = CipherUtil.getAlgorithmsCipher(sb.toString(), "SHA1");
+        AbLogUtil.d("TAG","sha1="+sha1);
+
     }
 
     /**

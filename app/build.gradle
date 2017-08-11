@@ -1,7 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'com.neenbedankt.android-apt'
 apply plugin: 'org.greenrobot.greendao'
-
+apply plugin: 'me.tatarka.retrolambda'
 android {
     compileSdkVersion 25
     buildToolsVersion "25.0.0"
@@ -12,17 +12,28 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        /*
+        使用java8需要开启，但开启后不支持apt
+        使用 库me.tatarka.retrolambda  实现java8编译
+        jackOptions {
+            enabled true
+        }*/
     }
+    compileOptions {
+        /*sourceCompatibility JavaVersion.VERSION_1_7
+        targetCompatibility JavaVersion.VERSION_1_7*/
+        //使用JAVA8语法解析  主要是使用lambda 的函数式接口简化代码
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-
-   /* dataBinding{
-        enabled false
-    }*/
 }
 
 dependencies {
@@ -36,18 +47,17 @@ dependencies {
     //butterknife
     compile 'com.jakewharton:butterknife:8.0.1'
     apt 'com.jakewharton:butterknife-compiler:8.0.1'
-    //rx
-    compile 'com.squareup.retrofit2:converter-gson:2.1.0'//转换器，请求结果转换成Model
-    compile 'com.squareup.retrofit2:adapter-rxjava2:2.2.0'
-    compile 'io.reactivex.rxjava2:rxjava:2.0.1'
-    compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
 
-    compile 'com.trello.rxlifecycle2:rxlifecycle-components:2.1.0'
-
-    compile 'com.squareup.retrofit2:retrofit:2.0.2'
     //ok的3.0版
     compile 'com.squareup.okhttp3:okhttp:3.2.0'
     compile 'com.squareup.okio:okio:1.7.0'
+    //rx
+    compile 'com.squareup.retrofit2:retrofit:2.0.2'
+    compile 'com.squareup.retrofit2:converter-gson:2.1.0'//
+    compile 'com.squareup.retrofit2:adapter-rxjava2:2.2.0'
+    compile 'io.reactivex.rxjava2:rxjava:2.0.1'
+    compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
+    compile 'com.trello.rxlifecycle2:rxlifecycle-components:2.1.0'
 
     //recyclerView
     compile 'com.android.support:recyclerview-v7:25.0.1'

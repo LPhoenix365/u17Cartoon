@@ -1,6 +1,9 @@
 package com.pingan.u17.base;
 
 import android.app.Application;
+import android.app.IntentService;
+import android.content.Intent;
+import android.support.annotation.Nullable;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.pingan.u17.net.HttpClient;
@@ -8,8 +11,9 @@ import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 
 /**
- * Author：liupeng on 2017/2/6 23:45
- * Address：liupeng264@pingan.com.cn
+ * Description
+ * @author  liupeng502
+ * @data    2017/8/4
  */
 public class U17Application extends Application {
 
@@ -45,5 +49,21 @@ public class U17Application extends Application {
         mWxapi.registerApp(ApiId);
     }
 
+
+    class initIntentService extends IntentService{
+        /**
+         * Creates an IntentService.  Invoked by your subclass's constructor.
+         *
+         * @param name Used to name the worker thread, important only for debugging.
+         */
+        public initIntentService(String name) {
+            super(name);
+        }
+
+        @Override
+        protected void onHandleIntent(@Nullable Intent intent) {
+
+        }
+    }
 
 }
