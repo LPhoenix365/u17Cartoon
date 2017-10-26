@@ -10,8 +10,9 @@ import com.pingan.u17.R;
 import com.pingan.u17.base.BaseFragment;
 
 /**
- * Author：liupeng on 2017/2/24 09:57
- * Address：liupeng264@pingan.com.cn
+ * Description
+ * @author  liupeng502
+ * @data    2017/10/24
  */
 public class BookRackFragment extends BaseFragment {
     @Nullable

@@ -2,7 +2,6 @@ package com.pingan.u17.ui.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -32,7 +31,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 import butterknife.BindColor;
 import butterknife.BindView;
@@ -87,7 +85,7 @@ public class ChildRecommendFragment extends BaseFragment<ChildRecommendView, Chi
     }
 
     private void init() {
-        RxBus.getInstance()
+                RxBus.getInstance()
                 .toObservable(UpdateBean.class)
                 .compose(this.<UpdateBean>bindToLifecycle())
                 .subscribe(new Consumer<UpdateBean>() {
@@ -114,37 +112,8 @@ public class ChildRecommendFragment extends BaseFragment<ChildRecommendView, Chi
         map.put("come_from", "openqq");
         map.put("android_id", "602b734eecb46c60");
 
-
         mPresenter.getHomePageData(map);
         mPresenter.hasNewversion(map);
-        Observable.range(20, 30).subscribe(new Consumer<Integer>() {
-            @Override
-            public void accept(@NonNull Integer integer) throws Exception {
-                Log.d(TAG, "integer=" + integer);
-            }
-        });
-
-        Observable<Long> observable3 = Observable.timer(2, TimeUnit.SECONDS);
-
-
-        Observable.just(1, 2, 3, 4, 5)
-                .filter(integer -> integer > 4)
-                .subscribe(integer -> System.out.println(integer));
-
-
-       /* Observable.zip(observable3, observable3, new BiFunction<String, Integer, String>() {
-            @Override
-            public String apply(@NonNull String s, @NonNull Integer integer) throws Exception {
-                return s + integer;
-            }
-        }).subscribe(new Consumer<String>() {
-            @Override
-            public void accept(@NonNull String s) throws Exception {
-                mRxOperatorsText.append("zip : accept : " + s + "\n");
-                Log.e(TAG, "zip : accept : " + s + "\n");
-            }
-        });*/
-
     }
 
 
