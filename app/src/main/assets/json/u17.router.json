@@ -1,0 +1,17 @@
+{
+    "appID": "",
+    "versionID": "",
+    "versionDate": "",
+    "modules": [
+        {
+            "moduleID": 10010,
+            "moduleName": "CartoonDetail",
+            "moduleType": "native",
+            "pageClass": ".ui.activity.CartoonDetailActivity",
+            "moduleCName": "漫画详情",
+            "moduleContent": [
+
+            ]
+        }
+    ]
+}

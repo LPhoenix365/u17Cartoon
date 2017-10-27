@@ -13,16 +13,9 @@ android {
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
-        /*
-        使用java8需要开启，但开启后不支持apt
-        使用 库me.tatarka.retrolambda  实现java8编译
-        jackOptions {
-            enabled true
-        }*/
+
     }
     compileOptions {
-        /*sourceCompatibility JavaVersion.VERSION_1_7
-        targetCompatibility JavaVersion.VERSION_1_7*/
         //使用JAVA8语法解析  主要是使用lambda 的函数式接口简化代码
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8

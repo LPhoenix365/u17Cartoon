@@ -11,11 +11,7 @@ import android.widget.Toast;
 
 import com.pingan.u17.base.U17Application;
 
-/**
- * 跳转Activity的工具类
- * @author CHENZHIQIANG247
- *
- */
+
 public class ActivityIntentTools {
 	
     public static void gotoActivity(Context context, Class<?> targetClass) {

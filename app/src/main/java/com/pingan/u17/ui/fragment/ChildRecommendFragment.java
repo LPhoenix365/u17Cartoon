@@ -275,7 +275,9 @@ public class ChildRecommendFragment extends BaseFragment<ChildRecommendView, Chi
             ((SimpleDraweeView) headerView.findViewById(R.id.item_header_icon)).setImageURI(comicBean.getNewTitleIconUrl());
             ((TextView) headerView.findViewById(R.id.item_header_title)).setText(comicBean.getItemTitle());
             modelLinearLayout.addView(headerView, headerParams);
+            headerView.setTag(2);
             //头部点击事件
+            headerView.setOnClickListener(headerClickListener);
             headerView.setTag(comicBean.getItemTitle());
             headerView.setOnClickListener(headerClickListener);
             LinearLayout linearLayout = null;
@@ -614,7 +616,7 @@ public class ChildRecommendFragment extends BaseFragment<ChildRecommendView, Chi
     private View.OnClickListener headerClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-
+            int tag = (int) v.getTag();
         }
     };
 
