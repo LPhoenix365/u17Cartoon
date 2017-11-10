@@ -3,10 +3,6 @@ package com.pingan.u17.model;
 import com.pingan.u17.base.U17Application;
 import com.pingan.u17.net.RestApi;
 
-import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
-
 
 /**
  * Description
@@ -23,16 +19,5 @@ public class BaseModel {
         api = U17Application.getInstance().getHttpClient().getApiService();
     }
 
-    /**
-     *
-     * @param observable
-     * @param
-     * @return
-     */
-    protected Observable observe(Observable observable){
-        return observable
-                .subscribeOn(Schedulers.io())
-                .unsubscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
-    }
+
 }

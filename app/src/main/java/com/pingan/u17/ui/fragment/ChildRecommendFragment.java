@@ -20,7 +20,9 @@ import com.pingan.u17.base.U17Application;
 import com.pingan.u17.bean.HomePageBean;
 import com.pingan.u17.bean.UpdateBean;
 import com.pingan.u17.presenter.ChildRecommendPresenter;
-import com.pingan.u17.ui.activity.ScrollingActivity;
+import com.pingan.u17.pull2refresh.PullToRefreshLayout;
+import com.pingan.u17.pull2refresh.PullableScrollView;
+import com.pingan.u17.ui.activity.CartoonDetailActivity;
 import com.pingan.u17.util.ActivityIntentTools;
 import com.pingan.u17.util.RxBus;
 import com.pingan.u17.util.ToolUtils;
@@ -51,9 +53,11 @@ import io.reactivex.functions.Function;
  */
 public class ChildRecommendFragment extends BaseFragment<ChildRecommendView, ChildRecommendPresenter> implements View.OnClickListener, ChildRecommendView {
 
+    @BindView(R.id.refresh_layout)
+    PullToRefreshLayout refreshLayout;
     @BindView(R.id.ll_container_recommend)
+    PullableScrollView scrollContainer;
     LinearLayout llContainer;
-
     @BindColor(R.color.white)
     int model_border_bg;
     @BindColor(R.color.item_rank_bg1)
@@ -97,7 +101,18 @@ public class ChildRecommendFragment extends BaseFragment<ChildRecommendView, Chi
 
         mRank_bgs = new int[]{item_rank_bg1, item_rank_bg2, item_rank_bg3, item_rank_bg4, item_rank_bg5};
         mScreenWidth = ToolUtils.getScreenWidth(mActivity);
-        mBoderEdgeParam = new LinearLayout.LayoutParams(ToolUtils.dip2px(mActivity, 8), LinearLayout.LayoutParams.MATCH_PARENT);
+        mBoderEdgeParam = new LinearLayout.LayoutParams(ToolUtils.dip2px(8), LinearLayout.LayoutParams.MATCH_PARENT);
+        refreshLayout.setOnPullListener(new PullToRefreshLayout.OnPullListener() {
+            @Override
+            public void onRefresh(PullToRefreshLayout pullToRefreshLayout) {
+                refreshLayout.refreshFinish(PullToRefreshLayout.SUCCEED);
+            }
+
+            @Override
+            public void onLoadMore(PullToRefreshLayout pullToRefreshLayout) {
+                refreshLayout.refreshFinish(PullToRefreshLayout.SUCCEED);
+            }
+        });
     }
 
     @Override
@@ -130,6 +145,10 @@ public class ChildRecommendFragment extends BaseFragment<ChildRecommendView, Chi
                 .subscribe(new Consumer<List<HomePageBean.ReturnDataBean.GalleryItemsBean>>() {
                     @Override
                     public void accept(List<HomePageBean.ReturnDataBean.GalleryItemsBean> galleryItemsBeen) throws Exception {
+                        LinearLayout.LayoutParams modelLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                        llContainer = new LinearLayout(mActivity);
+                        llContainer.setOrientation(LinearLayout.VERTICAL);
+                        scrollContainer.addView(llContainer,modelLayoutParams);
                         mGalleryItems = galleryItemsBeen;
                         addAD();
                     }
@@ -264,12 +283,12 @@ public class ChildRecommendFragment extends BaseFragment<ChildRecommendView, Chi
 
         if (twoModelEntities != null && twoModelEntities.size() > 0) {
             LinearLayout.LayoutParams modelLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-            modelLayoutParams.bottomMargin = ToolUtils.dip2px(mActivity, 10);
+            modelLayoutParams.bottomMargin = ToolUtils.dip2px(10);
             LinearLayout modelLinearLayout = new LinearLayout(mActivity);
             modelLinearLayout.setBackgroundColor(model_border_bg);
             modelLinearLayout.setOrientation(LinearLayout.VERTICAL);
 
-            LinearLayout.LayoutParams headerParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, ToolUtils.dip2px(mActivity, 40));
+            LinearLayout.LayoutParams headerParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, ToolUtils.dip2px(40));
             View headerView = mInflater.inflate(R.layout.item_recomend_header, null, false);
             headerView.findViewById(R.id.item_header).setOnClickListener(this);
             ((SimpleDraweeView) headerView.findViewById(R.id.item_header_icon)).setImageURI(comicBean.getNewTitleIconUrl());
@@ -300,7 +319,7 @@ public class ChildRecommendFragment extends BaseFragment<ChildRecommendView, Chi
                 ViewGroup.LayoutParams iconLayoutParams = icon.getLayoutParams();
                 //设置icon的高度
                 iconLayoutParams.width = LinearLayout.LayoutParams.MATCH_PARENT;
-                iconLayoutParams.height = ToolUtils.dip2px(mActivity, height);
+                iconLayoutParams.height = ToolUtils.dip2px(height);
 
                 TwoModelViewHolder viewHolder = new TwoModelViewHolder(view);
                 HomePageBean.ReturnDataBean.ComicListsBean.ComicsBean comics = twoModelEntities.get(i);
@@ -333,12 +352,12 @@ public class ChildRecommendFragment extends BaseFragment<ChildRecommendView, Chi
         List<HomePageBean.ReturnDataBean.ComicListsBean.ComicsBean> comics = comicsBean.getComics();
         if (comics != null && comics.size() > 0) {
             LinearLayout.LayoutParams modelLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-            modelLayoutParams.bottomMargin = ToolUtils.dip2px(mActivity, 10);
+            modelLayoutParams.bottomMargin = ToolUtils.dip2px(10);
             LinearLayout modelLinearLayout = new LinearLayout(mActivity);
             modelLinearLayout.setBackgroundColor(model_border_bg);
             modelLinearLayout.setOrientation(LinearLayout.VERTICAL);
 
-            LinearLayout.LayoutParams headerParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, ToolUtils.dip2px(mActivity, 40));
+            LinearLayout.LayoutParams headerParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, ToolUtils.dip2px(40));
             View headerView = mInflater.inflate(R.layout.item_recomend_header, null, false);
             headerView.findViewById(R.id.item_header).setOnClickListener(this);
             ((SimpleDraweeView) headerView.findViewById(R.id.item_header_icon)).setImageURI(comicsBean.getNewTitleIconUrl());
@@ -389,12 +408,12 @@ public class ChildRecommendFragment extends BaseFragment<ChildRecommendView, Chi
         List<HomePageBean.ReturnDataBean.ComicListsBean.ComicsBean> comics = comicsBean.getComics();
         if (comics != null && comics.size() > 0) {
             LinearLayout.LayoutParams modelLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-            modelLayoutParams.bottomMargin = ToolUtils.dip2px(mActivity, 10);
+            modelLayoutParams.bottomMargin = ToolUtils.dip2px(10);
             LinearLayout modelLinearLayout = new LinearLayout(mActivity);
             modelLinearLayout.setBackgroundColor(model_border_bg);
             modelLinearLayout.setOrientation(LinearLayout.VERTICAL);
 
-            LinearLayout.LayoutParams headerParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, ToolUtils.dip2px(mActivity, 40));
+            LinearLayout.LayoutParams headerParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, ToolUtils.dip2px(40));
             View headerView = mInflater.inflate(R.layout.item_recomend_header, null, false);
             headerView.findViewById(R.id.item_header).setOnClickListener(this);
             ((SimpleDraweeView) headerView.findViewById(R.id.item_header_icon)).setImageURI(comicsBean.getNewTitleIconUrl());
@@ -404,7 +423,7 @@ public class ChildRecommendFragment extends BaseFragment<ChildRecommendView, Chi
             headerView.setTag(comicsBean.getItemTitle());
             headerView.setOnClickListener(headerClickListener);
 
-            LinearLayout.LayoutParams fourLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, ToolUtils.dip2px(mActivity, 100));
+            LinearLayout.LayoutParams fourLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, ToolUtils.dip2px(100));
             View fourLayout = mInflater.inflate(R.layout.item_view_four, null, false);
             fourLayout.findViewById(R.id.item_header).setOnClickListener(this);
             SimpleDraweeView draweeView = (SimpleDraweeView) fourLayout.findViewById(R.id.sv_cover_four);
@@ -433,7 +452,7 @@ public class ChildRecommendFragment extends BaseFragment<ChildRecommendView, Chi
                 View boderLine = new View(mActivity);
                 linearLayout.addView(boderLine, mBoderEdgeParam);
                 LinearLayout.LayoutParams layoutParam = new LinearLayout.LayoutParams(mItemWidth, LinearLayout.LayoutParams.WRAP_CONTENT);
-                layoutParam.bottomMargin = ToolUtils.dip2px(mActivity, 10);
+                layoutParam.bottomMargin = ToolUtils.dip2px(10);
                 linearLayout.addView(view, layoutParam);
                 //点击事件
                 String tag = comicsBean.getItemTitle() + "_" + i;
@@ -457,12 +476,12 @@ public class ChildRecommendFragment extends BaseFragment<ChildRecommendView, Chi
         List<HomePageBean.ReturnDataBean.ComicListsBean.ComicsBean> comics = comicsBean.getComics();
         if (comics != null && comics.size() > 0) {
             LinearLayout.LayoutParams modelLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-            modelLayoutParams.bottomMargin = ToolUtils.dip2px(mActivity, 10);
+            modelLayoutParams.bottomMargin = ToolUtils.dip2px(10);
             LinearLayout modelLinearLayout = new LinearLayout(mActivity);
             modelLinearLayout.setBackgroundColor(model_border_bg);
             modelLinearLayout.setOrientation(LinearLayout.VERTICAL);
 
-            LinearLayout.LayoutParams headerParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, ToolUtils.dip2px(mActivity, 40));
+            LinearLayout.LayoutParams headerParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, ToolUtils.dip2px(40));
             View headerView = mInflater.inflate(R.layout.item_recomend_header, null, false);
             headerView.findViewById(R.id.item_header).setOnClickListener(this);
             SimpleDraweeView icon = (SimpleDraweeView) headerView.findViewById(R.id.item_header_icon);
@@ -492,7 +511,7 @@ public class ChildRecommendFragment extends BaseFragment<ChildRecommendView, Chi
                 View boderLine = new View(mActivity);
                 linearLayout.addView(boderLine, mBoderEdgeParam);
                 LinearLayout.LayoutParams layoutParam = new LinearLayout.LayoutParams(mItemWidth, LinearLayout.LayoutParams.WRAP_CONTENT);
-                layoutParam.bottomMargin = ToolUtils.dip2px(mActivity, 10);
+                layoutParam.bottomMargin = ToolUtils.dip2px(10);
                 linearLayout.addView(view, layoutParam);
                 //点击事件
                 String tag = comicsBean.getItemTitle() + "_" + i;
@@ -514,15 +533,16 @@ public class ChildRecommendFragment extends BaseFragment<ChildRecommendView, Chi
         LinearLayout.LayoutParams modelLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         RelativeLayout modelLinearLayout = new RelativeLayout(mActivity);
         modelLinearLayout.setBackgroundColor(model_border_bg);
-        RelativeLayout.LayoutParams adLayoutParams = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, ToolUtils.dip2px(mActivity, 140));
+        RelativeLayout.LayoutParams adLayoutParams = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, ToolUtils.dip2px(140));
         RollView rollViewPager = new RollView(mActivity);
         List<String> arrayList = new ArrayList<>();
         LinearLayout guideLayout = new LinearLayout(mActivity);
         RelativeLayout.LayoutParams guideLayoutParams = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-
+        guideLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+        guideLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
         RelativeLayout.LayoutParams imglayoutParams = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        int paddingLength = ToolUtils.dip2px(mActivity, 8);
-        int paddingWidth = ToolUtils.dip2px(mActivity, 6);
+        int paddingLength = ToolUtils.dip2px(8);
+        int paddingWidth = ToolUtils.dip2px(6);
         imglayoutParams.rightMargin=paddingWidth;
 
         for (HomePageBean.ReturnDataBean.GalleryItemsBean galleryItem : mGalleryItems) {
@@ -623,7 +643,7 @@ public class ChildRecommendFragment extends BaseFragment<ChildRecommendView, Chi
     private void dispatchEventClick(String[] params) {
         String itemTitle = params[0];
         int position = Integer.parseInt(params[1]);
-        ActivityIntentTools.gotoActivityNotFinish(mActivity, ScrollingActivity.class);
+        ActivityIntentTools.gotoActivityNotFinish(mActivity, CartoonDetailActivity.class);
     }
 
 

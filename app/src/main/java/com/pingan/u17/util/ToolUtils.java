@@ -74,6 +74,28 @@ public class ToolUtils {
 
 
 	/**
+	 * 是否有网络
+	 * @param context
+	 * @return
+	 */
+	public static boolean isConnected(Context context) {
+		NetworkInfo info = getActiveNetworkInfo(context);
+		return info != null && info.isConnected();
+	}
+
+
+	/**
+	 * 获取活动网络信息
+	 *
+	 * @param context 上下文
+	 * @return NetworkInfo
+	 */
+	private static NetworkInfo getActiveNetworkInfo(Context context) {
+		ConnectivityManager cm = (ConnectivityManager) context
+				.getSystemService(Context.CONNECTIVITY_SERVICE);
+		return cm.getActiveNetworkInfo();
+	}
+	/**
 	 * 判断是否是wifi网络
 	 * 
 	 * @param mContext
@@ -181,8 +203,8 @@ public class ToolUtils {
 	 *            （DisplayMetrics类中属性density）
 	 * @return
 	 */
-	public static int px2dip(Context context, float pxValue) {
-		final float scale = context.getResources().getDisplayMetrics().density;
+	public static int px2dip(float pxValue) {
+		final float scale = U17Application.getInstance().getResources().getDisplayMetrics().density;
 		return (int) (pxValue / scale + 0.5f);
 	}
 
@@ -193,8 +215,8 @@ public class ToolUtils {
 	 *            （DisplayMetrics类中属性density）
 	 * @return
 	 */
-	public static int dip2px(Context context, float dipValue) {
-		final float scale = context.getResources().getDisplayMetrics().density;
+	public static int dip2px(float dipValue) {
+		final float scale = U17Application.getInstance().getResources().getDisplayMetrics().density;
 		return (int) (dipValue * scale + 0.5f);
 	}
 
@@ -205,8 +227,8 @@ public class ToolUtils {
 	 *            （DisplayMetrics类中属性scaledDensity）
 	 * @return
 	 */
-	public static int px2sp(Context context, float pxValue) {
-		final float fontScale = context.getResources().getDisplayMetrics().scaledDensity;
+	public static int px2sp(float pxValue) {
+		final float fontScale = U17Application.getInstance().getResources().getDisplayMetrics().scaledDensity;
 		return (int) (pxValue / fontScale + 0.5f);
 	}
 
@@ -217,8 +239,8 @@ public class ToolUtils {
 	 *            （DisplayMetrics类中属性scaledDensity）
 	 * @return
 	 */
-	public static int sp2px(Context context, float spValue) {
-		final float fontScale = context.getResources().getDisplayMetrics().scaledDensity;
+	public static int sp2px(float spValue) {
+		final float fontScale = U17Application.getInstance().getResources().getDisplayMetrics().scaledDensity;
 		return (int) (spValue * fontScale + 0.5f);
 	}
 
@@ -437,7 +459,7 @@ public class ToolUtils {
 	}
 
 	/**
-	 * 获取app升级次数
+	 * 获取app版本号
 	 * 
 	 * @return
 	 */

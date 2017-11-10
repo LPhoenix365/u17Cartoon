@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/white"
+              android:orientation="vertical"
+              >
+
+    <TextView
+        android:id="@+id/cartoon_tags"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="故事漫画  连载中..."
+        android:padding="10dp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="10dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="本月月票："
+            android:textColor="@color/tab_text_color_normal"/>
+
+        <TextView
+            android:id="@+id/tv_mouth_ticket"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="142"
+            android:textColor="@color/item_c7bf68"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:text="累计月票："
+            android:textColor="@color/tab_text_color_normal"
+            />
+
+        <TextView
+            android:id="@+id/tv_mouth_ticket_acount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="1111142"
+            android:textColor="@color/item_c7bf68"/>
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:background="@color/border_bg"
+        />
+    <FrameLayout
+        android:id="@+id/ll_other_works"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="作者其他作品"/>
+
+        <TextView
+            android:id="@+id/tv_other_works"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:text="13"/>
+    </FrameLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:background="@color/border_bg"
+        />
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_other_work"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+</LinearLayout>

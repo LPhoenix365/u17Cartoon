@@ -3,6 +3,7 @@ package com.pingan.u17.net;
 import com.pingan.u17.bean.HomePageBean;
 import com.pingan.u17.bean.SortPageBean;
 import com.pingan.u17.bean.UpdateBean;
+import com.pingan.u17.model.response.CartoonDetailResponse;
 
 import java.util.Map;
 
@@ -42,4 +43,7 @@ public interface RestApi {
     @FormUrlEncoded
     @POST("/x3/weather")
     Observable<String> getWeather(@Field("cityId") String cityId, @Field("key") String key);
+
+    @GET("comic/detail_static_new?")
+    Single<CartoonDetailResponse> getCartoonDetailData(@QueryMap Map<String,String> map);
 }

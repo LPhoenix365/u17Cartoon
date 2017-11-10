@@ -36,6 +36,15 @@ public class RxUtils {
         };
     }
 
+    public static <T> ObservableTransformer<T, T> defaultSchedulers_observable() {
+        return new ObservableTransformer<T, T>() {
+            @Override
+            public ObservableSource<T> apply(@NonNull Observable<T> upstream) {
+                return upstream.observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io());
+            }
+        };
+    }
+
     public static <T> SingleTransformer<T, T> defaultSchedulers_single() {
         return new SingleTransformer<T, T>() {
 

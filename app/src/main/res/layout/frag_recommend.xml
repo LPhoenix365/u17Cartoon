@@ -1,15 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
+<com.pingan.u17.pull2refresh.PullToRefreshLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/refresh_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:scrollbars="none">
-    <LinearLayout
+    android:layout_height="match_parent">
+    <com.pingan.u17.pull2refresh.PullableScrollView
         android:id="@+id/ll_container_recommend"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/common_border_bg"
-        android:orientation="vertical">
-
-    </LinearLayout>
-</ScrollView>
+        android:scrollbars="none">
+    </com.pingan.u17.pull2refresh.PullableScrollView>
+</com.pingan.u17.pull2refresh.PullToRefreshLayout>

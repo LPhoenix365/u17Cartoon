@@ -37,6 +37,7 @@ public class BaseActivity<V, T extends BasePresenter<V>> extends AppCompatActivi
         }
         setContentView(R.layout.activity_base);
         baseFramelayout = (FrameLayout) findViewById(R.id.base_framelayout);
+        //mPresenter.isViewAttached();
     }
     /***
      * 设置内容区域
@@ -59,7 +60,7 @@ public class BaseActivity<V, T extends BasePresenter<V>> extends AppCompatActivi
     }
 
 
-    private T createPresenter() {
+    public T createPresenter() {
         return null;
     }
 

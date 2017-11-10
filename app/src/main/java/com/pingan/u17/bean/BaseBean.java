@@ -15,7 +15,6 @@ public class BaseBean<T> implements Serializable, IResponse {
 
 
     private int    code;
-    private String msg;
     private T      data;
 
     public int getCode() {
@@ -26,13 +25,6 @@ public class BaseBean<T> implements Serializable, IResponse {
         this.code = code;
     }
 
-    public String getMsg() {
-        return msg;
-    }
-
-    public void setMsg(String msg) {
-        this.msg = msg;
-    }
 
     public T getData() {
         return data;

@@ -1,13 +1,11 @@
 package com.pingan.u17.presenter;
 
-import com.example.framework.http.abutil.AbLogUtil;
 import com.pingan.u17.model.BaseModel;
+import com.pingan.u17.net.CommonServiceImp;
+import com.pingan.u17.net.ServiceFactory;
 
 import java.lang.ref.Reference;
 import java.lang.ref.WeakReference;
-
-import io.reactivex.annotations.NonNull;
-import io.reactivex.functions.Consumer;
 
 /**
  * Description
@@ -18,51 +16,32 @@ import io.reactivex.functions.Consumer;
 public class BasePresenter<V> {
 
     protected Reference<V> mViewRef;
+    protected CommonServiceImp commonServiceImp;
 
-    public void attachView(V view){
+    public void attachView(V view) {
         mViewRef = new WeakReference<V>(view);
     }
 
-    protected V getView(){
+    protected V getView() {
         return mViewRef.get();
     }
 
-    public boolean isViewAttached(){
-        return mViewRef != null&& mViewRef.get()!=null;
+    public boolean isViewAttached() {
+        return mViewRef != null && mViewRef.get() != null;
     }
 
-    public void detachView(){
-        if(mViewRef!=null){
+    public void detachView() {
+        if (mViewRef != null) {
             mViewRef.clear();
             mViewRef = null;
         }
     }
 
+    public BasePresenter() {
+        commonServiceImp = ServiceFactory.getInstance().createService(CommonServiceImp.class);
+    }
 
     protected void setBaseModel(BaseModel baseM) {
 
-    }
-
-
-    public   Consumer<Throwable> disposeFailureInfo(Throwable t) {
-        return new Consumer<Throwable>() {
-            @Override
-            public void accept(@NonNull Throwable throwable) throws Exception {
-                AbLogUtil.d("tag","throwable="+throwable);
-            }
-        };
-
-
-        /*throwable -> {
-            if (t.toString().contains("GaiException") || t.toString().contains("SocketTimeoutException") ||
-                    t.toString().contains("UnknownHostException")) {
-                //ToastUtil.showShort("网络问题");
-            } else if (t.toString().contains("API没有")) {
-                *//*OrmLite.getInstance()
-                        .delete(new WhereBuilder(CityORM.class).where("name=?", Util.replaceInfo(t.getMessage())));
-                ToastUtil.showShort("错误: " + t.getMessage());*//*
-            }
-            //PLog.w(t.getMessage());
-        };*/
     }
 }

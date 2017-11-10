@@ -1,67 +1,87 @@
 package com.pingan.u17.ui.activity;
 
-import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.TabLayout;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.example.framework.FrescoImageUtil;
+import com.example.framework.http.abutil.ToastUtil;
+import com.facebook.drawee.view.SimpleDraweeView;
 import com.pingan.u17.R;
 import com.pingan.u17.base.BaseActivity;
-import com.pingan.u17.net.LoggingInterceptor;
+import com.pingan.u17.model.CartoonDetailViewModel;
+import com.pingan.u17.model.response.CartoonDetailRealtimeResponse;
+import com.pingan.u17.model.response.CartoonDetailResponse;
+import com.pingan.u17.presenter.CartoonDetailPresenter;
+import com.pingan.u17.view.CartoonDetailView;
 
-import java.io.IOException;
+import java.util.LinkedHashMap;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
 
-import static com.pingan.u17.R.id.app_bar;
+import static com.pingan.u17.R.id.tv_author;
+import static com.pingan.u17.R.id.tv_visit_count;
 
-public class CartoonDetailActivity extends BaseActivity {
+
+public class CartoonDetailActivity extends BaseActivity<CartoonDetailView, CartoonDetailPresenter> implements CartoonDetailView {
 
     @BindView(R.id.iv_cover)
-    ImageView               ivCover;
+    SimpleDraweeView ivCover;
     @BindView(R.id.tv_name)
-    TextView                tvName;
-    @BindView(R.id.tv_author)
-    TextView                tvAuthor;
+    TextView tvName;
+    @BindView(tv_author)
+    TextView tvAuthor;
     @BindView(R.id.tv_visit)
-    TextView                tvVisit;
-    @BindView(R.id.tv_visit_count)
-    TextView                tvVisitCount;
+    TextView tvVisit;
+    @BindView(tv_visit_count)
+    TextView tvVisitCount;
     @BindView(R.id.monthly_ticket)
-    TextView                monthlyTicket;
+    TextView monthlyTicket;
     @BindView(R.id.tv_monthly_ticket)
-    TextView                tvMonthlyTicket;
+    TextView tvMonthlyTicket;
     @BindView(R.id.tv_themes)
-    TextView                tvThemes;
+    TextView tvThemes;
     @BindView(R.id.tv_detail)
-    TextView                tvDetail;
+    TextView tvDetail;
     @BindView(R.id.view_reward)
-    TextView                viewReward;
-    @BindView(R.id.tv_download)
-    TextView                tvDownload;
-    @BindView(R.id.tv_continue_read)
-    TextView                tvContinueRead;
-
+    TextView viewReward;
     @BindView(R.id.toolbar)
-    Toolbar                 toolbar;
+    Toolbar toolbar;
     @BindView(R.id.toolbar_layout)
     CollapsingToolbarLayout collapsingToolbarLayout;
-    @BindView(app_bar)
-    AppBarLayout            appBar;
     @BindView(R.id.coordinatorLayout)
-    CoordinatorLayout       coordinatorLayout;
+    CoordinatorLayout coordinatorLayout;
+    @BindView(R.id.iv_back)
+    ImageView ivBack;
+    @BindView(R.id.tv_name_toolbar)
+    TextView tvNameToolbar;
+    @BindView(R.id.iv_share_toolbar)
+    ImageView ivShareToolbar;
+    @BindView(R.id.iv_star_toolbar)
+    ImageView ivStarToolbar;
+    @BindView(R.id.tablayout)
+    TabLayout tablayout;
+    @BindView(R.id.app_bar)
+    AppBarLayout appBar;
+    @BindView(R.id.viewpage)
+    ViewPager viewpage;
+    @BindView(R.id.toolbar_rl)
+    RelativeLayout rlLayout;
+    private CartoonDetailViewModel cartoonDetailModel;
+
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -69,72 +89,77 @@ public class CartoonDetailActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentLayout(R.layout.activity_cartoon_detail);
         ButterKnife.bind(this);
-        /*appBar.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+        appBar.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             @Override
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-                Log.w("verticalOffset", "verticalOffset=" + verticalOffset);
-                toolbar.setAlpha(Math.abs(verticalOffset / (576.f*2)));
-                if (verticalOffset == 0) {
-                    if (state != CollapsingToolbarLayoutState.EXPANDED) {
-                        state = CollapsingToolbarLayoutState.EXPANDED;//修改状态标记为展开
-                        //collapsingToolbarLayout.setTitle("EXPANDED");//设置title为EXPANDED
-                    }
-                } else if (Math.abs(verticalOffset) >= appBarLayout.getTotalScrollRange()) {
-                    if (state != CollapsingToolbarLayoutState.COLLAPSED) {
-                        collapsingToolbarLayout.setTitle("");//设置title不显示
-                        state = CollapsingToolbarLayoutState.COLLAPSED;//修改状态标记为折叠
-                    }
-                } else {
-                    if (state != CollapsingToolbarLayoutState.INTERNEDIATE) {
-                        if (state == CollapsingToolbarLayoutState.COLLAPSED) {
-
-                        }
-                       // collapsingToolbarLayout.setTitle("INTERNEDIATE");//设置title为INTERNEDIATE
-                        state = CollapsingToolbarLayoutState.INTERNEDIATE;//修改状态标记为中间
-                    }
-                }
+                int height = appBar.getHeight();
+                //设置
+                float alpha = Math.abs(verticalOffset) * 1.f / height;
+                tvNameToolbar.setAlpha(alpha);
+                rlLayout.setAlpha(alpha);
             }
-        });*/
+        });
+        LinkedHashMap<String, String> map = new LinkedHashMap<>();
+        map.put("comicid", String.valueOf(13707));
+        mPresenter.getCartoonDetailData(map);
+        mPresenter.getCartoonDetailRealtime(map);
+        cartoonDetailModel = new CartoonDetailViewModel();
+    }
 
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                         OkHttpClient client = new OkHttpClient.Builder()
-                                .addNetworkInterceptor(new LoggingInterceptor())
-                                .build();
-
-                         Request request = new Request.Builder()
-                                .url("http://www.publicobject.com/helloworld.txt")
-                                .header("User-Agent", "OkHttp Example")
-                                .build();
-                        Response response = client.newCall(request).execute();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }).start();
-
+    @Override
+    public CartoonDetailPresenter createPresenter() {
+        return new CartoonDetailPresenter();
     }
 
 
-    @OnClick({R.id.tv_download, R.id.tv_continue_read})
-    public void onViewClicked(View view) {
-        switch (view.getId()) {
-            case R.id.tv_download:
-                startActivity(new Intent(CartoonDetailActivity.this,ReadingActivity.class));
-                break;
-            case R.id.tv_continue_read:
-                break;
+    @Override
+    public void showErrorMsg(String errormsg) {
+        ToastUtil.showToast(this, errormsg);
+    }
+
+    @Override
+    public void getCartoonDetail(CartoonDetailResponse response) {
+        if (response != null) {
+            cartoonDetailModel.cartoonDetailResponse=response;
+            CartoonDetailResponse.ComicBean comicBean = response.comic;
+            tvAuthor.setText(comicBean.author.name);
+            List<String> stringList = comicBean.theme_ids;
+            StringBuffer sb = new StringBuffer();
+            if (stringList != null && stringList.size() > 0) {
+                for (String s : stringList) {
+                    sb.append(s + " ");
+                }
+                tvThemes.setText(sb.toString());
+            }
+            tvDetail.setText(comicBean.description);
+            FrescoImageUtil.displayImgFromNetwork(ivCover, comicBean.cover);
+
         }
     }
 
-    private CollapsingToolbarLayoutState state;
+    @Override
+    public void getCartoonDetailRealtime(CartoonDetailRealtimeResponse response) {
+        if (response != null) {
+            cartoonDetailModel.cartoonDetailRealtimeResponse=response;
+            CartoonDetailRealtimeResponse.ComicBean comic = response.comic;
+            if (comic != null) {
+                tvVisitCount.setText(String.valueOf(comic.total_click));
+                tvMonthlyTicket.setText(String.valueOf(comic.monthly_ticket));
+            }
 
-    private enum CollapsingToolbarLayoutState {
-        EXPANDED,
-        COLLAPSED,
-        INTERNEDIATE
+        }
+    }
+
+    @OnClick({R.id.iv_back, R.id.iv_share_toolbar, R.id.iv_star_toolbar})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.iv_back:
+                break;
+            case R.id.iv_share_toolbar:
+                break;
+            case R.id.iv_star_toolbar:
+                break;
+        }
     }
 
 

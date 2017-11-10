@@ -63,54 +63,6 @@ public class ChildRecommendPresenter extends BasePresenter<ChildRecommendView> {
                     });
         }
 
-            /*childRecommendModel
-                    .getHomePageData(map)
-                    .flatMap(new Function<HomePageBean, ObservableSource<HomePageBean.ReturnDataBean>>() {
-                        @Override
-                        public ObservableSource<HomePageBean.ReturnDataBean> apply(@NonNull HomePageBean homePageBean) throws Exception {
-                            if (homePageBean.isSucess() && homePageBean.getReturnData() != null) {
-                                return Observable.just(homePageBean.getReturnData());
-                            }
-                            return Observable.error(new RuntimeException("解析错误"));
-                        }
-                    })
-                    .doOnError(new Consumer<Throwable>() {
-                        @Override
-                        public void accept(@NonNull Throwable throwable) throws Exception {
-                            disposeFailureInfo(throwable);
-                            //这个可以统一处理 不改变流
-                        }
-                    })
-                    .subscribe(new Consumer<HomePageBean.ReturnDataBean>() {
-                        @Override
-                        public void accept(@NonNull HomePageBean.ReturnDataBean returnDataBean) throws Exception {
-                            childRecommendView.getHomePageData2(Observable.just(returnDataBean));
-                        }
-                    }, new Consumer<Throwable>() {
-                        @Override
-                        public void accept(@NonNull Throwable throwable) throws Exception {
-                            disposeFailureInfo(throwable);
-                            //这个终结者 可以传递给具体的请求页面
-                        }
-                    });
-                    *//*.subscribe(new Consumer<HomePageBean>() {
-                        @Override
-                        public void accept(HomePageBean homePageBean) throws Exception {
-                            if (homePageBean != null && homePageBean.getCode() == 1) {
-                                HomePageBean data = homePageBean.getData();
-                                HomePageBean.ReturnDataBean dataBean = data.getReturnData();
-                                childRecommendView.getHomePageData2(Observable.just(dataBean));
-                                childRecommendView.showErrorMsg("");
-                            }
-                        }
-                    }, new Consumer<Throwable>() {
-                        @Override
-                        public void accept(Throwable throwable) throws Exception {
-                            childRecommendView.showErrorMsg("");
-                        }
-                    });*//*
-        }*/
-
     }
 
     public void hasNewversion(Map<String, String> map) {
