@@ -1,6 +1,7 @@
 package com.pingan.u17.presenter;
 
 import com.pingan.u17.model.BaseModel;
+import com.pingan.u17.net.CommentServiceImp;
 import com.pingan.u17.net.CommonServiceImp;
 import com.pingan.u17.net.ServiceFactory;
 
@@ -17,6 +18,7 @@ public class BasePresenter<V> {
 
     protected Reference<V> mViewRef;
     protected CommonServiceImp commonServiceImp;
+    protected  CommentServiceImp commentServiceImp;
 
     public void attachView(V view) {
         mViewRef = new WeakReference<V>(view);
@@ -39,6 +41,8 @@ public class BasePresenter<V> {
 
     public BasePresenter() {
         commonServiceImp = ServiceFactory.getInstance().createService(CommonServiceImp.class);
+        commentServiceImp = ServiceFactory.getInstance().createService(CommentServiceImp.class);
+
     }
 
     protected void setBaseModel(BaseModel baseM) {

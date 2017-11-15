@@ -1,6 +1,6 @@
 package com.pingan.u17.presenter;
 
-import com.pingan.u17.model.response.CartoonDetailRealtimeResponse;
+import com.pingan.u17.model.response.RealtimeResponse;
 import com.pingan.u17.model.response.CartoonDetailResponse;
 import com.pingan.u17.model.response.HttpSingleSubscriber;
 import com.pingan.u17.util.RxUtils;
@@ -46,10 +46,10 @@ public class CartoonDetailPresenter extends BasePresenter<CartoonDetailView> {
         cartoonDetailView = getView();
         commonServiceImp
                 .getCartoonDetailRealtime(map)
-                .compose(RxUtils.<CartoonDetailRealtimeResponse>defaultSchedulers_single())
-                .subscribe(new HttpSingleSubscriber<CartoonDetailRealtimeResponse>() {
+                .compose(RxUtils.<RealtimeResponse>defaultSchedulers_single())
+                .subscribe(new HttpSingleSubscriber<RealtimeResponse>() {
                     @Override
-                    public void success(CartoonDetailRealtimeResponse returnDataBean) {
+                    public void success(RealtimeResponse returnDataBean) {
                         if (isViewAttached()) {
                             cartoonDetailView.getCartoonDetailRealtime(returnDataBean);
                         }

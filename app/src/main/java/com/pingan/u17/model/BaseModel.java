@@ -1,6 +1,5 @@
 package com.pingan.u17.model;
 
-import com.pingan.u17.base.U17Application;
 import com.pingan.u17.net.RestApi;
 
 
@@ -16,7 +15,7 @@ public class BaseModel {
     public RestApi api;
 
     public BaseModel() {
-        api = U17Application.getInstance().getHttpClient().getApiService();
+        //api = U17Application.getInstance().getHttpClient().getApiService();
     }
 
 

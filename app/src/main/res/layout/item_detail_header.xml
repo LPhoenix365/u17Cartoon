@@ -17,7 +17,8 @@
             android:layout_height="wrap_content"
             android:background="@color/item_rank_bg1"
             android:orientation="horizontal"
-            android:paddingTop="50dp">
+            android:paddingTop="50dp"
+            >
 
             <com.facebook.drawee.view.SimpleDraweeView
                 android:id="@+id/iv_cover"
@@ -26,7 +27,8 @@
                 android:layout_marginBottom="10dp"
                 android:layout_marginLeft="20dp"
                 android:scaleType="centerCrop"
-                android:src="@drawable/bg_login_top"/>
+                android:src="@drawable/bg_login_top"
+                />
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -41,7 +43,8 @@
                     android:layout_height="wrap_content"
                     android:padding="2dp"
                     android:text="错身奇缘"
-                    android:textColor="@color/detail_text_F4FAE9"/>
+                    android:textColor="@color/detail_text_F4FAE9"
+                    />
 
                 <TextView
                     android:id="@+id/tv_author"
@@ -51,7 +54,8 @@
                     android:padding="2dp"
                     android:text="银桑树"
                     android:textColor="@color/detail_text_color2"
-                    android:textSize="12sp"/>
+                    android:textSize="12sp"
+                    />
 
                 <TextView
                     android:id="@+id/tv_visit"
@@ -72,7 +76,8 @@
                     android:padding="2dp"
                     android:text="2373.30万"
                     android:textColor="@color/detail_text_color1"
-                    android:textSize="12sp"/>
+                    android:textSize="12sp"
+                    />
 
                 <TextView
                     android:id="@+id/monthly_ticket"
@@ -82,7 +87,8 @@
                     android:text="月票:"
                     android:textColor="@color/detail_text_color2"
                     android:textSize="12sp"
-                    android:layout_below="@+id/tv_visit"/>
+                    android:layout_below="@+id/tv_visit"
+                    />
 
                 <TextView
                     android:id="@+id/tv_monthly_ticket"
@@ -93,7 +99,8 @@
                     android:padding="2dp"
                     android:text="204"
                     android:textColor="@color/detail_text_color1"
-                    android:textSize="12sp"/>
+                    android:textSize="12sp"
+                    />
                 <!--带圆圈的字  自定义-->
                 <TextView
                     android:id="@+id/tv_themes"
@@ -133,7 +140,8 @@
         android:background="@color/contentBgColor"
         android:orientation="horizontal"
         android:paddingTop="@dimen/activity_horizontal_margin"
-        android:paddingBottom="@dimen/activity_horizontal_margin">
+        android:paddingBottom="@dimen/activity_horizontal_margin"
+        >
 
         <TextView
             android:id="@+id/tv_download"

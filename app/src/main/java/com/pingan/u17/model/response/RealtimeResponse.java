@@ -1,5 +1,7 @@
 package com.pingan.u17.model.response;
 
+import com.pingan.u17.bean.ChapterRealTimeBean;
+
 import java.util.List;
 
 /**
@@ -9,7 +11,7 @@ import java.util.List;
  * @data 2017/11/9
  */
 
-public class CartoonDetailRealtimeResponse extends BaseResponse<CartoonDetailRealtimeResponse> {
+public class RealtimeResponse extends BaseResponse<RealtimeResponse> {
 
 
     /**
@@ -22,7 +24,7 @@ public class CartoonDetailRealtimeResponse extends BaseResponse<CartoonDetailRea
     public ComicBean comic;
     public CommentBean comment;
     public LastReadBean last_read;
-    public List<ChapterListBean> chapter_list;
+    public List<ChapterRealTimeBean> chapter_list;
 
     public static class ComicBean {
         /**
@@ -74,21 +76,6 @@ public class CartoonDetailRealtimeResponse extends BaseResponse<CartoonDetailRea
         public String create_time;
     }
 
-    public static class ChapterListBean {
-        /**
-         * vip_images : 0
-         * chapter_id : 52776
-         * is_view : 1
-         * buyed : 0
-         * read_state : 1
-         */
-
-        public String vip_images;
-        public String chapter_id;
-        public int is_view;
-        public String buyed;
-        public int read_state;
-    }
 
 
 }

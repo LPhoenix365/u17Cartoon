@@ -17,7 +17,7 @@ public class ReadingActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentLayout(R.layout.activity_reading);
+        setContentLayout(R.layout.activity_test);
         initData();
     }
 

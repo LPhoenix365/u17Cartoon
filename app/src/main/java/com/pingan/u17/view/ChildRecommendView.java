@@ -1,10 +1,8 @@
 package com.pingan.u17.view;
 
-import com.pingan.u17.bean.HomePageBean;
-import com.pingan.u17.bean.UpdateBean;
+import com.pingan.u17.model.response.HomePageResponse;
 
 import io.reactivex.Observable;
-import io.reactivex.Single;
 
 /**
  * Description
@@ -14,6 +12,6 @@ import io.reactivex.Single;
  */
 
 public interface ChildRecommendView extends BaseView {
-    void  getHomePageData(Observable<HomePageBean.ReturnDataBean> homePageBean);
-    void  hasNewVersion(Single<UpdateBean.ReturnDataBean.UpdateInfoBean> updateBean);
+    void  getHomePageData(Observable<HomePageResponse> homePageBean);
+   // void  hasNewVersion(Single<UpdateBean.ReturnDataBean.UpdateInfoBean> updateBean);
 }

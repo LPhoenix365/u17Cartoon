@@ -28,7 +28,7 @@ public class U17Application extends Application {
         INSTANCE = this;
         Fresco.initialize(this);
         regToWx();
-        setHttpClient(new HttpClient());
+        //setHttpClient(new HttpClient());
     }
 
     public static U17Application getInstance() {

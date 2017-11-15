@@ -10,8 +10,9 @@ import com.pingan.u17.presenter.SortPresenter;
 import com.pingan.u17.view.SortView;
 
 /**
- * Author：liupeng on 2017/2/24 09:55
- * Address：liupeng264@pingan.com.cn
+ *
+ * @author  liupeng502
+ * @data    2017/11/13
  */
 public class SortFragment extends BaseFragment<SortView, SortPresenter> implements SortView {
     public static final String TAG = SortFragment.class.getSimpleName();
@@ -31,7 +32,7 @@ public class SortFragment extends BaseFragment<SortView, SortPresenter> implemen
 
     @Override
     protected SortPresenter createPresenter() {
-        return new SortPresenter(this);
+        return new SortPresenter();
     }
 
     @Override

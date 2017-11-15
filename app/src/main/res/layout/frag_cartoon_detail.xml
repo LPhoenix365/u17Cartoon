@@ -1,81 +1,105 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:background="@color/white"
-              android:orientation="vertical"
-              >
-
-    <TextView
-        android:id="@+id/cartoon_tags"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="故事漫画  连载中..."
-        android:padding="10dp"/>
+<android.support.v4.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical"
+    >
+    <!--app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    viewpager 中已设置了 不需要再设置 但是viewpager 内部页面最外部控件需支持behavior-->
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="10dp">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
         <TextView
+            android:id="@+id/cartoon_detail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="本月月票："
-            android:textColor="@color/tab_text_color_normal"/>
+            android:lines="3"
+            android:padding="10dp"
+            android:visibility="gone"/>
 
         <TextView
-            android:id="@+id/tv_mouth_ticket"
+            android:id="@+id/cartoon_tags"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="142"
-            android:textColor="@color/item_c7bf68"/>
+            android:padding="10dp"
+            android:text="故事漫画  连载中..."/>
 
-        <TextView
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:text="累计月票："
-            android:textColor="@color/tab_text_color_normal"
+            android:orientation="horizontal"
+            android:padding="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="本月月票："
+                android:textColor="@color/tab_text_color_normal"/>
+
+            <TextView
+                android:id="@+id/tv_mouth_ticket"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="142"
+                android:textColor="@color/item_c7bf68"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:text="累计月票："
+                android:textColor="@color/tab_text_color_normal"
+                />
+
+            <TextView
+                android:id="@+id/tv_mouth_ticket_acount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="1111142"
+                android:textColor="@color/item_c7bf68"/>
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="10dp"
+            android:background="@color/border_bg"
             />
 
-        <TextView
-            android:id="@+id/tv_mouth_ticket_acount"
-            android:layout_width="wrap_content"
+        <FrameLayout
+            android:id="@+id/ll_other_works"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="1111142"
-            android:textColor="@color/item_c7bf68"/>
-    </LinearLayout>
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="10dp"
-        android:background="@color/border_bg"
-        />
-    <FrameLayout
-        android:id="@+id/ll_other_works"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="10dp">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="作者其他作品"/>
+            android:padding="10dp">
 
-        <TextView
-            android:id="@+id/tv_other_works"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:text="13"/>
-    </FrameLayout>
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="10dp"
-        android:background="@color/border_bg"
-        />
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler_other_work"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
-</LinearLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="作者其他作品"/>
+
+            <TextView
+                android:id="@+id/tv_other_works"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:text="13"/>
+        </FrameLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="10dp"
+            android:background="@color/border_bg"
+            />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_guess_like"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            />
+    </LinearLayout>
+</android.support.v4.widget.NestedScrollView>

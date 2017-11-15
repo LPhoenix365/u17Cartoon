@@ -1,5 +1,8 @@
 package com.pingan.u17.model.response;
 
+import com.pingan.u17.bean.ChapterBean;
+
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -20,11 +23,11 @@ public class CartoonDetailResponse extends BaseResponse<CartoonDetailResponse> {
      */
 
     public ComicBean comic;
-    public List<ChapterListBean> chapter_list;
+    public List<ChapterBean> chapter_list;
     public List<OtherWorkBean> otherWorks;
     public List<CommentListBean> commentList;
 
-    public static class OtherWorkBean {
+    public static class OtherWorkBean implements Serializable{
         /**
          * comicId : 22520
          * coverUrl : http://cover2.u17i.com/2011/11/1310592_1321685216_eRzdSrRVHECD.sbig.jpg
@@ -38,7 +41,7 @@ public class CartoonDetailResponse extends BaseResponse<CartoonDetailResponse> {
         public String passChapterNum;
     }
 
-    public static class ComicBean {
+    public static class ComicBean implements Serializable{
         /**
          * name : 请神误用
          * comic_id : 144558
@@ -85,7 +88,7 @@ public class CartoonDetailResponse extends BaseResponse<CartoonDetailResponse> {
         public List<ClassifyTagsBean> classifyTags;
         public List<String> tagList;
 
-        public static class AuthorBean {
+        public static class AuthorBean implements Serializable{
             /**
              * avatar : http://k.avatar.u17i.com/2017/0522/17883203_e8d78b65c91a130f5874c5bf22a3d38f_1495436091.big.png
              * name : 潜昕
@@ -97,7 +100,7 @@ public class CartoonDetailResponse extends BaseResponse<CartoonDetailResponse> {
             public String id;
         }
 
-        public static class ClassifyTagsBean {
+        public static class ClassifyTagsBean implements Serializable{
             /**
              * name : 少年
              * argName : cate
@@ -110,35 +113,9 @@ public class CartoonDetailResponse extends BaseResponse<CartoonDetailResponse> {
         }
     }
 
-    public static class ChapterListBean {
-        /**
-         * name : 01.请神
-         * image_total : 28
-         * chapter_id : 583311
-         * type : 0
-         * size : 6320310
-         * pass_time : 1486718573
-         * release_time : 1486746000
-         * zip_high_webp : 2559119
-         * is_new : 0
-         * has_locked_image : false
-         * index : 1
-         */
 
-        public String name;
-        public String image_total;
-        public String chapter_id;
-        public String type;
-        public String size;
-        public int pass_time;
-        public String release_time;
-        public String zip_high_webp;
-        public int is_new;
-        public boolean has_locked_image;
-        public String index;
-    }
 
-    public static class CommentListBean {
+    public static class CommentListBean implements Serializable{
         /**
          * cate : 0
          * color : FF0000
@@ -217,7 +194,7 @@ public class CartoonDetailResponse extends BaseResponse<CartoonDetailResponse> {
         public String likeCount;
         public List<?> imageList;
 
-        public static class LevelBean {
+        public static class LevelBean implements Serializable{
             /**
              * level : 1
              * min_exp : 0

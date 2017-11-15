@@ -1,6 +1,6 @@
 package com.pingan.u17.view;
 
-import com.pingan.u17.model.response.CartoonDetailRealtimeResponse;
+import com.pingan.u17.model.response.RealtimeResponse;
 import com.pingan.u17.model.response.CartoonDetailResponse;
 
 /**
@@ -12,5 +12,5 @@ import com.pingan.u17.model.response.CartoonDetailResponse;
 
 public interface CartoonDetailView extends BaseView {
     void getCartoonDetail(CartoonDetailResponse response);
-    void getCartoonDetailRealtime(CartoonDetailRealtimeResponse response);
+    void getCartoonDetailRealtime(RealtimeResponse response);
 }

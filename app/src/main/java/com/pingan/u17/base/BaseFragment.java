@@ -32,7 +32,7 @@ public  class BaseFragment<V, P extends BasePresenter<V>> extends RxFragment {
         super.onAttach(context);
         //防止后面获取activity失败 报空
         mActivity = getActivity();
-        api = U17Application.getInstance().getHttpClient().getApiService();
+        //api = U17Application.getInstance().getHttpClient().getApiService();
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

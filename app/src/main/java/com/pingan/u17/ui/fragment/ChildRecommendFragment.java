@@ -8,17 +8,15 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.framework.FrescoImageUtil;
-import com.example.framework.http.abutil.AbLogUtil;
 import com.example.framework.http.abutil.ToastUtil;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.pingan.u17.R;
 import com.pingan.u17.base.BaseFragment;
 import com.pingan.u17.base.U17Application;
-import com.pingan.u17.bean.HomePageBean;
 import com.pingan.u17.bean.UpdateBean;
+import com.pingan.u17.model.response.HomePageResponse;
 import com.pingan.u17.presenter.ChildRecommendPresenter;
 import com.pingan.u17.pull2refresh.PullToRefreshLayout;
 import com.pingan.u17.pull2refresh.PullableScrollView;
@@ -39,7 +37,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
-import io.reactivex.Single;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
@@ -70,17 +67,17 @@ public class ChildRecommendFragment extends BaseFragment<ChildRecommendView, Chi
     int item_rank_bg4;
     @BindColor(R.color.item_rank_bg4)
     int item_rank_bg5;
-    private HomePageBean mHomePageBean;
+    private HomePageResponse mHomePageBean;
 
     public static final String TAG = ChildRecommendFragment.class.getSimpleName();
 
-    private List<HomePageBean.ReturnDataBean.GalleryItemsBean> mGalleryItems;//banner 实体
-    private List<HomePageBean.ReturnDataBean.ComicListsBean>   mComicLists;
+    private List<HomePageResponse.GalleryItemsBean> mGalleryItems;//banner 实体
+    private List<HomePageResponse.ComicListsBean>   mComicLists;
 
     private int                       mScreenWidth;
     private LinearLayout.LayoutParams mBoderEdgeParam;
     private int[]                     mRank_bgs;
-    List<HomePageBean.ReturnDataBean.ComicListsBean.ComicsBean> twoModelEntities;
+    List<HomePageResponse.ComicListsBean.ComicsBean> twoModelEntities;
 
 
     @Override
@@ -128,23 +125,23 @@ public class ChildRecommendFragment extends BaseFragment<ChildRecommendView, Chi
         map.put("android_id", "602b734eecb46c60");
 
         mPresenter.getHomePageData(map);
-        mPresenter.hasNewversion(map);
+        //mPresenter.hasNewversion(map);
     }
 
 
     @Override
-    public void getHomePageData(Observable<HomePageBean.ReturnDataBean> homePageBean) {
+    public void getHomePageData(Observable<HomePageResponse> homePageBean) {
         homePageBean
-                .map(new Function<HomePageBean.ReturnDataBean, List<HomePageBean.ReturnDataBean.GalleryItemsBean>>() {
+                .map(new Function<HomePageResponse, List<HomePageResponse.GalleryItemsBean>>() {
                     @Override
-                    public List<HomePageBean.ReturnDataBean.GalleryItemsBean> apply(HomePageBean.ReturnDataBean returnDataBean) throws Exception {
+                    public List<HomePageResponse.GalleryItemsBean> apply(HomePageResponse returnDataBean) throws Exception {
                         return returnDataBean.getGalleryItems();
                     }
                 })
                 .take(1)
-                .subscribe(new Consumer<List<HomePageBean.ReturnDataBean.GalleryItemsBean>>() {
+                .subscribe(new Consumer<List<HomePageResponse.GalleryItemsBean>>() {
                     @Override
-                    public void accept(List<HomePageBean.ReturnDataBean.GalleryItemsBean> galleryItemsBeen) throws Exception {
+                    public void accept(List<HomePageResponse.GalleryItemsBean> galleryItemsBeen) throws Exception {
                         LinearLayout.LayoutParams modelLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                         llContainer = new LinearLayout(mActivity);
                         llContainer.setOrientation(LinearLayout.VERTICAL);
@@ -155,17 +152,17 @@ public class ChildRecommendFragment extends BaseFragment<ChildRecommendView, Chi
                 });
 
         homePageBean
-                .flatMap(new Function<HomePageBean.ReturnDataBean, ObservableSource<HomePageBean.ReturnDataBean.ComicListsBean>>() {
+                .flatMap(new Function<HomePageResponse, ObservableSource<HomePageResponse.ComicListsBean>>() {
                     @Override
-                    public ObservableSource<HomePageBean.ReturnDataBean.ComicListsBean> apply(HomePageBean.ReturnDataBean returnDataBean) throws Exception {
-                        List<HomePageBean.ReturnDataBean.ComicListsBean> comicLists = returnDataBean.getComicLists();
+                    public ObservableSource<HomePageResponse.ComicListsBean> apply(HomePageResponse returnDataBean) throws Exception {
+                        List<HomePageResponse.ComicListsBean> comicLists = returnDataBean.getComicLists();
                         return Observable.fromIterable(comicLists);
                     }
                 })
                 .take(10)
-                .subscribe(new Consumer<HomePageBean.ReturnDataBean.ComicListsBean>() {
+                .subscribe(new Consumer<HomePageResponse.ComicListsBean>() {
                     @Override
-                    public void accept(HomePageBean.ReturnDataBean.ComicListsBean comicListsBean) throws Exception {
+                    public void accept(HomePageResponse.ComicListsBean comicListsBean) throws Exception {
                         int comicType = comicListsBean.getComicType();
                         switch (comicType) {
                             case 6:  //强力推荐
@@ -200,12 +197,12 @@ public class ChildRecommendFragment extends BaseFragment<ChildRecommendView, Chi
                 });
     }
 
-    @Override
-    public void hasNewVersion(Single<UpdateBean.ReturnDataBean.UpdateInfoBean> updateBean) {
+   /* @Override
+    public void hasNewVersion(Single<UpdateBean.UpdateInfoBean> updateBean) {
         updateBean
-                .map(new Function<UpdateBean.ReturnDataBean.UpdateInfoBean, String>() {
+                .map(new Function<UpdateBean.UpdateInfoBean, String>() {
                     @Override
-                    public String apply(@NonNull UpdateBean.ReturnDataBean.UpdateInfoBean updateInfoBean) throws Exception {
+                    public String apply(@NonNull UpdateBean.UpdateInfoBean updateInfoBean) throws Exception {
                         return updateInfoBean.getUpdate_content();
                     }
                 })
@@ -217,20 +214,20 @@ public class ChildRecommendFragment extends BaseFragment<ChildRecommendView, Chi
                     }
                 });
 
-    }
+    }*/
 
     /**
      * 根据返回值刷新view界面
      */
     private void updateView() {
         if (mHomePageBean != null) {
-            mGalleryItems = mHomePageBean.getReturnData().getGalleryItems();
+            mGalleryItems = mHomePageBean.getGalleryItems();
             addAD();
-            mComicLists = mHomePageBean.getReturnData().getComicLists();
+            mComicLists = mHomePageBean.getComicLists();
             int size = mComicLists.size();
 
             for (int i = 0; i < mComicLists.size(); i++) {
-                HomePageBean.ReturnDataBean.ComicListsBean comicBean = mComicLists.get(i);
+                HomePageResponse.ComicListsBean comicBean = mComicLists.get(i);
                 int comicType = comicBean.getComicType();
                 switch (comicType) {
                     case 6:  //强力推荐
@@ -278,7 +275,7 @@ public class ChildRecommendFragment extends BaseFragment<ChildRecommendView, Chi
      * @param type      type=1 一行 type=2 两行
      * @param onlyImg   只显示图片的种类
      */
-    private void addTwoModel(HomePageBean.ReturnDataBean.ComicListsBean comicBean, int height, int type, boolean onlyImg) {
+    private void addTwoModel(HomePageResponse.ComicListsBean comicBean, int height, int type, boolean onlyImg) {
         twoModelEntities = comicBean.getComics();
 
         if (twoModelEntities != null && twoModelEntities.size() > 0) {
@@ -322,7 +319,7 @@ public class ChildRecommendFragment extends BaseFragment<ChildRecommendView, Chi
                 iconLayoutParams.height = ToolUtils.dip2px(height);
 
                 TwoModelViewHolder viewHolder = new TwoModelViewHolder(view);
-                HomePageBean.ReturnDataBean.ComicListsBean.ComicsBean comics = twoModelEntities.get(i);
+                HomePageResponse.ComicListsBean.ComicsBean comics = twoModelEntities.get(i);
                 viewHolder.bindView(comics, onlyImg);
                 View boderLine = new View(mActivity);
                 linearLayout.addView(boderLine, mBoderEdgeParam);
@@ -348,8 +345,8 @@ public class ChildRecommendFragment extends BaseFragment<ChildRecommendView, Chi
      * @param comicsBean
      * @param type       = 1为 1行3列的，2为 2行3列的
      */
-    private void addThreeModel(HomePageBean.ReturnDataBean.ComicListsBean comicsBean, int type) {
-        List<HomePageBean.ReturnDataBean.ComicListsBean.ComicsBean> comics = comicsBean.getComics();
+    private void addThreeModel(HomePageResponse.ComicListsBean comicsBean, int type) {
+        List<HomePageResponse.ComicListsBean.ComicsBean> comics = comicsBean.getComics();
         if (comics != null && comics.size() > 0) {
             LinearLayout.LayoutParams modelLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
             modelLayoutParams.bottomMargin = ToolUtils.dip2px(10);
@@ -404,8 +401,8 @@ public class ChildRecommendFragment extends BaseFragment<ChildRecommendView, Chi
     /**
      * @param comicsBean 四模块
      */
-    private void addFourModel(HomePageBean.ReturnDataBean.ComicListsBean comicsBean) {
-        List<HomePageBean.ReturnDataBean.ComicListsBean.ComicsBean> comics = comicsBean.getComics();
+    private void addFourModel(HomePageResponse.ComicListsBean comicsBean) {
+        List<HomePageResponse.ComicListsBean.ComicsBean> comics = comicsBean.getComics();
         if (comics != null && comics.size() > 0) {
             LinearLayout.LayoutParams modelLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
             modelLayoutParams.bottomMargin = ToolUtils.dip2px(10);
@@ -472,8 +469,8 @@ public class ChildRecommendFragment extends BaseFragment<ChildRecommendView, Chi
      *
      * @param comicsBean
      */
-    private void addRankModel(HomePageBean.ReturnDataBean.ComicListsBean comicsBean) {
-        List<HomePageBean.ReturnDataBean.ComicListsBean.ComicsBean> comics = comicsBean.getComics();
+    private void addRankModel(HomePageResponse.ComicListsBean comicsBean) {
+        List<HomePageResponse.ComicListsBean.ComicsBean> comics = comicsBean.getComics();
         if (comics != null && comics.size() > 0) {
             LinearLayout.LayoutParams modelLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
             modelLayoutParams.bottomMargin = ToolUtils.dip2px(10);
@@ -545,7 +542,7 @@ public class ChildRecommendFragment extends BaseFragment<ChildRecommendView, Chi
         int paddingWidth = ToolUtils.dip2px(6);
         imglayoutParams.rightMargin=paddingWidth;
 
-        for (HomePageBean.ReturnDataBean.GalleryItemsBean galleryItem : mGalleryItems) {
+        for (HomePageResponse.GalleryItemsBean galleryItem : mGalleryItems) {
             arrayList.add(galleryItem.getCover());
             ImageView imageView = new ImageView(mActivity);
             imageView.setPadding(paddingLength,paddingWidth,paddingLength,paddingWidth);
@@ -636,7 +633,7 @@ public class ChildRecommendFragment extends BaseFragment<ChildRecommendView, Chi
     private View.OnClickListener headerClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            int tag = (int) v.getTag();
+            //int tag = (int) v.getTag();
         }
     };
 
@@ -665,7 +662,7 @@ public class ChildRecommendFragment extends BaseFragment<ChildRecommendView, Chi
             ButterKnife.bind(this, view);
         }
 
-        public void bindView(HomePageBean.ReturnDataBean.ComicListsBean.ComicsBean comics) {
+        public void bindView(HomePageResponse.ComicListsBean.ComicsBean comics) {
             FrescoImageUtil.displayImgFromNetwork(svCoverSeven, comics.getCover());
             tvNameSeven.setText(comics.getName());
             tvCornerSeven.setText(U17Application.getInstance().getResources().getString(R.string.text_update_setion, comics.getCornerInfo()));
@@ -684,7 +681,7 @@ public class ChildRecommendFragment extends BaseFragment<ChildRecommendView, Chi
             ButterKnife.bind(this, view);
         }
 
-        public void bindView(HomePageBean.ReturnDataBean.ComicListsBean.ComicsBean comics, boolean onlyImg) {
+        public void bindView(HomePageResponse.ComicListsBean.ComicsBean comics, boolean onlyImg) {
             FrescoImageUtil.displayImgFromNetwork(svCoverSeven, comics.getCover());
             if (onlyImg) {
                 tvNameSeven.setVisibility(View.GONE);
@@ -713,19 +710,19 @@ public class ChildRecommendFragment extends BaseFragment<ChildRecommendView, Chi
             ButterKnife.bind(this, view);
         }
 
-        public void bindView(HomePageBean.ReturnDataBean.ComicListsBean.ComicsBean comics, int position) {
+        public void bindView(HomePageResponse.ComicListsBean.ComicsBean comics, int position) {
             FrescoImageUtil.displayImgFromNetwork(svCoverRank, comics.getCover());
             tvNameRank.setText(comics.getName());
             tvAnthorRank.setText(comics.getAuthor_name());
             llRight.setBackgroundColor(mRank_bgs[position]);
-            String[] comicsTags = comics.getTags();
+            /*String[] comicsTags = comics.getTags();
             StringBuilder sb = new StringBuilder();
             if (comicsTags != null && comicsTags.length > 0) {
                 for (int i = 0; i < comicsTags.length; i++) {
                     sb.append(comicsTags[i] + " ");
                 }
             }
-            tvThemeRank.setText(sb.toString());
+            tvThemeRank.setText(sb.toString());*/
         }
     }
 }

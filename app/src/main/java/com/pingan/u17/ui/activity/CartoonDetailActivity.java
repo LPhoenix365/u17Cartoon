@@ -18,11 +18,14 @@ import com.example.framework.FrescoImageUtil;
 import com.example.framework.http.abutil.ToastUtil;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.pingan.u17.R;
+import com.pingan.u17.adapter.PAFragmentPagerAdapter;
 import com.pingan.u17.base.BaseActivity;
 import com.pingan.u17.model.CartoonDetailViewModel;
-import com.pingan.u17.model.response.CartoonDetailRealtimeResponse;
 import com.pingan.u17.model.response.CartoonDetailResponse;
+import com.pingan.u17.model.response.RealtimeResponse;
 import com.pingan.u17.presenter.CartoonDetailPresenter;
+import com.pingan.u17.ui.fragment.CartoonDetailFragment;
+import com.pingan.u17.ui.fragment.ChapterListFragment;
 import com.pingan.u17.view.CartoonDetailView;
 
 import java.util.LinkedHashMap;
@@ -81,6 +84,12 @@ public class CartoonDetailActivity extends BaseActivity<CartoonDetailView, Carto
     @BindView(R.id.toolbar_rl)
     RelativeLayout rlLayout;
     private CartoonDetailViewModel cartoonDetailModel;
+    private String[] mTitles=new String[]{
+            "详情", "目录", "评论"
+    };
+    private int mCurrentPage=0;
+    private boolean getCartoonDetailSucess;
+    private boolean getDetailRealtimeSucess;
 
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -121,6 +130,8 @@ public class CartoonDetailActivity extends BaseActivity<CartoonDetailView, Carto
     public void getCartoonDetail(CartoonDetailResponse response) {
         if (response != null) {
             cartoonDetailModel.cartoonDetailResponse=response;
+            getCartoonDetailSucess=true;
+            initVp();
             CartoonDetailResponse.ComicBean comicBean = response.comic;
             tvAuthor.setText(comicBean.author.name);
             List<String> stringList = comicBean.theme_ids;
@@ -138,18 +149,36 @@ public class CartoonDetailActivity extends BaseActivity<CartoonDetailView, Carto
     }
 
     @Override
-    public void getCartoonDetailRealtime(CartoonDetailRealtimeResponse response) {
+    public void getCartoonDetailRealtime(RealtimeResponse response) {
         if (response != null) {
-            cartoonDetailModel.cartoonDetailRealtimeResponse=response;
-            CartoonDetailRealtimeResponse.ComicBean comic = response.comic;
+            cartoonDetailModel.realtimeResponse =response;
+            getDetailRealtimeSucess=true;
+            initVp();
+            RealtimeResponse.ComicBean comic = response.comic;
             if (comic != null) {
                 tvVisitCount.setText(String.valueOf(comic.total_click));
                 tvMonthlyTicket.setText(String.valueOf(comic.monthly_ticket));
             }
-
         }
     }
 
+
+    private void initVp() {
+        if (getDetailRealtimeSucess && getCartoonDetailSucess) {
+            tablayout.addTab(tablayout.newTab().setText(mTitles[0]).setTag(mTitles[0]));
+            tablayout.addTab(tablayout.newTab().setText(mTitles[1]).setTag(mTitles[1]));
+            tablayout.addTab(tablayout.newTab().setText(mTitles[2]).setTag(mTitles[2]));
+            PAFragmentPagerAdapter mAdapter = new PAFragmentPagerAdapter(getSupportFragmentManager(), mTitles);
+            mAdapter.addFragment(CartoonDetailFragment.newInstance(cartoonDetailModel));
+            mAdapter.addFragment(ChapterListFragment.newInstance(cartoonDetailModel));
+            mAdapter.addFragment(CartoonDetailFragment.newInstance(cartoonDetailModel));
+            viewpage.setAdapter(mAdapter);
+            viewpage.setCurrentItem(mCurrentPage);
+            //viewpage.setOffscreenPageLimit(mTitles.length - 1);//不再让Fragment自动销毁并重建
+            //给viewpager设置 adapter
+            tablayout.setupWithViewPager(viewpage);
+        }
+    }
     @OnClick({R.id.iv_back, R.id.iv_share_toolbar, R.id.iv_star_toolbar})
     public void onViewClicked(View view) {
         switch (view.getId()) {

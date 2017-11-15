@@ -3,7 +3,7 @@ apply plugin: 'com.neenbedankt.android-apt'
 apply plugin: 'org.greenrobot.greendao'
 apply plugin: 'me.tatarka.retrolambda'
 
-def recycler_adapter_version = "2.1.1"
+def recycler_adapter_version = "2.9.30"
 
 android {
     compileSdkVersion 25
@@ -17,8 +17,14 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         renderscriptTargetApi 19
         renderscriptSupportModeEnabled true
-
+        //避免打包方法数超过65535
+        multiDexEnabled true
     }
+
+    dexOptions{
+        javaMaxHeapSize "4g"
+    }
+
     compileOptions {
         //使用JAVA8语法解析  主要是使用lambda 的函数式接口简化代码
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -74,7 +80,10 @@ dependencies {
     //高斯模糊图片
     compile 'com.qiushui:blurredview:0.8.1'
     //
-    //compile "com.github.CymChad:BaseRecyclerViewAdapterHelper: ${recycler_adapter_version}"
-    compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.30'
+    compile "com.github.CymChad:BaseRecyclerViewAdapterHelper:${recycler_adapter_version}"
+    //compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.30'
 
+   /* compile "android.arch.lifecycle:runtime:1.0.0-alpha1"
+    compile "android.arch.lifecycle:extensions:1.0.0-alpha1"
+    compile "android.arch.lifecycle:compiler:1.0.0-alpha1"*/
 }
