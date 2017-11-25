@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="horizontal"
+              android:padding="6dp">
+
+    <com.facebook.drawee.view.SimpleDraweeView
+        android:id="@+id/iv_face"
+        android:layout_width="22dp"
+        android:layout_height="22dp"
+        android:layout_margin="2dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/app_icon"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="6dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_nickname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="幻想照进现实"
+            android:textColor="@color/detail_text_color2"
+            android:textSize="12sp"/>
+
+        <TextView
+            android:id="@+id/tv_comment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:text="自小学起就收集各种心爱的漫画书，不知不觉已经大学毕业走入社会一年了，期间受到网络的冲击，版权意识渐渐淡薄，也不再像当年为了一本心爱的漫画书冒着寒风走到报刊亭，拿出攒了一星期的零花钱买上一本回家躺在床上仔细阅读，如今读过《端脑》之后仿佛又回到了当年，我站在寒冷的报刊亭，心却是热的。想想我当年是那么热爱漫画，热爱生活，炙热的心如今已渐行渐远。说来惭愧，这是我第一次买数字版权，端脑虽不完美，但已如愿。"
+            android:textColor="@color/tab_text_color_normal"
+            android:textSize="12sp"
+            />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp">
+
+            <TextView
+                android:id="@+id/tv_comment_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="10-12 03:50"
+                android:textColor="@color/detail_text_color2"
+                android:drawableRight="@drawable/shape_trigle"
+                android:drawablePadding="10dp"
+                android:gravity="center_vertical"
+                android:textSize="12sp"/>
+
+            <TextView
+                android:id="@+id/tv_write_comment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="8dp"
+                android:drawableLeft="@drawable/selector_write_comment"
+                android:drawablePadding="4dp"
+                android:text="4"/>
+
+            <TextView
+                android:id="@+id/tv_favorite"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toLeftOf="@id/tv_write_comment"
+                android:drawableLeft="@drawable/u17_like_normal"
+                android:drawablePadding="4dp"
+                android:gravity="center_vertical"
+                android:text="83"
+                android:textColor="@color/detail_text_color2"
+                android:textSize="12sp"
+                />
+            <TextView
+                android:id="@+id/tv_test"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/shape_trigle"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="100dp"
+                />
+        </RelativeLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

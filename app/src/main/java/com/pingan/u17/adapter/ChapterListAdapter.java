@@ -42,7 +42,7 @@ public class ChapterListAdapter extends BaseQuickAdapter<ChapterDetailBean, Base
             if (!TextUtils.equals("0", timeDetailBean.buyed)) {
                 helper.getView(R.id.iv_chapter_pay).setVisibility(View.VISIBLE);
             }
-            if (!TextUtils.equals("0", timeDetailBean.vip_images)) {
+            if (TextUtils.equals("0", timeDetailBean.vip_images)) {
                 helper.getView(R.id.iv_chapter_vip).setVisibility(View.VISIBLE);
             }
         }

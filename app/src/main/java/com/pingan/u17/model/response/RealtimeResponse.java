@@ -2,6 +2,7 @@ package com.pingan.u17.model.response;
 
 import com.pingan.u17.bean.ChapterRealTimeBean;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -26,7 +27,7 @@ public class RealtimeResponse extends BaseResponse<RealtimeResponse> {
     public LastReadBean last_read;
     public List<ChapterRealTimeBean> chapter_list;
 
-    public static class ComicBean {
+    public static class ComicBean implements Serializable {
         /**
          * comic_id : 13707
          * user_id : 12647
@@ -54,7 +55,7 @@ public class RealtimeResponse extends BaseResponse<RealtimeResponse> {
         public int is_auto_buy;
     }
 
-    public static class CommentBean {
+    public static class CommentBean  implements Serializable{
         /**
          * commentCount : 94750
          */
@@ -62,7 +63,7 @@ public class RealtimeResponse extends BaseResponse<RealtimeResponse> {
         public String commentCount;
     }
 
-    public static class LastReadBean {
+    public static class LastReadBean implements Serializable{
         /**
          * page : 0
          * chapter_id : 52776

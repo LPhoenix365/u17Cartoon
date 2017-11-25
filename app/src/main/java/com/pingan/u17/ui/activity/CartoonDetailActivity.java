@@ -26,6 +26,7 @@ import com.pingan.u17.model.response.RealtimeResponse;
 import com.pingan.u17.presenter.CartoonDetailPresenter;
 import com.pingan.u17.ui.fragment.CartoonDetailFragment;
 import com.pingan.u17.ui.fragment.ChapterListFragment;
+import com.pingan.u17.ui.fragment.CommentListFragment;
 import com.pingan.u17.view.CartoonDetailView;
 
 import java.util.LinkedHashMap;
@@ -133,6 +134,8 @@ public class CartoonDetailActivity extends BaseActivity<CartoonDetailView, Carto
             getCartoonDetailSucess=true;
             initVp();
             CartoonDetailResponse.ComicBean comicBean = response.comic;
+            tvName.setText(comicBean.name);
+            tvNameToolbar.setText(comicBean.name);
             tvAuthor.setText(comicBean.author.name);
             List<String> stringList = comicBean.theme_ids;
             StringBuffer sb = new StringBuffer();
@@ -165,16 +168,17 @@ public class CartoonDetailActivity extends BaseActivity<CartoonDetailView, Carto
 
     private void initVp() {
         if (getDetailRealtimeSucess && getCartoonDetailSucess) {
+            String commentCount = cartoonDetailModel.realtimeResponse.comment.commentCount;
             tablayout.addTab(tablayout.newTab().setText(mTitles[0]).setTag(mTitles[0]));
             tablayout.addTab(tablayout.newTab().setText(mTitles[1]).setTag(mTitles[1]));
-            tablayout.addTab(tablayout.newTab().setText(mTitles[2]).setTag(mTitles[2]));
+            tablayout.addTab(tablayout.newTab().setText(mTitles[2]+commentCount).setTag(mTitles[2]+commentCount));
             PAFragmentPagerAdapter mAdapter = new PAFragmentPagerAdapter(getSupportFragmentManager(), mTitles);
             mAdapter.addFragment(CartoonDetailFragment.newInstance(cartoonDetailModel));
             mAdapter.addFragment(ChapterListFragment.newInstance(cartoonDetailModel));
-            mAdapter.addFragment(CartoonDetailFragment.newInstance(cartoonDetailModel));
+            mAdapter.addFragment(CommentListFragment.newInstance(cartoonDetailModel.cartoonDetailResponse.comic));
             viewpage.setAdapter(mAdapter);
             viewpage.setCurrentItem(mCurrentPage);
-            //viewpage.setOffscreenPageLimit(mTitles.length - 1);//不再让Fragment自动销毁并重建
+            viewpage.setOffscreenPageLimit(mTitles.length - 1);//不再让Fragment自动销毁并重建
             //给viewpager设置 adapter
             tablayout.setupWithViewPager(viewpage);
         }

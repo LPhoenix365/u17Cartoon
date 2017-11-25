@@ -1,68 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:layout_gravity=""
-              android:background="@drawable/bg_item_chapter_list"
-              android:gravity="center_vertical"
-              android:orientation="horizontal"
-              android:paddingBottom="8dp"
-              android:paddingLeft="4dp"
-              android:paddingRight="4dp"
-              android:paddingTop="8dp">
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_item_chapter_list"
+    android:elevation="@dimen/dp_4"
+    android:layout_marginLeft="6dp"
+    android:layout_marginTop="6dp">
 
-    <TextView
-        android:id="@+id/chapter_number"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="6dp"
-        android:text="90"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingBottom="8dp"
+        android:paddingLeft="4dp"
+        android:paddingRight="4dp"
+        android:paddingTop="8dp"
+        >
 
-    <View
-        style="@style/line_vertical"
-        android:layout_marginLeft="2dp"></View>
+        <TextView
+            android:id="@+id/chapter_number"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="6dp"
+            android:text="90"/>
 
-    <!--<TextView
-        android:id="@+id/chapter_number_chinese"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="2dp"
-        android:text="第90话"/>-->
+        <View
+            style="@style/line_vertical"
+            android:layout_marginLeft="2dp"></View>
 
-    <TextView
-        android:id="@+id/chapter_name"
-        android:layout_width="120dp"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="4dp"
-        android:ellipsize="end"
-        android:lines="1"
-        android:text="亡灵世界亡灵世界亡灵世界"/>
-    <!--android:maxLength="4" 这个属性与ellipsize达不到...的效果-->
-    <ImageView
-        android:id="@+id/iv_chapter_new"
-        android:layout_width="12dp"
-        android:layout_height="12dp"
-        android:src="@drawable/comic_detail_chapter_new"
-        android:visibility="invisible"/>
+        <!--<TextView
+            android:id="@+id/chapter_number_chinese"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="2dp"
+            android:text="第90话"/>-->
 
-    <FrameLayout
-        android:layout_width="10dp"
-        android:layout_height="10dp"
-        android:layout_marginLeft="2dp">
-
+        <TextView
+            android:id="@+id/chapter_name"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="4dp"
+            android:ellipsize="end"
+            android:lines="1"
+            android:text="亡灵世界亡灵世界亡灵世界"/>
+        <!--android:maxLength="4" 这个属性与ellipsize达不到...的效果-->
         <ImageView
-            android:id="@+id/iv_chapter_vip"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:src="@drawable/detail_chapter_vip"
-            android:visibility="gone"/>
+            android:id="@+id/iv_chapter_new"
+            android:layout_width="12dp"
+            android:layout_height="12dp"
+            android:src="@drawable/comic_detail_chapter_new"
+            android:visibility="invisible"/>
 
-        <ImageView
-            android:id="@+id/iv_chapter_pay"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:src="@drawable/detail_chapter_pay"
-            android:visibility="gone"/>
-    </FrameLayout>
+        <FrameLayout
+            android:layout_width="10dp"
+            android:layout_height="10dp"
+            android:layout_marginLeft="2dp">
 
-</LinearLayout>
+            <ImageView
+                android:id="@+id/iv_chapter_vip"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/detail_chapter_vip"
+                android:visibility="gone"/>
+
+            <ImageView
+                android:id="@+id/iv_chapter_pay"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/detail_chapter_pay"
+                android:visibility="gone"/>
+        </FrameLayout>
+    </LinearLayout>
+</android.support.v7.widget.CardView>

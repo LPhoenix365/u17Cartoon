@@ -18,11 +18,11 @@
             android:id="@+id/toolbar_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:contentScrim="?attr/colorPrimary"
+            app:contentScrim="@color/color_45c262"
             app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
-            app:statusBarScrim="@color/colorPrimary"
+            app:statusBarScrim="@color/color_054e16"
             android:fitsSystemWindows="true">
-            <!--contentScrim="@android:color/white"  折叠时toolbar的颜色
+            <!--contentScrim="?attr/colorPrimary"  折叠时toolbar的颜色
             app:statusBarScrim="@color/colorPrimary"  折叠时状态栏的颜色-->
             <!--android:fitsSystemWindows="true"   这个属性负责 设置了沉浸状态栏后
              布局能延伸至状态栏-->
