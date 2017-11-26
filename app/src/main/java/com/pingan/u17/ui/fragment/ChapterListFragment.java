@@ -1,7 +1,6 @@
 package com.pingan.u17.ui.fragment;
 
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -20,7 +19,7 @@ import com.pingan.u17.model.CartoonDetailViewModel;
 import com.pingan.u17.model.response.CartoonDetailResponse;
 import com.pingan.u17.model.response.RealtimeResponse;
 import com.pingan.u17.presenter.GuessLikePresenter;
-import com.pingan.u17.widget.SuperSwipeRefreshLayout;
+import com.pingan.u17.widget.SuperSwipeRefreshLayout2;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,7 +39,7 @@ public class ChapterListFragment extends BaseFragment {
     @BindView(R.id.rv_chapter_list)
     RecyclerView chapterList;
     @BindView(R.id.refresh_layout)
-    SuperSwipeRefreshLayout swipeRefreshLayout;
+    SuperSwipeRefreshLayout2 swipeRefreshLayout;
     private CartoonDetailViewModel viewModel;
     private ProgressBar footerProgressBar;
     private TextView textView;
@@ -48,6 +47,10 @@ public class ChapterListFragment extends BaseFragment {
     private ProgressBar progressBar;
     private TextView footerTextView;
     private ImageView footerImageView;
+    private List<ChapterDetailBean> mDatas;
+    private ChapterDetailBean mChapterDetailBean;
+    private List<ChapterDetailBean> mMChapterDetailList=new ArrayList<>();
+    private ChapterListAdapter mChapterListAdapter;
 
 
     public static ChapterListFragment newInstance(CartoonDetailViewModel viewModel) {
@@ -81,26 +84,41 @@ public class ChapterListFragment extends BaseFragment {
         CartoonDetailResponse detailResponse = viewModel.cartoonDetailResponse;
         RealtimeResponse realtimeResponse = viewModel.realtimeResponse;
         chapterList.setLayoutManager(new GridLayoutManager(mActivity, 2));
-        swipeRefreshLayout.setHeaderView(createHeaderView());// add headerView
-        swipeRefreshLayout.setFooterView(createFooterView());
+//        swipeRefreshLayout.setHeaderView(createHeaderView());// add headerView
+//        swipeRefreshLayout.setFooterView(createFooterView());
+        swipeRefreshLayout.setLoadMore(false);
+        swipeRefreshLayout.setRefreshing(false);
         if (detailResponse != null && realtimeResponse != null && detailResponse.chapter_list != null && detailResponse.chapter_list != null) {
             List<ChapterBean> chapter_list = detailResponse.chapter_list;
             List<ChapterRealTimeBean> timeDetailBeanList = realtimeResponse.chapter_list;
 
             int minSize = Math.min(chapter_list.size(), timeDetailBeanList.size());
-            List<ChapterDetailBean> datas = new ArrayList<>();
+            mDatas = new ArrayList<>();
 
             for (int i = 0; i < minSize; i++) {
-                ChapterDetailBean chapterDetailBean = new ChapterDetailBean(chapter_list.get(i), timeDetailBeanList.get(i));
-                datas.add(chapterDetailBean);
+                mMChapterDetailList.add(new ChapterDetailBean(chapter_list.get(i), timeDetailBeanList.get(i)));
             }
-            ChapterListAdapter adapter = new ChapterListAdapter(datas);
+            mDatas.addAll(mMChapterDetailList);
+            mChapterListAdapter = new ChapterListAdapter(mDatas);
             View header = LayoutInflater.from(mActivity).inflate(R.layout.activity_clock, null);
-            adapter.addHeaderView(header);
-            adapter.openLoadAnimation();
-            chapterList.setAdapter(adapter);
+            mChapterListAdapter.addHeaderView(header);
+            mChapterListAdapter.openLoadAnimation();
+            chapterList.setAdapter(mChapterListAdapter);
         }
-        swipeRefreshLayout
+
+        /*swipeRefreshLayout.setRefreshListener2(new SwipeRefreshLayout.OnRefreshListener2() {
+            @Override
+            public void onPullDownToRefresh(SuperSwipeRefreshLayout var1) {
+
+            }
+
+            @Override
+            public void onPullUpToRefresh(SuperSwipeRefreshLayout var1) {
+                mDatas.addAll(mMChapterDetailList);
+                mChapterListAdapter.notifyDataSetChanged();
+            }
+        });*/
+        /*swipeRefreshLayout
                 .setOnPullRefreshListener(new SuperSwipeRefreshLayout.OnPullRefreshListener() {
                     @Override
                     public void onRefresh() {
@@ -145,6 +163,8 @@ public class ChapterListFragment extends BaseFragment {
                                 footerImageView.setVisibility(View.VISIBLE);
                                 footerProgressBar.setVisibility(View.GONE);
                                 swipeRefreshLayout.setLoadMore(false);
+                                mDatas.addAll(mMChapterDetailList);
+                                mChapterListAdapter.notifyDataSetChanged();
                             }
                         }, 5000);
                     }
@@ -161,7 +181,7 @@ public class ChapterListFragment extends BaseFragment {
                         // TODO Auto-generated method stub
                     }
 
-                });
+                });*/
 
 }
 

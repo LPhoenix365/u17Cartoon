@@ -7,8 +7,8 @@ import android.view.View;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.pingan.u17.R;
-import com.pingan.u17.bean.ChapterDetailBean;
 import com.pingan.u17.bean.ChapterBean;
+import com.pingan.u17.bean.ChapterDetailBean;
 import com.pingan.u17.bean.ChapterRealTimeBean;
 
 import java.util.List;
@@ -21,6 +21,8 @@ import java.util.List;
  */
 
 public class ChapterListAdapter extends BaseQuickAdapter<ChapterDetailBean, BaseViewHolder> {
+
+
 
 
     public ChapterListAdapter(@Nullable List<ChapterDetailBean> data) {
