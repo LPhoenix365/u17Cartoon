@@ -26,6 +26,7 @@ import com.pingan.u17.presenter.CartoonDetailPresenter;
 import com.pingan.u17.ui.fragment.CartoonDetailFragment;
 import com.pingan.u17.ui.fragment.ChapterListFragment;
 import com.pingan.u17.ui.fragment.CommentListFragment;
+import com.pingan.u17.util.ActivityIntentTools;
 import com.pingan.u17.view.CartoonDetailView;
 import com.pingan.u17.widget.SuperRefreshListener;
 import com.pingan.u17.widget.SuperSwipeRefreshLayout;
@@ -186,14 +187,18 @@ public class CartoonDetailActivity extends BaseActivity<CartoonDetailView, Carto
             tablayout.setupWithViewPager(viewpage);
         }
     }
-    @OnClick({R.id.iv_back, R.id.iv_share_toolbar, R.id.iv_star_toolbar})
+    @OnClick({R.id.iv_back, R.id.iv_share_toolbar, R.id.iv_star_toolbar,R.id.tv_download})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_back:
+
                 break;
             case R.id.iv_share_toolbar:
                 break;
             case R.id.iv_star_toolbar:
+                break;
+            case R.id.tv_download:
+                ActivityIntentTools.gotoActivityNotFinish(this, ReadingActivity.class);
                 break;
         }
     }

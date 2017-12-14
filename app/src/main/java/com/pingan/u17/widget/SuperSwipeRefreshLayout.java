@@ -223,7 +223,10 @@ public class SuperSwipeRefreshLayout extends ViewGroup implements NestedScrollin
     private void updateListenerCallBack() {
         int distance = mCurrentTargetOffsetTop + mHeadViewContainer.getHeight();
         if (mListener != null) {
-            mListener.onPullDistance(distance);
+            if (0<distance) {
+                //mListener.onPullDistance(distance);
+            }
+            Log.d("tag","distance123="+distance);
         }
         if (usingDefaultHeader && isProgressEnable) {
             defaultProgressView.setPullDistance(distance);
@@ -857,9 +860,20 @@ public class SuperSwipeRefreshLayout extends ViewGroup implements NestedScrollin
         return MotionEventCompat.getY(ev, index);
     }
 
+    /**
+     * 这段代码来自谷歌官方的 SwipeRefreshLayout
+     * 应用场景已经在英文注释中解释清楚
+     * 大部分第三方下拉刷新库都保留了这段代码，本库也不例外
+     */
     @Override
-    public void requestDisallowInterceptTouchEvent(boolean b) {
-        // Nope.
+    public void requestDisallowInterceptTouchEvent(boolean disallowIntercept) {
+        // if this is a List < L or another view that doesn't support nested
+        // scrolling, ignore this request so that the vertical scroll event
+        // isn't stolen
+        if ((android.os.Build.VERSION.SDK_INT >= 21 || !(mTarget instanceof AbsListView))
+                && (mTarget == null || ViewCompat.isNestedScrollingEnabled(mTarget))) {
+            super.requestDisallowInterceptTouchEvent(disallowIntercept);
+        }
     }
 
     @Override
