@@ -22,8 +22,8 @@ import android.support.v7.widget.RecyclerView.LayoutManager;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Display;
-import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
@@ -34,13 +34,8 @@ import android.view.animation.Animation.AnimationListener;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.Transformation;
 import android.widget.AbsListView;
-import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
-import android.widget.TextView;
-
-import com.pingan.u17.R;
 
 /**
  * @Author Zheng Haibo
@@ -56,13 +51,9 @@ import com.pingan.u17.R;
  * 比如：onRefresh() onPullDistance(int distance)和onPullEnable(boolean
  * enable)<br>
  * 开发人员可以根据下拉过程中distance的值做一系列动画。 <br>
- *
- * @modify liupeng502
- * @date 2017/11/26
- *
  */
 @SuppressLint("ClickableViewAccessibility")
-public class SuperSwipeRefreshLayout2 extends ViewGroup {
+public class SuperSwipeRefreshLayout3 extends ViewGroup {
     private static final String LOG_TAG = "CustomeSwipeRefreshLayout";
     private static final int HEADER_VIEW_HEIGHT = 50;// HeaderView height (dp)
 
@@ -142,16 +133,6 @@ public class SuperSwipeRefreshLayout2 extends ViewGroup {
     private float density = 1.0f;
 
     private boolean isProgressEnable = true;
-
-
-    private ProgressBar footerProgressBar;
-    private TextView textView;
-    private ImageView imageView;
-    private ProgressBar progressBar;
-    private TextView footerTextView;
-    private ImageView footerImageView;
-
-
     /**
      * 下拉时，超过距离之后，弹回来的动画监听器
      */
@@ -239,12 +220,12 @@ public class SuperSwipeRefreshLayout2 extends ViewGroup {
         mFooterViewContainer.addView(child, layoutParams);
     }
 
-    public SuperSwipeRefreshLayout2(Context context) {
+    public SuperSwipeRefreshLayout3(Context context) {
         this(context, null);
     }
 
     @SuppressWarnings("deprecation")
-    public SuperSwipeRefreshLayout2(Context context, AttributeSet attrs) {
+    public SuperSwipeRefreshLayout3(Context context, AttributeSet attrs) {
         super(context, attrs);
 
         /**
@@ -279,71 +260,6 @@ public class SuperSwipeRefreshLayout2 extends ViewGroup {
         mSpinnerFinalOffset = DEFAULT_CIRCLE_TARGET * metrics.density;
         density = metrics.density;
         mTotalDragDistance = mSpinnerFinalOffset;
-        /*
-         modify
-         */
-        setHeaderView(createHeaderView());
-        setFooterView(createFooterView());
-        this.setOnPullRefreshListener(new OnPullRefreshListener() {
-                    @Override
-                    public void onRefresh() {
-                        textView.setText("正在刷新");
-                        imageView.setVisibility(View.GONE);
-                        progressBar.setVisibility(View.VISIBLE);
-                        new Handler().postDelayed(new Runnable() {
-
-                            @Override
-                            public void run() {
-                                setRefreshing(false);
-                                progressBar.setVisibility(View.GONE);
-                            }
-                        }, 2000);
-                    }
-
-                    @Override
-                    public void onPullDistance(int distance) {
-                        // pull distance
-                    }
-
-                    @Override
-                    public void onPullEnable(boolean enable) {
-                        textView.setText(enable ? "松开刷新" : "下拉刷新");
-                        imageView.setVisibility(View.VISIBLE);
-                        imageView.setRotation(enable ? 180 : 0);
-                    }
-                });
-
-        this.setOnPushLoadMoreListener(new OnPushLoadMoreListener() {
-
-                    @Override
-                    public void onLoadMore() {
-                        footerTextView.setText("正在加载...");
-                        footerImageView.setVisibility(View.GONE);
-                        footerProgressBar.setVisibility(View.VISIBLE);
-                        new Handler().postDelayed(new Runnable() {
-
-                            @Override
-                            public void run() {
-                                footerImageView.setVisibility(View.VISIBLE);
-                                footerProgressBar.setVisibility(View.GONE);
-                                setLoadMore(false);
-                            }
-                        }, 5000);
-                    }
-
-                    @Override
-                    public void onPushEnable(boolean enable) {
-                        footerTextView.setText(enable ? "松开加载" : "上拉加载");
-                        footerImageView.setVisibility(View.VISIBLE);
-                        footerImageView.setRotation(enable ? 0 : 180);
-                    }
-
-                    @Override
-                    public void onPushDistance(int distance) {
-                        // TODO Auto-generated method stub
-                    }
-
-                });
     }
 
     /**
@@ -824,6 +740,7 @@ public class SuperSwipeRefreshLayout2 extends ViewGroup {
                 final int pointerIndex = MotionEventCompat.findPointerIndex(ev,
                         mActivePointerId);
                 if (pointerIndex < 0) {
+                    Log.e(LOG_TAG, "Got ACTION_MOVE event but have an invalid active pointer id.");
                     return false;
                 }
 
@@ -893,6 +810,8 @@ public class SuperSwipeRefreshLayout2 extends ViewGroup {
             case MotionEvent.ACTION_CANCEL: {
                 if (mActivePointerId == INVALID_POINTER) {
                     if (action == MotionEvent.ACTION_UP) {
+                        Log.e(LOG_TAG,
+                                "Got ACTION_UP event but don't have an active pointer id.");
                     }
                     return false;
                 }
@@ -948,11 +867,14 @@ public class SuperSwipeRefreshLayout2 extends ViewGroup {
             case MotionEvent.ACTION_DOWN:
                 mActivePointerId = MotionEventCompat.getPointerId(ev, 0);
                 mIsBeingDragged = false;
+                Log.d(LOG_TAG, "debug:onTouchEvent ACTION_DOWN");
                 break;
             case MotionEvent.ACTION_MOVE: {
                 final int pointerIndex = MotionEventCompat.findPointerIndex(ev,
                         mActivePointerId);
                 if (pointerIndex < 0) {
+                    Log.e(LOG_TAG,
+                            "Got ACTION_MOVE event but have an invalid active pointer id.");
                     return false;
                 }
                 final float y = MotionEventCompat.getY(ev, pointerIndex);
@@ -1197,7 +1119,9 @@ public class SuperSwipeRefreshLayout2 extends ViewGroup {
 
     private void setTargetOffsetTopAndBottom(int offset, boolean requiresUpdate) {
         mHeadViewContainer.bringToFront();
-        mHeadViewContainer.offsetTopAndBottom(offset);
+        //mHeadViewContainer.offsetTopAndBottom(offset);
+        Log.d("tag","offset="+offset);
+        mHeadViewContainer.offsetTopAndBottom(0);
         mCurrentTargetOffsetTop = mHeadViewContainer.getTop();
         if (requiresUpdate && Build.VERSION.SDK_INT < 11) {
             invalidate();
@@ -1536,35 +1460,6 @@ public class SuperSwipeRefreshLayout2 extends ViewGroup {
             super.onDetachedFromWindow();
         }
 
-    }
-
-    private View createFooterView() {
-        View footerView = LayoutInflater.from(getContext())
-                .inflate(R.layout.layout_footer, null);
-        footerProgressBar = (ProgressBar) footerView
-                .findViewById(R.id.footer_pb_view);
-        footerImageView = (ImageView) footerView
-                .findViewById(R.id.footer_image_view);
-        footerTextView = (TextView) footerView
-                .findViewById(R.id.footer_text_view);
-        footerProgressBar.setVisibility(View.GONE);
-        footerImageView.setVisibility(View.VISIBLE);
-        //footerImageView.setImageResource(R.drawable.down_arrow);
-        footerTextView.setText("上拉加载更多...");
-        return footerView;
-    }
-
-    private View createHeaderView() {
-        View headerView = LayoutInflater.from(getContext())
-                .inflate(R.layout.layout_head, null);
-        progressBar = (ProgressBar) headerView.findViewById(R.id.pb_view);
-        textView = (TextView) headerView.findViewById(R.id.text_view);
-        textView.setText("下拉刷新");
-        imageView = (ImageView) headerView.findViewById(R.id.image_view);
-        imageView.setVisibility(View.VISIBLE);
-        // imageView.setImageResource(R.drawable.down_arrow);
-        progressBar.setVisibility(View.GONE);
-        return headerView;
     }
 
 }

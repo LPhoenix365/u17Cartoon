@@ -40,7 +40,7 @@ public class SwipeRefreshLayout extends FrameLayout {
     private ProgressBar progressBar;
     private TextView footerTextView;
     private ImageView footerImageView;
-    private SuperSwipeRefreshLayout refreshLayout;
+    private SuperSwipeRefreshLayout3 refreshLayout;
 
     public SwipeRefreshLayout(@NonNull Context context) {
         this(context, null);
@@ -48,7 +48,7 @@ public class SwipeRefreshLayout extends FrameLayout {
 
     public SwipeRefreshLayout(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
-        refreshLayout = new SuperSwipeRefreshLayout(context);
+        refreshLayout = new SuperSwipeRefreshLayout3(context);
         refreshLayout.setHeaderView(createHeaderView());// add headerView
         refreshLayout.setFooterView(createFooterView());
         addLisenter();
@@ -72,7 +72,7 @@ public class SwipeRefreshLayout extends FrameLayout {
 
     private void addLisenter() {
         refreshLayout
-                .setOnPullRefreshListener(new SuperSwipeRefreshLayout.OnPullRefreshListener() {
+                .setOnPullRefreshListener(new SuperSwipeRefreshLayout3.OnPullRefreshListener() {
                     @Override
                     public void onRefresh() {
                         textView.setText("正在刷新");
@@ -105,7 +105,7 @@ public class SwipeRefreshLayout extends FrameLayout {
                 });
 
         refreshLayout
-                .setOnPushLoadMoreListener(new SuperSwipeRefreshLayout.OnPushLoadMoreListener() {
+                .setOnPushLoadMoreListener(new SuperSwipeRefreshLayout3.OnPushLoadMoreListener() {
                     @Override
                     public void onLoadMore() {
                         footerTextView.setText("正在加载...");
@@ -173,13 +173,13 @@ public class SwipeRefreshLayout extends FrameLayout {
 
     OnRefreshListener2 mOnRefreshListener2;
     public interface OnRefreshListener2 {
-        void onPullDownToRefresh(SuperSwipeRefreshLayout var1);
+        void onPullDownToRefresh(SuperSwipeRefreshLayout3 var1);
 
-        void onPullUpToRefresh(SuperSwipeRefreshLayout var1);
+        void onPullUpToRefresh(SuperSwipeRefreshLayout3 var1);
     }
 
     public interface OnRefreshListener {
-        void onRefresh(SuperSwipeRefreshLayout var1);
+        void onRefresh(SuperSwipeRefreshLayout3 var1);
     }
 
     public void setRefreshListener2(OnRefreshListener2 onRefreshListener2 ){

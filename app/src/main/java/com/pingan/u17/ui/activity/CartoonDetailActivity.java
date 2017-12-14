@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
@@ -28,6 +27,8 @@ import com.pingan.u17.ui.fragment.CartoonDetailFragment;
 import com.pingan.u17.ui.fragment.ChapterListFragment;
 import com.pingan.u17.ui.fragment.CommentListFragment;
 import com.pingan.u17.view.CartoonDetailView;
+import com.pingan.u17.widget.SuperRefreshListener;
+import com.pingan.u17.widget.SuperSwipeRefreshLayout;
 
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -40,7 +41,7 @@ import static com.pingan.u17.R.id.tv_author;
 import static com.pingan.u17.R.id.tv_visit_count;
 
 
-public class CartoonDetailActivity extends BaseActivity<CartoonDetailView, CartoonDetailPresenter> implements CartoonDetailView {
+public class CartoonDetailActivity extends BaseActivity<CartoonDetailView, CartoonDetailPresenter> implements CartoonDetailView, SuperRefreshListener.OnRefreshListener3 {
 
     @BindView(R.id.iv_cover)
     SimpleDraweeView ivCover;
@@ -66,8 +67,6 @@ public class CartoonDetailActivity extends BaseActivity<CartoonDetailView, Carto
     Toolbar toolbar;
     @BindView(R.id.toolbar_layout)
     CollapsingToolbarLayout collapsingToolbarLayout;
-    @BindView(R.id.coordinatorLayout)
-    CoordinatorLayout coordinatorLayout;
     @BindView(R.id.iv_back)
     ImageView ivBack;
     @BindView(R.id.tv_name_toolbar)
@@ -84,6 +83,8 @@ public class CartoonDetailActivity extends BaseActivity<CartoonDetailView, Carto
     ViewPager viewpage;
     @BindView(R.id.toolbar_rl)
     RelativeLayout rlLayout;
+    @BindView(R.id.swipe_layout)
+    SuperSwipeRefreshLayout mSwipeRefreshLayout;
     private CartoonDetailViewModel cartoonDetailModel;
     private String[] mTitles=new String[]{
             "详情", "目录", "评论"
@@ -97,8 +98,10 @@ public class CartoonDetailActivity extends BaseActivity<CartoonDetailView, Carto
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentLayout(R.layout.activity_cartoon_detail);
+        setContentLayout(R.layout.activity_cartoon_detail_2);
         ButterKnife.bind(this);
+        mSwipeRefreshLayout.setEnabled(true);
+        mSwipeRefreshLayout.setSuperRefreshListener3(this);
         appBar.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             @Override
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
@@ -196,4 +199,18 @@ public class CartoonDetailActivity extends BaseActivity<CartoonDetailView, Carto
     }
 
 
+    @Override
+    public void onPullDownToRefresh(SuperSwipeRefreshLayout refreshLayout) {
+
+    }
+
+    @Override
+    public void onPullUpToRefresh(SuperSwipeRefreshLayout refreshLayout) {
+
+    }
+
+    @Override
+    public void onPullDistance(int distance) {
+
+    }
 }

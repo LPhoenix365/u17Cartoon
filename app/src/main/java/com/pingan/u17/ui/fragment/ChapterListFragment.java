@@ -1,6 +1,7 @@
 package com.pingan.u17.ui.fragment;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -19,7 +20,7 @@ import com.pingan.u17.model.CartoonDetailViewModel;
 import com.pingan.u17.model.response.CartoonDetailResponse;
 import com.pingan.u17.model.response.RealtimeResponse;
 import com.pingan.u17.presenter.GuessLikePresenter;
-import com.pingan.u17.widget.SuperSwipeRefreshLayout2;
+import com.pingan.u17.widget.SuperSwipeRefreshLayout3;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +40,7 @@ public class ChapterListFragment extends BaseFragment {
     @BindView(R.id.rv_chapter_list)
     RecyclerView chapterList;
     @BindView(R.id.refresh_layout)
-    SuperSwipeRefreshLayout2 swipeRefreshLayout;
+    SuperSwipeRefreshLayout3 swipeRefreshLayout;
     private CartoonDetailViewModel viewModel;
     private ProgressBar footerProgressBar;
     private TextView textView;
@@ -60,6 +61,7 @@ public class ChapterListFragment extends BaseFragment {
         fragment.setArguments(bundle);
         return fragment;
     }
+
 
 
     @Override
@@ -84,8 +86,8 @@ public class ChapterListFragment extends BaseFragment {
         CartoonDetailResponse detailResponse = viewModel.cartoonDetailResponse;
         RealtimeResponse realtimeResponse = viewModel.realtimeResponse;
         chapterList.setLayoutManager(new GridLayoutManager(mActivity, 2));
-//        swipeRefreshLayout.setHeaderView(createHeaderView());// add headerView
-//        swipeRefreshLayout.setFooterView(createFooterView());
+       swipeRefreshLayout.setHeaderView(createHeaderView());// add headerView
+        swipeRefreshLayout.setFooterView(createFooterView());
         swipeRefreshLayout.setLoadMore(false);
         swipeRefreshLayout.setRefreshing(false);
         if (detailResponse != null && realtimeResponse != null && detailResponse.chapter_list != null && detailResponse.chapter_list != null) {
@@ -106,20 +108,9 @@ public class ChapterListFragment extends BaseFragment {
             chapterList.setAdapter(mChapterListAdapter);
         }
 
-        /*swipeRefreshLayout.setRefreshListener2(new SwipeRefreshLayout.OnRefreshListener2() {
-            @Override
-            public void onPullDownToRefresh(SuperSwipeRefreshLayout var1) {
 
-            }
-
-            @Override
-            public void onPullUpToRefresh(SuperSwipeRefreshLayout var1) {
-                mDatas.addAll(mMChapterDetailList);
-                mChapterListAdapter.notifyDataSetChanged();
-            }
-        });*/
-        /*swipeRefreshLayout
-                .setOnPullRefreshListener(new SuperSwipeRefreshLayout.OnPullRefreshListener() {
+        swipeRefreshLayout
+                .setOnPullRefreshListener(new SuperSwipeRefreshLayout3.OnPullRefreshListener() {
                     @Override
                     public void onRefresh() {
                         textView.setText("正在刷新");
@@ -131,6 +122,9 @@ public class ChapterListFragment extends BaseFragment {
                             public void run() {
                                 swipeRefreshLayout.setRefreshing(false);
                                 progressBar.setVisibility(View.GONE);
+                                mDatas.clear();
+                                mDatas.addAll(mMChapterDetailList.subList(0,mMChapterDetailList.size()));
+                                mChapterListAdapter.setNewData(mDatas);
                             }
                         }, 2000);
                     }
@@ -149,7 +143,7 @@ public class ChapterListFragment extends BaseFragment {
                 });
 
         swipeRefreshLayout
-                .setOnPushLoadMoreListener(new SuperSwipeRefreshLayout.OnPushLoadMoreListener() {
+                .setOnPushLoadMoreListener(new SuperSwipeRefreshLayout3.OnPushLoadMoreListener() {
 
                     @Override
                     public void onLoadMore() {
@@ -181,7 +175,7 @@ public class ChapterListFragment extends BaseFragment {
                         // TODO Auto-generated method stub
                     }
 
-                });*/
+                });
 
 }
 

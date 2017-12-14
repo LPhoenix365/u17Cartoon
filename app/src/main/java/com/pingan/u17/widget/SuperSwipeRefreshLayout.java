@@ -9,11 +9,15 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.RectF;
 import android.os.Build;
 import android.os.Handler;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.view.MotionEventCompat;
+import android.support.v4.view.NestedScrollingParent;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.LinearLayoutManager;
@@ -28,14 +32,21 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup;
+import android.view.ViewParent;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
 import android.view.animation.DecelerateInterpolator;
+import android.view.animation.Interpolator;
+import android.view.animation.LinearInterpolator;
 import android.view.animation.Transformation;
 import android.widget.AbsListView;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
+import android.widget.TextView;
+
 
 /**
  * @Author Zheng Haibo
@@ -51,9 +62,11 @@ import android.widget.ScrollView;
  * 比如：onRefresh() onPullDistance(int distance)和onPullEnable(boolean
  * enable)<br>
  * 开发人员可以根据下拉过程中distance的值做一系列动画。 <br>
+ * @modify liupeng502
+ * @date 2017/11/26
  */
 @SuppressLint("ClickableViewAccessibility")
-public class SuperSwipeRefreshLayout extends ViewGroup {
+public class SuperSwipeRefreshLayout extends ViewGroup implements NestedScrollingParent {
     private static final String LOG_TAG = "CustomeSwipeRefreshLayout";
     private static final int HEADER_VIEW_HEIGHT = 50;// HeaderView height (dp)
 
@@ -133,6 +146,31 @@ public class SuperSwipeRefreshLayout extends ViewGroup {
     private float density = 1.0f;
 
     private boolean isProgressEnable = true;
+
+
+    private LinearLayout mFootView; //loadmore布局
+    private TextView mLoadMoreText;
+    //PullToRefreshIndicator mIndicator;  // progressBar的动画
+    private ImageView mHeaderImage;
+    private Matrix mHeaderImageMatrix;
+    private Animation mRotateAnimation;
+    private final Interpolator ANIMATION_INTERPOLATOR = new LinearInterpolator();
+    private ImageView mFooterImage;
+
+    private LinearLayout mHeadView;
+    private ImageView mArrowImageView;
+    //private SimpleView mProgressBar;
+    private TextView mStatusTextView;
+    //箭头旋转动画
+    private Animation mRotateUpAnim;
+    private Animation mRotateDownAnim;
+    //动画延时
+    private static final int ROTATE_ANIM_DURATION = 180;
+    //实际高度
+    public int mMeasuredHeight;
+    private SuperRefreshListener.OnRefreshListener2 mOnRefreshListener2;
+    private boolean parentHasAppBar;
+    private SuperRefreshListener.OnRefreshListener3 mOnRefreshListener3;
     /**
      * 下拉时，超过距离之后，弹回来的动画监听器
      */
@@ -173,6 +211,11 @@ public class SuperSwipeRefreshLayout extends ViewGroup {
             updateListenerCallBack();
         }
     };
+    private int totalDisY;
+
+    public void setSuperRefreshListener3(SuperRefreshListener.OnRefreshListener3 listener) {
+        mOnRefreshListener3 = listener;
+    }
 
     /**
      * 更新回调
@@ -185,6 +228,18 @@ public class SuperSwipeRefreshLayout extends ViewGroup {
         if (usingDefaultHeader && isProgressEnable) {
             defaultProgressView.setPullDistance(distance);
         }
+    }
+
+    /**
+     * 更新回调
+     */
+    private void updateListenerCallBack(int offset) {
+        if (mListener != null) {
+            mListener.onPullDistance(offset);
+        }
+       /* if (usingDefaultHeader && isProgressEnable) {
+            defaultProgressView.setPullDistance(distance);
+        }*/
     }
 
     /**
@@ -228,7 +283,7 @@ public class SuperSwipeRefreshLayout extends ViewGroup {
     public SuperSwipeRefreshLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
 
-        /**
+        /*
          * getScaledTouchSlop是一个距离，表示滑动的时候，手的移动要大于这个距离才开始移动控件。如果小于这个距离就不触发移动控件
          */
         mTouchSlop = ViewConfiguration.get(context).getScaledTouchSlop();
@@ -260,6 +315,82 @@ public class SuperSwipeRefreshLayout extends ViewGroup {
         mSpinnerFinalOffset = DEFAULT_CIRCLE_TARGET * metrics.density;
         density = metrics.density;
         mTotalDragDistance = mSpinnerFinalOffset;
+        /*
+         modify
+         */
+       /* setHeaderView(createHeaderView());
+        setFooterView(createFooterView());*/
+        this.setOnPullRefreshListener(new OnPullRefreshListener() {
+            @Override
+            public void onRefresh() {
+                /*mArrowImageView.setVisibility(View.INVISIBLE);
+                mHeaderImage.setVisibility(VISIBLE);
+                refreshingImpl();
+                mArrowImageView.clearAnimation();
+                mStatusTextView.setText(R.string.pull_to_refresh_refreshing_label);*/
+                if (mOnRefreshListener2 != null) {
+                    mOnRefreshListener2.onPullDownToRefresh(SuperSwipeRefreshLayout.this);
+                }
+                if (mOnRefreshListener3 != null) {
+                    mOnRefreshListener3.onPullDownToRefresh(SuperSwipeRefreshLayout.this);
+                }
+            }
+
+            @Override
+            public void onPullDistance(int distance) {
+                mOnRefreshListener3.onPullDistance(distance);
+            }
+
+            @Override
+            public void onPullEnable(boolean enable) {
+                /*if (enable) {//松开刷新
+                    mArrowImageView.setVisibility(View.VISIBLE);
+                    mHeaderImage.setVisibility(View.INVISIBLE);
+                    mArrowImageView.startAnimation(mRotateDownAnim);
+                    mStatusTextView.setText(R.string.pull_to_refresh_release_label);
+
+                } else {//下拉刷新
+                    mArrowImageView.setVisibility(VISIBLE);
+                    mHeaderImage.setVisibility(View.INVISIBLE);
+                    resetImpl();
+                    mStatusTextView.setText(R.string.pull_to_refresh_pull_label);
+                }*/
+            }
+        });
+
+        this.setOnPushLoadMoreListener(new OnPushLoadMoreListener() {
+
+            @Override
+            public void onLoadMore() {
+               /* mLoadMoreText.setText(getContext().getText(R.string.pull_to_refresh_footer_refreshing_label));
+                //mFootView.setVisibility(View.VISIBLE);
+                mFooterImage.setVisibility(View.VISIBLE);
+                loadmoreImpl();
+                if (mOnRefreshListener2 != null) {
+                    mOnRefreshListener2.onPullUpToRefresh(SuperSwipeRefreshLayout3.this);
+                }
+                if (mOnRefreshListener3 != null) {
+                    mOnRefreshListener3.onPullUpToRefresh(SuperSwipeRefreshLayout3.this);
+                }*/
+            }
+
+            @Override
+            public void onPushEnable(boolean enable) {
+                /*if (enable) {//松开加载
+                    mLoadMoreText.setText(R.string.pull_to_refresh_footer_release_label);
+                    mFooterImage.setVisibility(INVISIBLE);
+                } else {//上拉加载
+                    mLoadMoreText.setText(R.string.pull_to_refresh_footer_pull_label);
+                    mFooterImage.setVisibility(INVISIBLE);
+                }*/
+            }
+
+            @Override
+            public void onPushDistance(int distance) {
+                // TODO Auto-generated method stub
+            }
+
+        });
     }
 
     /**
@@ -479,7 +610,6 @@ public class SuperSwipeRefreshLayout extends ViewGroup {
         final int childTop = getPaddingTop() + distance - pushDistance;// 根据偏移量distance更新
         final int childWidth = width - getPaddingLeft() - getPaddingRight();
         final int childHeight = height - getPaddingTop() - getPaddingBottom();
-        //Log.d(LOG_TAG, "debug:onLayout childHeight = " + childHeight);
         child.layout(childLeft, childTop, childLeft + childWidth, childTop
                 + childHeight);// 更新目标View的位置
         int headViewWidth = mHeadViewContainer.getMeasuredWidth();
@@ -553,6 +683,7 @@ public class SuperSwipeRefreshLayout extends ViewGroup {
             }
         } else {
             return !ViewCompat.canScrollVertically(mTarget, -1);
+            //return !ViewCompat.canScrollVertically((View) SuperSwipeRefreshLayout.this.getParent(), -1);
         }
     }
 
@@ -562,9 +693,9 @@ public class SuperSwipeRefreshLayout extends ViewGroup {
      * @return
      */
     public boolean isChildScrollToBottom() {
-        if (isChildScrollToTop()) {
+        /*if (isChildScrollToTop()) {
             return false;
-        }
+        }*/
         if (mTarget instanceof RecyclerView) {
             RecyclerView recyclerView = (RecyclerView) mTarget;
             LayoutManager layoutManager = recyclerView.getLayoutManager();
@@ -619,9 +750,15 @@ public class SuperSwipeRefreshLayout extends ViewGroup {
                     return true;
                 }
             }
-        }
+        }/*else if (mTarget instanceof ViewGroup) {
+            return true;
+        }*/
         return false;
     }
+
+    private float actionY;
+    private float downY;
+    private boolean isDraggedToUp;
 
     /**
      * 主要判断是否应该拦截子View的事件<br>
@@ -644,6 +781,7 @@ public class SuperSwipeRefreshLayout extends ViewGroup {
             return false;
         }
 
+        actionY = ev.getY();
         // 下拉刷新判断
         switch (action) {
             case MotionEvent.ACTION_DOWN:
@@ -656,10 +794,9 @@ public class SuperSwipeRefreshLayout extends ViewGroup {
                     return false;
                 }
                 mInitialMotionY = initialMotionY;// 记录按下的位置
-
+                downY = actionY;
             case MotionEvent.ACTION_MOVE:
                 if (mActivePointerId == INVALID_POINTER) {
-                    //Log.e(LOG_TAG, "Got ACTION_MOVE event but don't have an active pointer id.");
                     return false;
                 }
 
@@ -667,7 +804,7 @@ public class SuperSwipeRefreshLayout extends ViewGroup {
                 if (y == -1) {
                     return false;
                 }
-                float yDiff = 0;
+                /*float yDiff = 0;
                 if (isChildScrollToBottom()) {
                     yDiff = mInitialMotionY - y;// 计算上拉距离
                     if (yDiff > mTouchSlop && !mIsBeingDragged) {// 判断是否下拉的距离足够
@@ -678,7 +815,23 @@ public class SuperSwipeRefreshLayout extends ViewGroup {
                     if (yDiff > mTouchSlop && !mIsBeingDragged) {// 判断是否下拉的距离足够
                         mIsBeingDragged = true;// 正在下拉
                     }
+                }*/
+
+                float moveY = actionY;
+                if (Math.abs(moveY - downY) > mTouchSlop) {
+                    if ((moveY - downY < 0) && !mIsBeingDragged) {
+                        if (isChildScrollToBottom()) {
+                            mIsBeingDragged = true;// 正在上拉
+                            isDraggedToUp = true;
+                        }
+                    } else {
+                        if (isChildScrollToTop() && appbarState == AppBarStateChangeListener.State.EXPANDED) {
+                            mIsBeingDragged = true;// 正在下拉
+                            isDraggedToUp = false;
+                        }
+                    }
                 }
+                downY = moveY;
                 break;
 
             case MotionEventCompat.ACTION_POINTER_UP:
@@ -722,30 +875,37 @@ public class SuperSwipeRefreshLayout extends ViewGroup {
             return false;
         }
 
-        if (isChildScrollToBottom()) {// 上拉加载更多
+        /*if (isChildScrollToBottom()) {// 上拉加载更多
+            return handlerPushTouchEvent(ev, action);
+        } else {// 下拉刷新
+            return handlerPullTouchEvent(ev, action);
+        }*/
+        if (mIsBeingDragged && isDraggedToUp) {// 上拉加载更多
             return handlerPushTouchEvent(ev, action);
         } else {// 下拉刷新
             return handlerPullTouchEvent(ev, action);
         }
     }
 
+    private float handleDownY;
     private boolean handlerPullTouchEvent(MotionEvent ev, int action) {
         switch (action) {
             case MotionEvent.ACTION_DOWN:
                 mActivePointerId = MotionEventCompat.getPointerId(ev, 0);
                 mIsBeingDragged = false;
+                handleDownY=ev.getY();
                 break;
 
             case MotionEvent.ACTION_MOVE: {
                 final int pointerIndex = MotionEventCompat.findPointerIndex(ev,
                         mActivePointerId);
                 if (pointerIndex < 0) {
-                    Log.e(LOG_TAG, "Got ACTION_MOVE event but have an invalid active pointer id.");
                     return false;
                 }
 
                 final float y = MotionEventCompat.getY(ev, pointerIndex);
                 final float overscrollTop = (y - mInitialMotionY) * DRAG_RATE;
+                Log.d("tag", "overscrollTop=" + overscrollTop);
                 if (mIsBeingDragged) {
                     float originalDragPercent = overscrollTop / mTotalDragDistance;
                     if (originalDragPercent < 0) {
@@ -763,6 +923,7 @@ public class SuperSwipeRefreshLayout extends ViewGroup {
 
                     int targetY = mOriginalOffsetTop
                             + (int) ((slingshotDist * dragPercent) + extraMove);
+                    Log.d("tag", "targetY=" + targetY);
                     if (mHeadViewContainer.getVisibility() != View.VISIBLE) {
                         mHeadViewContainer.setVisibility(View.VISIBLE);
                     }
@@ -791,8 +952,14 @@ public class SuperSwipeRefreshLayout extends ViewGroup {
                             mListener.onPullEnable(true);
                         }
                     }
+                    Log.d("tag", "targetY - mCurrentTargetOffsetTop=" + (targetY - mCurrentTargetOffsetTop));
                     setTargetOffsetTopAndBottom(targetY - mCurrentTargetOffsetTop,
                             true);
+
+                    float disY = y - handleDownY;
+                    totalDisY+=disY;
+                    updateListenerCallBack((int) disY);
+                    handleDownY=y;
                 }
                 break;
             }
@@ -810,8 +977,6 @@ public class SuperSwipeRefreshLayout extends ViewGroup {
             case MotionEvent.ACTION_CANCEL: {
                 if (mActivePointerId == INVALID_POINTER) {
                     if (action == MotionEvent.ACTION_UP) {
-                        Log.e(LOG_TAG,
-                                "Got ACTION_UP event but don't have an active pointer id.");
                     }
                     return false;
                 }
@@ -867,14 +1032,11 @@ public class SuperSwipeRefreshLayout extends ViewGroup {
             case MotionEvent.ACTION_DOWN:
                 mActivePointerId = MotionEventCompat.getPointerId(ev, 0);
                 mIsBeingDragged = false;
-                Log.d(LOG_TAG, "debug:onTouchEvent ACTION_DOWN");
                 break;
             case MotionEvent.ACTION_MOVE: {
                 final int pointerIndex = MotionEventCompat.findPointerIndex(ev,
                         mActivePointerId);
                 if (pointerIndex < 0) {
-                    Log.e(LOG_TAG,
-                            "Got ACTION_MOVE event but have an invalid active pointer id.");
                     return false;
                 }
                 final float y = MotionEventCompat.getY(ev, pointerIndex);
@@ -903,7 +1065,6 @@ public class SuperSwipeRefreshLayout extends ViewGroup {
             case MotionEvent.ACTION_CANCEL: {
                 if (mActivePointerId == INVALID_POINTER) {
                     if (action == MotionEvent.ACTION_UP) {
-                       // Log.e(LOG_TAG, "Got ACTION_UP event but don't have an active pointer id.");
                     }
                     return false;
                 }
@@ -1119,12 +1280,16 @@ public class SuperSwipeRefreshLayout extends ViewGroup {
 
     private void setTargetOffsetTopAndBottom(int offset, boolean requiresUpdate) {
         mHeadViewContainer.bringToFront();
-        mHeadViewContainer.offsetTopAndBottom(offset);
-        mCurrentTargetOffsetTop = mHeadViewContainer.getTop();
-        if (requiresUpdate && Build.VERSION.SDK_INT < 11) {
-            invalidate();
+        if (parentHasAppBar) {
+            mHeadViewContainer.offsetTopAndBottom(0);
+        } else {
+            mHeadViewContainer.offsetTopAndBottom(offset);
+            mCurrentTargetOffsetTop = mHeadViewContainer.getTop();
+            if (requiresUpdate && Build.VERSION.SDK_INT < 11) {
+                invalidate();
+            }
+            updateListenerCallBack();
         }
-        updateListenerCallBack();
     }
 
     /**
@@ -1458,6 +1623,141 @@ public class SuperSwipeRefreshLayout extends ViewGroup {
             super.onDetachedFromWindow();
         }
 
+    }
+
+   /* private View createFooterView() {
+        // 将loadmore布局加载到这个View中
+        mFootView = (LinearLayout) LayoutInflater.from(getContext()).inflate(R.layout.load_more_footer, null);
+        LayoutParams lp = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+        // lp.setMargins(0, 0, 0, 0);
+        setLayoutParams(lp);
+        // setPadding(0, 0, 0, 0);
+        // 初始化progressBar
+        mLoadMoreText = (TextView) mFootView.findViewById(R.id.loadmore_status_textview);
+        mFooterImage = (ImageView) mFootView.findViewById(com.handmark.pulltorefresh.library.R.id.pull_to_refresh_image);
+        mFooterImage.setScaleType(ImageView.ScaleType.MATRIX);
+        mHeaderImageMatrix = new Matrix();
+        mFooterImage.setVisibility(GONE);
+        mFooterImage.setImageMatrix(mHeaderImageMatrix);
+        Drawable imageDrawable = WanjiaApplication.getContext().getResources().getDrawable(R.drawable.default_ptr_rotate);
+        mFooterImage.setImageDrawable(imageDrawable);
+
+        mRotateAnimation = new RotateAnimation(0, 720, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF,
+                0.5f);
+        mRotateAnimation.setInterpolator(ANIMATION_INTERPOLATOR);
+        mRotateAnimation.setDuration(1200);
+        mRotateAnimation.setRepeatCount(Animation.INFINITE);
+        mRotateAnimation.setRepeatMode(Animation.RESTART);
+
+        //测量一下添加布局后的view的宽高。
+        measure(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+
+        return mFootView;
+    }
+
+    private View createHeaderView() {
+        //初始化header布局
+        mHeadView = (LinearLayout) LayoutInflater.from(getContext()).inflate(R.layout.recyclerview_header_layout, null);
+        LayoutParams lp = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+        setLayoutParams(lp);
+
+        mArrowImageView = (ImageView) mHeadView.findViewById(R.id.listview_header_arrow);
+        mStatusTextView = (TextView) mHeadView.findViewById(R.id.refresh_status_textview);
+        //初始化progressbar
+        mHeaderImage = (ImageView) mHeadView.findViewById(com.handmark.pulltorefresh.library.R.id.pull_to_refresh_image);
+        mHeaderImage.setScaleType(ImageView.ScaleType.MATRIX);
+        mHeaderImageMatrix = new Matrix();
+        mHeaderImage.setVisibility(GONE);
+        mHeaderImage.setImageMatrix(mHeaderImageMatrix);
+        Drawable imageDrawable = WanjiaApplication.getContext().getResources().getDrawable(R.drawable.default_ptr_rotate);
+        mHeaderImage.setImageDrawable(imageDrawable);
+
+        //箭头翻转动画
+        mRotateUpAnim = new RotateAnimation(0.0f, -180.0f,
+                Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+        mRotateUpAnim.setDuration(ROTATE_ANIM_DURATION);
+        mRotateUpAnim.setFillAfter(true);
+        mRotateDownAnim = new RotateAnimation(-180.0f, 0.0f,
+                Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+        mRotateDownAnim.setDuration(ROTATE_ANIM_DURATION);
+        mRotateDownAnim.setFillAfter(true);
+
+        measure(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+        mMeasuredHeight = getMeasuredHeight();
+
+
+        mRotateAnimation = new RotateAnimation(0, 720, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF,
+                0.5f);
+        mRotateAnimation.setInterpolator(ANIMATION_INTERPOLATOR);
+        mRotateAnimation.setDuration(1200);
+        mRotateAnimation.setRepeatCount(Animation.INFINITE);
+        mRotateAnimation.setRepeatMode(Animation.RESTART);
+        return mHeadView;
+    }
+
+    protected void refreshingImpl() {
+        mHeaderImage.startAnimation(mRotateAnimation);
+    }
+
+    protected void loadmoreImpl() {
+        mFooterImage.startAnimation(mRotateAnimation);
+    }
+
+    public void setSuperRefreshListener2(SuperRefreshListener.OnRefreshListener2 listener) {
+        mOnRefreshListener2 = listener;
+    }
+
+    public void setSuperRefreshListener3(SuperRefreshListener.OnRefreshListener3 listener) {
+        mOnRefreshListener3 = listener;
+    }
+
+    protected void resetImpl() {
+        mHeaderImage.clearAnimation();
+        resetImageRotation();
+    }
+
+    private void resetImageRotation() {
+        if (null != mHeaderImageMatrix) {
+            mHeaderImageMatrix.reset();
+            mHeaderImage.setImageMatrix(mHeaderImageMatrix);
+        }
+    }*/
+
+    private AppBarStateChangeListener.State appbarState = AppBarStateChangeListener.State.EXPANDED;
+
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        //解决和CollapsingToolbarLayout冲突的问题
+        AppBarLayout appBarLayout = null;
+        ViewParent p = getParent();
+        while (p != null) {
+            if (p instanceof CoordinatorLayout) {
+                break;
+            }
+            p = p.getParent();
+        }
+        if (p instanceof CoordinatorLayout) {
+            CoordinatorLayout coordinatorLayout = (CoordinatorLayout) p;
+            final int childCount = coordinatorLayout.getChildCount();
+            for (int i = childCount - 1; i >= 0; i--) {
+                final View child = coordinatorLayout.getChildAt(i);
+                if (child instanceof AppBarLayout) {
+                    appBarLayout = (AppBarLayout) child;
+                    parentHasAppBar = true;
+                    break;
+                }
+            }
+            if (appBarLayout != null) {
+                appBarLayout.addOnOffsetChangedListener(new AppBarStateChangeListener() {
+                    @Override
+                    public void onStateChanged(AppBarLayout appBarLayout, AppBarStateChangeListener.State state) {
+                        Log.d("tag", "appbarState=" + appbarState);
+                        appbarState = state;
+                    }
+                });
+            }
+        }
     }
 
 }
