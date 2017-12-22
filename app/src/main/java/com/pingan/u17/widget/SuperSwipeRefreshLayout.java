@@ -32,7 +32,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup;
-import android.view.ViewParent;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
@@ -223,10 +222,10 @@ public class SuperSwipeRefreshLayout extends ViewGroup implements NestedScrollin
     private void updateListenerCallBack() {
         int distance = mCurrentTargetOffsetTop + mHeadViewContainer.getHeight();
         if (mListener != null) {
-            if (0<distance) {
+            if (0 < distance) {
                 //mListener.onPullDistance(distance);
             }
-            Log.d("tag","distance123="+distance);
+            // Log.d("tag","distance123="+distance);
         }
         if (usingDefaultHeader && isProgressEnable) {
             defaultProgressView.setPullDistance(distance);
@@ -753,10 +752,32 @@ public class SuperSwipeRefreshLayout extends ViewGroup implements NestedScrollin
                     return true;
                 }
             }
-        }/*else if (mTarget instanceof ViewGroup) {
-            return true;
-        }*/
+        }else {
+            boolean bottomEdge = isViewReachBottomEdge(mTarget);
+            return bottomEdge;
+        }
         return false;
+    }
+
+    /**
+     * 判断View是否滑动到底部
+     * @param view
+     * @return
+     */
+    public static boolean isViewReachBottomEdge(View view) {
+        if (view instanceof ViewGroup) {
+            if (view.canScrollVertically(SCROLL_AXIS_VERTICAL))
+                return false;
+            int count  = ((ViewGroup)view).getChildCount();
+            for (int i = 0; i < count; i++) {
+                if (!isViewReachBottomEdge(((ViewGroup)view).getChildAt(i)))
+                    return false;
+            }
+        }
+        if (view.canScrollVertically(SCROLL_AXIS_VERTICAL)) {
+            return false;
+        }
+        return true;
     }
 
     private float actionY;
@@ -820,7 +841,7 @@ public class SuperSwipeRefreshLayout extends ViewGroup implements NestedScrollin
                     }
                 }*/
 
-                float moveY = actionY;
+                /*float moveY = actionY;
                 if (Math.abs(moveY - downY) > mTouchSlop) {
                     if ((moveY - downY < 0) && !mIsBeingDragged) {
                         if (isChildScrollToBottom()) {
@@ -834,7 +855,22 @@ public class SuperSwipeRefreshLayout extends ViewGroup implements NestedScrollin
                         }
                     }
                 }
-                downY = moveY;
+                downY = moveY;*/
+
+                float yDiff = 0;
+                if (isChildScrollToBottom()) {
+                    yDiff = mInitialMotionY - y;// 计算上拉距离
+                    if (yDiff > mTouchSlop && !mIsBeingDragged) {// 判断是否下拉的距离足够
+                        mIsBeingDragged = true;// 正在上拉
+                        isDraggedToUp=true;
+                    }
+                } else {
+                    yDiff = y - mInitialMotionY;// 计算下拉距离
+                    if (yDiff > mTouchSlop && !mIsBeingDragged && appbarState == AppBarStateChangeListener.State.EXPANDED) {// 判断是否下拉的距离足够
+                        mIsBeingDragged = true;// 正在下拉
+                        isDraggedToUp=false;
+                    }
+                }
                 break;
 
             case MotionEventCompat.ACTION_POINTER_UP:
@@ -902,12 +938,13 @@ public class SuperSwipeRefreshLayout extends ViewGroup implements NestedScrollin
     }
 
     private float handleDownY;
+
     private boolean handlerPullTouchEvent(MotionEvent ev, int action) {
         switch (action) {
             case MotionEvent.ACTION_DOWN:
                 mActivePointerId = MotionEventCompat.getPointerId(ev, 0);
                 mIsBeingDragged = false;
-                handleDownY=ev.getY();
+                handleDownY = ev.getY();
                 break;
 
             case MotionEvent.ACTION_MOVE: {
@@ -971,9 +1008,9 @@ public class SuperSwipeRefreshLayout extends ViewGroup implements NestedScrollin
                             true);
 
                     float disY = y - handleDownY;
-                    totalDisY+=disY;
+                    totalDisY += disY;
                     updateListenerCallBack((int) disY);
-                    handleDownY=y;
+                    handleDownY = y;
                 }
                 break;
             }
@@ -1294,16 +1331,15 @@ public class SuperSwipeRefreshLayout extends ViewGroup implements NestedScrollin
 
     private void setTargetOffsetTopAndBottom(int offset, boolean requiresUpdate) {
         mHeadViewContainer.bringToFront();
-        if (parentHasAppBar) {
+        /*if (parentHasAppBar) {
             mHeadViewContainer.offsetTopAndBottom(0);
-        } else {
+        } else*/
             mHeadViewContainer.offsetTopAndBottom(offset);
             mCurrentTargetOffsetTop = mHeadViewContainer.getTop();
             if (requiresUpdate && Build.VERSION.SDK_INT < 11) {
                 invalidate();
             }
             updateListenerCallBack();
-        }
     }
 
     /**
@@ -1744,20 +1780,25 @@ public class SuperSwipeRefreshLayout extends ViewGroup implements NestedScrollin
         super.onAttachedToWindow();
         //解决和CollapsingToolbarLayout冲突的问题
         AppBarLayout appBarLayout = null;
-        ViewParent p = getParent();
-        while (p != null) {
-            if (p instanceof CoordinatorLayout) {
-                break;
-            }
-            p = p.getParent();
+        View child = null;
+        //
+        int childCount = getChildCount();
+        for (int i = 0; i < childCount; i++) {
+            View c = getChildAt(i);
+                if (c instanceof CoordinatorLayout) {
+                    child = c;
+                    break;
+                }else if (c instanceof ViewGroup) {
+                    findCoordinatorLayout((ViewGroup) c);
+                }
         }
-        if (p instanceof CoordinatorLayout) {
-            CoordinatorLayout coordinatorLayout = (CoordinatorLayout) p;
-            final int childCount = coordinatorLayout.getChildCount();
-            for (int i = childCount - 1; i >= 0; i--) {
-                final View child = coordinatorLayout.getChildAt(i);
-                if (child instanceof AppBarLayout) {
-                    appBarLayout = (AppBarLayout) child;
+        if (child instanceof CoordinatorLayout) {
+            CoordinatorLayout coordinatorLayout = (CoordinatorLayout) child;
+            final int count = coordinatorLayout.getChildCount();
+            for (int i = count - 1; i >= 0; i--) {
+                final View childView = coordinatorLayout.getChildAt(i);
+                if (childView instanceof AppBarLayout) {
+                    appBarLayout = (AppBarLayout) childView;
                     parentHasAppBar = true;
                     break;
                 }
@@ -1774,4 +1815,14 @@ public class SuperSwipeRefreshLayout extends ViewGroup implements NestedScrollin
         }
     }
 
+    private View findCoordinatorLayout(ViewGroup viewGroup){
+        View view=null;
+        for (int i = 0; i < viewGroup.getChildCount(); i++) {
+            if (viewGroup.getChildAt(i) instanceof CoordinatorLayout) {
+                view=viewGroup.getChildAt(i);
+                break;
+            }
+        }
+        return view;
+    }
 }

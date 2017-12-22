@@ -76,6 +76,8 @@ public class MainActivity extends BaseActivity {
 
     }
 
+
+
     /**
      * 更换fragment
      */

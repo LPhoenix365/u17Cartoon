@@ -8,6 +8,7 @@ import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -19,6 +20,8 @@ import com.facebook.drawee.view.SimpleDraweeView;
 import com.pingan.u17.R;
 import com.pingan.u17.adapter.PAFragmentPagerAdapter;
 import com.pingan.u17.base.BaseActivity;
+import com.pingan.u17.bean.AddressBean;
+import com.pingan.u17.manager.AddressModelManager;
 import com.pingan.u17.model.CartoonDetailViewModel;
 import com.pingan.u17.model.response.CartoonDetailResponse;
 import com.pingan.u17.model.response.RealtimeResponse;
@@ -118,6 +121,23 @@ public class CartoonDetailActivity extends BaseActivity<CartoonDetailView, Carto
         mPresenter.getCartoonDetailData(map);
         mPresenter.getCartoonDetailRealtime(map);
         cartoonDetailModel = new CartoonDetailViewModel();
+        asyncTask();
+    }
+
+    public void asyncTask(){
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                long startTime = System.currentTimeMillis();
+                Log.d("tag", "start=" + startTime);
+                AddressBean addressInfo = AddressModelManager.getInstance().getAddressInfo();
+                AddressBean.Address address = addressInfo.address.get(9);
+                Log.d("tag", "addressInfo=" + addressInfo);
+                long endtiem = System.currentTimeMillis();
+                Log.d("tag", "end=" + endtiem + "total=" + (endtiem - startTime));
+            }
+        };
+        new Thread(runnable).start();
     }
 
     @Override

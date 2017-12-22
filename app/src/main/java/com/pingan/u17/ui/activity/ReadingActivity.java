@@ -1,6 +1,7 @@
 package com.pingan.u17.ui.activity;
 
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
@@ -100,31 +101,43 @@ public class ReadingActivity extends BaseActivity implements SuperRefreshListene
             mList.add("我是第"+i+"个");
         }
         rvList.setAdapter(new ReaddingAdapter(mList));
-
+        Log.d("tag","ll_read_header.getPaddingTop()"+ll_read_header.getPaddingTop());
         refresh_layout.setSuperRefreshListener3(this);
     }
 
 
+
     @Override
     public void onPullDownToRefresh(SuperSwipeRefreshLayout refreshLayout) {
-
+        SystemClock.sleep(2000);
+        refresh_layout.setRefreshing(false);
     }
 
     @Override
     public void onPullUpToRefresh(SuperSwipeRefreshLayout refreshLayout) {
-
+        SystemClock.sleep(2000);
+        refresh_layout.setLoadMore(false);
     }
 
     @Override
     public void onPullDistance(int distance) {
         if (distance >0) {
-            int dy = (int) (distance * 0.4f);
-            //appBar.getLayoutParams().height= appBar.getLayoutParams().height+distance;
-            appBar.bringToFront();
-            appBar.offsetTopAndBottom(distance);
-            Log.d("tag", "distance="+distance);
-           // appBar.setScaleY(distance);
+            Log.d("tag","distance="+distance);
+            //coordinatorLayout.offsetTopAndBottom(distance);
+            /*int dy = (int) (distance * 0.4f);
+            FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) ll_read_header.getLayoutParams();
+            Log.d("tag","ll_read_header.getPaddingTop()"+ll_read_header.getPaddingTop()+"dy="+dy);
+            ll_read_header.setPadding(0,ll_read_header.getPaddingTop()+dy,0,0);
+            //layoutParams.setMargins(0,layoutParams.topMargin+dy,0,0);
+            appBar.getLayoutParams().height= appBar.getLayoutParams().height+dy;
+            appBar.requestLayout();*/
+            /*appBar.bringToFront();
+            appBar.offsetTopAndBottom(distance);*/
 
+           // appBar.setScaleY(distance);
+           //ll_read_header.setTranslationY(distance);
+
+            //refresh_layout.offsetTopAndBottom(distance);
         }
     }
 }

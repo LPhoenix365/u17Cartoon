@@ -1121,7 +1121,7 @@ public class SuperSwipeRefreshLayout3 extends ViewGroup {
         mHeadViewContainer.bringToFront();
         //mHeadViewContainer.offsetTopAndBottom(offset);
         Log.d("tag","offset="+offset);
-        mHeadViewContainer.offsetTopAndBottom(0);
+        mHeadViewContainer.offsetTopAndBottom(offset);
         mCurrentTargetOffsetTop = mHeadViewContainer.getTop();
         if (requiresUpdate && Build.VERSION.SDK_INT < 11) {
             invalidate();

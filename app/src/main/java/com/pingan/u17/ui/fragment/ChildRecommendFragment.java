@@ -2,6 +2,7 @@ package com.pingan.u17.ui.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -15,7 +16,9 @@ import com.facebook.drawee.view.SimpleDraweeView;
 import com.pingan.u17.R;
 import com.pingan.u17.base.BaseFragment;
 import com.pingan.u17.base.U17Application;
+import com.pingan.u17.bean.AddressBean;
 import com.pingan.u17.bean.UpdateBean;
+import com.pingan.u17.manager.AddressModelManager;
 import com.pingan.u17.model.response.HomePageResponse;
 import com.pingan.u17.presenter.ChildRecommendPresenter;
 import com.pingan.u17.pull2refresh.PullToRefreshLayout;
@@ -125,8 +128,12 @@ public class ChildRecommendFragment extends BaseFragment<ChildRecommendView, Chi
         map.put("android_id", "602b734eecb46c60");
 
         mPresenter.getHomePageData(map);
+
         //mPresenter.hasNewversion(map);
+
     }
+
+
 
 
     @Override
